@@ -26,7 +26,23 @@ comparador :
 ;
 
 instruccion : 
-    // definir instruccion
+    asignacion
+    | declaracion
+;
+
+asignacion : 
+    variable = NUMBER
+    | variable = '"' STRING '"'
+;
+
+declaracion : 
+    tipo variable
+;
+
+// ****************** REVISAR PORQUE SOLO ACEPTA DOS TIPOS DE DATOS
+tipo :
+    Int
+    | String
 ;
 
 
@@ -39,6 +55,15 @@ If :
 Else :
     'else'
 ;
+Int : 
+    'int'
+;
+String :
+    'string'
+;
+
+
+
 
 
 NUMBER :
@@ -49,6 +74,16 @@ DIGIT :
     [0-9]
 ;
 
+// ******************** revisar porque este string no acepta simbolos
+STRING : 
+    [a-zA-Z0-9]
+;
+
+BOOLEAN : 
+    'true'
+    | 'false'
+    | NUMBER
+;
 
 
 
