@@ -64,11 +64,11 @@ for_statement:
 ;
 
 function_call_statement : 
-    VAR '(' expression (',' expression)? ')'  
+    VAR '(' (expression (',' expression)?)? ')'  
 ;
 
 function_definition_statement : 
-    TYPE VAR '(' TYPE VAR (',' TYPE VAR)? ')' '{' statement '}'  
+    TYPE VAR '(' (TYPE VAR (',' TYPE VAR)?)? ')' '{' statement '}'  
 ;
 
 NUMBER:

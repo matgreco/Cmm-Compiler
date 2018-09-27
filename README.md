@@ -16,4 +16,4 @@
 echo "if(casa == 10){casaa = 20; casab =0; }" | grun Cmm2 expression -gui
 
 ### una funcion
-echo "void main(){int unavariable; unavariable = funcion1(argumento1, argumento2, 3);}"
+echo "void main(){int unavariable; unavariable = funcion1(argumento1, argumento2, 3);}" | grun Cmm2 expression -gui
