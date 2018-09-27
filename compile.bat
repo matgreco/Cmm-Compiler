@@ -1,0 +1,1 @@
+@antlr4 %*.g4 && javac %**.java
