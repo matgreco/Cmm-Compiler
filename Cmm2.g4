@@ -3,14 +3,7 @@ grammar Cmm2;
 
 
 //TODO? cambiar orden?
-expression:
-    '(' expression ')'
-    | NUMBER
-    | STRING_CONSTANT
-    | VAR
-    | assign_expression
-    | compare_expression
-;
+
 
 declare_expression:
     TYPE VAR
@@ -121,4 +114,23 @@ VAR:
 
 WS
     : [ \t\u000C\r\n]+ -> skip
+;
+
+
+
+
+
+
+
+
+
+
+
+expression:
+    '(' expression ')'
+    | NUMBER
+    | STRING_CONSTANT
+    | VAR
+    | assign_expression
+    | compare_expression
 ;
