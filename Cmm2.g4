@@ -22,7 +22,8 @@ assign_expression:
 ;
 
 compare_expression:
-    //TODO
+    VAR compare_op VAR  
+    | VAR compare_op expression
 ;
 
 compare_op:
@@ -111,6 +112,7 @@ Break:'break';
 True:'true';
 False:'false';
 //String:'string'; //?
+
 
 VAR:
     [a-zA-Z_][a-zA-Z0-9_]*
