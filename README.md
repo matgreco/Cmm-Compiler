@@ -1,13 +1,13 @@
 # Cmm-Compiler
 
 ## PARA INSTALAR 
-export CLASSPATH=".:/home/mat/Escritorio/antlr/antlr-4.7.1-complete.jar:$CLASSPATH"
-alias antlr4='java -jar /home/mat/Escritorio/antlr/antlr-4.7.1-complete.jar'
-alias grun='java org.antlr.v4.gui.TestRig'
+- export CLASSPATH=".:/home/mat/Escritorio/antlr/antlr-4.7.1-complete.jar:$CLASSPATH"
+- alias antlr4='java -jar /home/mat/Escritorio/antlr/antlr-4.7.1-complete.jar'
+- alias grun='java org.antlr.v4.gui.TestRig'
 
 ## PARA GENERAR EL LEXER Y PARSER
-antlr4 Cmm2.g4
-javac Cmm2*.java -cp /home/mat/Escritorio/antlr/antlr-4.7.1-complete.jar
+- antlr4 Cmm2.g4
+- javac Cmm2*.java -cp /home/mat/Escritorio/antlr/antlr-4.7.1-complete.jar
 
 
 ## CODIGOS PARA PROBAR Y GENERAR EL ARBOL
