@@ -63,6 +63,14 @@ for_statement:
     | For '('(expression | declare_expression) ';' expression ';' expression ')' '{' statement* '}'
 ;
 
+function_call_statement : 
+    VAR '(' expression (',' expression)? ')'  
+;
+
+function_definition_statement : 
+    TYPE VAR '(' TYPE VAR (',' TYPE VAR)? ')' '{' statement '}'  
+;
+
 NUMBER:
     DEC_NUMBER
     | OCT_NUMBER
@@ -115,13 +123,6 @@ VAR:
 WS
     : [ \t\u000C\r\n]+ -> skip
 ;
-
-
-
-
-
-
-
 
 
 
