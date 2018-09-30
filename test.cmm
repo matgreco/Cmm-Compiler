@@ -1,0 +1,15 @@
+int x = 1;
+
+int fact(int n){
+    if(n == 1){
+        return 1;
+    }
+    return n * fact(n-1);
+}
+
+int main(){
+    int a = input();
+    int b = fact(a + x);
+    print(b);
+    return 0;
+}

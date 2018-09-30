@@ -2,12 +2,28 @@
 grammar Cmm2;
 
 
+build:
+    (
+        declare_statement//usar solo declaraciones sin asignacion?
+        | forward_function_definition
+        | function_definition
+        | struct_definition
+        | ';'
+    )*
+;
+
+
+
 //TODO? cambiar orden?
 
+declare_statement:
+    declare_expression ';'
+;
 
 declare_expression:
     TYPE VAR
     | TYPE VAR '=' expression
+    | TYPE VAR '[' NUMBER ']'
 ;
 
 assign_expression:
@@ -15,8 +31,7 @@ assign_expression:
 ;
 
 compare_expression:
-    VAR compare_op VAR  
-    | VAR compare_op expression
+    expression compare_op expression
 ;
 
 compare_op:
@@ -33,42 +48,70 @@ assign_op:
     | '-='
     | '*='
     | '/='
+    | '%='
+    | '<<='
+    | '>>='
+    | '&='
+    | '^='
+    | '|='
+;
+
+unary_left_op:
+    '++'
+    | '--'
+    | '+'
+    | '-'
+    | '!'
+    | '~'
 ;
 
 statement:
-    expression';'
+    expression?';'
     | declare_expression';'
+    | 'break' ';'
+    | 'continue' ';'
+    | 'return' expression? ';'
     | if_statement
     | while_statement
     | for_statement
-//  | '{' statement* '}' //?
+    | '{' statement* '}'
 ;
 
 if_statement:
     If '(' expression ')' statement
     | If '(' expression ')' statement Else statement
-    | If '(' expression ')' '{' statement* '}'
-    | If '(' expression ')' '{' statement* '}' Else '{' statement* '}'
-    | If '(' expression ')' statement Else '{' statement* '}'
-    | If '(' expression ')' '{' statement* '}' Else statement
+//    | If '(' expression ')' '{' statement* '}'
+//    | If '(' expression ')' '{' statement* '}' Else '{' statement* '}'
+//    | If '(' expression ')' statement Else '{' statement* '}'
+//    | If '(' expression ')' '{' statement* '}' Else statement
 ;
 
 while_statement:
     While'(' expression ')' statement
-    | While '(' expression ')' '{' statement* '}'
+//    | While '(' expression ')' '{' statement* '}'
 ;
 
 for_statement:
     For '('(expression | declare_expression) ';' expression ';' expression ')' statement
-    | For '('(expression | declare_expression) ';' expression ';' expression ')' '{' statement* '}'
+//    | For '('(expression | declare_expression) ';' expression ';' expression ')' '{' statement* '}'
 ;
 
-function_call_statement : 
-    VAR '(' (expression (',' expression)?)? ')'  
+function_call_expression : 
+    VAR '(' (expression (',' expression)*)? ')'  
 ;
 
-function_definition_statement : 
-    TYPE VAR '(' (TYPE VAR (',' TYPE VAR)?)? ')' '{' statement '}'  
+function_definition : 
+    TYPE VAR '(' (TYPE VAR (',' TYPE VAR)*)? ')' '{' statement* '}'  
+;
+
+forward_function_definition:
+    TYPE VAR '(' (TYPE VAR? (',' TYPE VAR?)*)? ')' ';'
+;
+
+struct_definition:
+    'struct' VAR '{'
+        declare_statement*
+    '}'';'
 ;
 
 NUMBER:
@@ -99,6 +142,7 @@ HEX_NUMBER:
 TYPE:
     Int
     | Char
+    | 'struct' VAR
 //  | String //?
 ;
 
@@ -112,6 +156,7 @@ For:'for';
 Break:'break';
 True:'true';
 False:'false';
+Struct:'struct';
 //String:'string'; //?
 
 
@@ -125,13 +170,82 @@ WS
 ;
 
 
-
+/*
+    EXPRESSIONS:
+    HIGHER PRECEDENCE
+    1   right_unary
+        ++/--
+        ()
+        []
+        .
+    2   left_unary_operator_expression
+        ++/--
+        left unary +/-
+        !
+        ~
+    3   operator_expression
+        *
+        /
+        %
+    4
+        +
+        -
+    5
+        <<
+        >>
+    6
+        <
+        <=
+        >
+        >=
+    7
+        ==
+        !=
+    8
+        &
+    9
+        ^
+    10
+        |
+    11
+        &&
+    12
+        ||
+    13  expression
+        =
+        +=
+        -=
+        *=
+        /=
+        %=
+        <<=
+        >>=
+        &=
+        ^=
+        |=
+    14 comma_expression
+        comma operator ,
+ */
 
 expression:
     '(' expression ')'
     | NUMBER
     | STRING_CONSTANT
     | VAR
-    | assign_expression
-    | compare_expression
+    | expression '.' VAR 
+    | function_call_expression | (VAR '[' expression ']') // expression[expression] para permitir usar 0[var] == var[0]
+    | expression ('++' | '--')
+    | unary_left_op expression
+    | expression ('*' | '/' | '%') expression
+    | expression ('+' | '-') expression
+    | expression ('<<' | '>>') expression
+    | expression ('<' | '<=' | '>' | '>=') expression
+    | expression ('==' | '!=') expression
+    | expression '&' expression
+    | expression '^' expression
+    | expression '|' expression
+    | expression '&&' expression
+    | expression '||' expression
+    | <assoc=right>assign_expression
+    | expression ',' expression
 ;
