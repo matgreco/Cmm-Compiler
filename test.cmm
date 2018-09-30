@@ -1,5 +1,12 @@
 int x = 1;
 
+struct S{
+    int a;
+    int b;
+    char B[5];
+};
+
+
 int fact(int n){
     if(n == 1){
         return 1;
@@ -7,9 +14,15 @@ int fact(int n){
     return n * fact(n-1);
 }
 
+int f(int a,int b){
+    return a+b;
+}
+
 int main(){
     int a = input();
-    int b = fact(a + x);
+    int b = fact(f(a,x));
     print(b);
+    struct S P;
+    P.a = 2;
     return 0;
 }

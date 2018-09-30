@@ -21,13 +21,12 @@ declare_statement:
 ;
 
 declare_expression:
-    TYPE VAR
-    | TYPE VAR '=' expression
-    | TYPE VAR '[' NUMBER ']'
+    type VAR ('=' expression (',' VAR ('=' expression)?)*)?
+    | type VAR '[' comma_expression ']'
 ;
 
 assign_expression:
-    VAR assign_op expression
+    (VAR | member_var) assign_op expression
 ;
 
 compare_expression:
@@ -67,7 +66,7 @@ unary_left_op:
 
 statement:
     expression?';'
-    | declare_expression';'
+    | declare_statement
     | 'break' ';'
     | 'continue' ';'
     | 'return' expression? ';'
@@ -78,8 +77,8 @@ statement:
 ;
 
 if_statement:
-    If '(' expression ')' statement
-    | If '(' expression ')' statement Else statement
+    If '(' comma_expression ')' statement
+    | If '(' comma_expression ')' statement Else statement
 //    | If '(' expression ')' '{' statement* '}'
 //    | If '(' expression ')' '{' statement* '}' Else '{' statement* '}'
 //    | If '(' expression ')' statement Else '{' statement* '}'
@@ -87,12 +86,12 @@ if_statement:
 ;
 
 while_statement:
-    While'(' expression ')' statement
+    While'(' comma_expression ')' statement
 //    | While '(' expression ')' '{' statement* '}'
 ;
 
 for_statement:
-    For '('(expression | declare_expression) ';' expression ';' expression ')' statement
+    For '('(comma_expression | declare_expression) ';' comma_expression ';' comma_expression ')' statement
 //    | For '('(expression | declare_expression) ';' expression ';' expression ')' '{' statement* '}'
 ;
 
@@ -101,17 +100,17 @@ function_call_expression :
 ;
 
 function_definition : 
-    TYPE VAR '(' (TYPE VAR (',' TYPE VAR)*)? ')' '{' statement* '}'  
+    type VAR '(' (type VAR (',' type VAR)*)? ')' '{' statement* '}'  
 ;
 
 forward_function_definition:
-    TYPE VAR '(' (TYPE VAR? (',' TYPE VAR?)*)? ')' ';'
+    type VAR '(' (type VAR? (',' type VAR?)*)? ')' ';'
 ;
 
 struct_definition:
     'struct' VAR '{'
         declare_statement*
-    '}'';'
+    '}' ';'
 ;
 
 NUMBER:
@@ -132,14 +131,14 @@ DEC_NUMBER:
 ;
 
 OCT_NUMBER:
-    '0'[0-7][0-7]*
+    '0'[0-7]+
 ;
 
 HEX_NUMBER:
-    ('0x' | '0X')[0-9a-fA-F][0-9a-fA-F]*
+    ('0x' | '0X')[0-9a-fA-F]+
 ;
 
-TYPE:
+type:
     Int
     | Char
     | 'struct' VAR
@@ -154,6 +153,7 @@ Else:'else';
 While:'while';
 For:'for';
 Break:'break';
+Continue:'continue';
 True:'true';
 False:'false';
 Struct:'struct';
@@ -227,13 +227,24 @@ WS
         comma operator ,
  */
 
+comma_expression:
+    expression
+    | comma_expression ',' expression
+;
+
+//tratar a.b.c.d (...) como variables
+member_var:
+    VAR
+    | member_var '.' VAR
+;
+
 expression:
-    '(' expression ')'
+    '(' comma_expression ')'
     | NUMBER
     | STRING_CONSTANT
     | VAR
-    | expression '.' VAR 
-    | function_call_expression | (VAR '[' expression ']') // expression[expression] para permitir usar 0[var] == var[0]
+    | member_var
+    | function_call_expression | ((VAR | member_var) '[' expression ']') // expression[expression] para permitir usar 0[var] == var[0]
     | expression ('++' | '--')
     | unary_left_op expression
     | expression ('*' | '/' | '%') expression
@@ -247,5 +258,4 @@ expression:
     | expression '&&' expression
     | expression '||' expression
     | <assoc=right>assign_expression
-    | expression ',' expression
 ;
