@@ -65,11 +65,11 @@ unary_left_op:
 ;
 
 statement:
-    expression?';'
+    comma_expression?';'
     | declare_statement
     | 'break' ';'
     | 'continue' ';'
-    | 'return' expression? ';'
+    | 'return' comma_expression? ';'
     | if_statement
     | while_statement
     | for_statement
@@ -100,11 +100,11 @@ function_call_expression :
 ;
 
 function_definition : 
-    type VAR '(' (type VAR (',' type VAR)*)? ')' '{' statement* '}'  
+    (type | 'void') VAR '(' ((type VAR (',' type VAR)*)? | 'void') ')' '{' statement* '}'  
 ;
 
 forward_function_definition:
-    type VAR '(' (type VAR? (',' type VAR?)*)? ')' ';'
+    (type | 'void') VAR '(' ((type VAR? (',' type VAR?)*)? | 'void') ')' ';'
 ;
 
 struct_definition:
@@ -122,6 +122,10 @@ NUMBER:
 //TODO? poner escape characters?
 STRING_CONSTANT :
     '"' ~('"')* '"'
+;
+
+CHAR_CONSTANT:
+    '\'' ~('\'')* '\''
 ;
 
 
@@ -157,6 +161,7 @@ Continue:'continue';
 True:'true';
 False:'false';
 Struct:'struct';
+Void:'void';
 //String:'string'; //?
 
 
@@ -169,6 +174,14 @@ WS
     : [ \t\u000C\r\n]+ -> skip
 ;
 
+//Comments
+COMMENT:
+    '//' ~[\n]* -> skip
+;
+
+MULTILINE_COMMENT:
+    '/*' ~[*/]* '*/' -> skip
+;
 
 /*
     EXPRESSIONS:
@@ -242,6 +255,7 @@ expression:
     '(' comma_expression ')'
     | NUMBER
     | STRING_CONSTANT
+    | CHAR_CONSTANT
     | VAR
     | member_var
     | function_call_expression | ((VAR | member_var) '[' expression ']') // expression[expression] para permitir usar 0[var] == var[0]
