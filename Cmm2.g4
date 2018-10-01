@@ -87,15 +87,15 @@ if_statement:
 //    | If '(' expression ')' '{' statement* '}' Else statement
 ;
 switch_statement:
-    Switch '(' expression ')' '{' (case_statement)+ (default_statement)? '}'
+    Switch '(' expression ')' '{' (case_statement)* (default_statement)? '}'
 ;
 
 case_statement :
-    Case ( expression ) ':' statement+
+    Case ( expression ) ':' statement*
 ;
 
 default_statement : 
-    Default ':' statement
+    Default ':' statement*
 ;
 
 

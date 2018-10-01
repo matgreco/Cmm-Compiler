@@ -1,0 +1,10 @@
+int main(){
+	int a = 10;
+	if(a == 20){
+		printf("%d",a);
+	}
+	a = 20;
+	else 
+		printf("%d",a);
+	return 0;
+}
