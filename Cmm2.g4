@@ -19,8 +19,8 @@ declare_statement:
 ;
 
 declare_expression:
-    type VAR ('=' expression (',' VAR ('=' expression)?)*)?
-    | type VAR '[' comma_expression ']'
+    Static? Unsigned? type VAR ('=' expression (',' VAR ('=' expression)?)*)?
+    | Static? Unsigned? type VAR '[' comma_expression ']'
 ;
 
 assign_expression:
@@ -91,7 +91,7 @@ switch_statement:
 ;
 
 case_statement :
-    Case ( expression ) ':' statement
+    Case ( expression ) ':' statement+
 ;
 
 default_statement : 
@@ -132,6 +132,8 @@ struct_definition:
         declare_statement*
     '}' ';'
 ;
+
+
 
 NUMBER:
     DEC_NUMBER
@@ -203,10 +205,11 @@ Long:'long';
 Short:'short';
 Float:'float';
 
-Sizeof:'sizeof';
 Static:'static';
-Typedef:'typedef';
 Unsigned:'unsigned';
+
+//Typedef:'typedef';
+//Sizeof:'sizeof';
 
 //String:'string'; //?
 

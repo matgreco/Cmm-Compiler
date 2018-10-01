@@ -1,0 +1,28 @@
+int main(void)
+{
+  int month=10;
+
+  switch(1a){
+    case 1: 
+      b=10;
+    case 2:
+      c=20;
+      v = 020;
+      break;
+    default :
+      x = 10101;
+  }
+
+  do {
+    a = 10;
+    b++;
+    c--;
+    ++z;
+    o = p;
+    int papa = 88;
+  }
+  //while(papa != popo);
+  casa = 100;
+
+  return(0);
+}

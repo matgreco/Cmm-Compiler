@@ -1,0 +1,22 @@
+struct Account {
+   int account_number;
+   char first_name[10];
+   char last_name[10];
+   float balance;
+};
+
+int funcion_devuelve_struct(struct Account account_a){
+	return account_a.account_number;
+}
+
+int main(){
+	struct Account account_b;
+	int b;
+
+	b = funcion_devuelve_struct(account_b);
+	printf("%d\n",b);
+
+	b = sizeof(account_b);
+
+	return(0);
+}
