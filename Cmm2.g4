@@ -87,11 +87,11 @@ if_statement:
 //    | If '(' expression ')' '{' statement* '}' Else statement
 ;
 switch_statement:
-    Switch '(' VAR ')' '{' (case_statement)+ (default_statement)? '}'
+    Switch '(' expression ')' '{' (case_statement)+ (default_statement)? '}'
 ;
 
 case_statement :
-    Case ( NUMBER | STRING_CONSTANT | CHAR_CONSTANT ) ':' statement*
+    Case ( expression ) ':' statement
 ;
 
 default_statement : 
@@ -168,6 +168,7 @@ type:
     | Double
     | Long
     | Short
+    | Float
     | 'struct' VAR
 //  | String //?
 ;
@@ -200,6 +201,7 @@ Const:'const';
 Double:'double';
 Long:'long';
 Short:'short';
+Float:'float';
 
 Sizeof:'sizeof';
 Static:'static';
