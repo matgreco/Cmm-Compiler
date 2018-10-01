@@ -13,7 +13,10 @@
 ## CODIGOS PARA PROBAR Y GENERAR EL ARBOL
 
 ### prueba evaluando un if que asigna dos variables
-echo "if(casa == 10){casaa = 20; casab =0; }" | grun Cmm2 expression -gui
+echo "if(casa == 10){casaa = 20; casab =0; }" | grun Cmm2 build -gui
 
 ### una funcion
-echo "void main(){int unavariable; unavariable = funcion1(argumento1, argumento2, 3);}" | grun Cmm2 expression -gui
+echo "void main(){int unavariable; unavariable = funcion1(argumento1, argumento2, 3);}" | grun Cmm2 build -gui
+
+### Para probar desde archivos
+grun Cmm2 build -gui < test.cmm

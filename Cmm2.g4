@@ -4,15 +4,13 @@ grammar Cmm2;
 
 build:
     (
-        declare_statement//usar solo declaraciones sin asignacion?
+        declare_statement //usar solo declaraciones sin asignacion?
         | forward_function_definition
         | function_definition
         | struct_definition
         | ';'
     )*
 ;
-
-
 
 //TODO? cambiar orden?
 
@@ -64,16 +62,20 @@ unary_left_op:
     | '~'
 ;
 
+
+
 statement:
     comma_expression?';'
     | declare_statement
-    | 'break' ';'
-    | 'continue' ';'
-    | 'return' comma_expression? ';'
+    | Break ';'
+    | Continue ';'
+    | Return comma_expression? ';'
     | if_statement
     | while_statement
     | for_statement
-    | '{' statement* '}'
+    | switch_statement
+    | do_statement
+    | '{' statement* '}' 
 ;
 
 if_statement:
@@ -84,6 +86,19 @@ if_statement:
 //    | If '(' expression ')' statement Else '{' statement* '}'
 //    | If '(' expression ')' '{' statement* '}' Else statement
 ;
+switch_statement:
+    Switch '(' VAR ')' '{' (case_statement)+ (default_statement)? '}'
+;
+
+case_statement :
+    Case ( NUMBER | STRING_CONSTANT | CHAR_CONSTANT ) ':' statement*
+;
+
+default_statement : 
+    Default ':' statement
+;
+
+
 
 while_statement:
     While'(' comma_expression ')' statement
@@ -94,6 +109,11 @@ for_statement:
     For '('(comma_expression | declare_expression) ';' comma_expression ';' comma_expression ')' statement
 //    | For '('(expression | declare_expression) ';' expression ';' expression ')' '{' statement* '}'
 ;
+
+do_statement:
+    Do statement While '(' comma_expression ')' 
+;
+
 
 function_call_expression : 
     VAR '(' (expression (',' expression)*)? ')'  
@@ -145,6 +165,9 @@ HEX_NUMBER:
 type:
     Int
     | Char
+    | Double
+    | Long
+    | Short
     | 'struct' VAR
 //  | String //?
 ;
@@ -162,6 +185,27 @@ True:'true';
 False:'false';
 Struct:'struct';
 Void:'void';
+Return:'return';
+
+Auto:'auto';
+Switch:'switch';
+Case:'case';
+Default:'default';
+Do:'do';
+
+
+Const:'const';
+
+
+Double:'double';
+Long:'long';
+Short:'short';
+
+Sizeof:'sizeof';
+Static:'static';
+Typedef:'typedef';
+Unsigned:'unsigned';
+
 //String:'string'; //?
 
 
