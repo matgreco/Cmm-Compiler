@@ -76,8 +76,8 @@ statement:
 ;
 
 if_statement:
-    If '(' comma_expression ')' statement
-    | If '(' comma_expression ')' statement Else statement
+    If '(' comma_expression ')' statement (Else statement)*
+//    | If '(' comma_expression ')' statement Else statement
 //    | If '(' expression ')' '{' statement* '}'
 //    | If '(' expression ')' '{' statement* '}' Else '{' statement* '}'
 //    | If '(' expression ')' statement Else '{' statement* '}'
@@ -195,10 +195,10 @@ Sizeof:'sizeof';
 
 
 //unused
-Const:'const';
-Static:'static';
-Auto:'auto';
-Goto:'goto';
+//Const:'const';
+//Static:'static';
+//Auto:'auto';
+//Goto:'goto';
 
 
 
@@ -288,11 +288,6 @@ comma_expression:
     | comma_expression ',' expression
 ;
 
-//tratar a.b.c.d (...) como variables
-member_var:
-    VAR
-    | member_var '.' VAR
-;
 
 expression:
     '(' comma_expression ')'

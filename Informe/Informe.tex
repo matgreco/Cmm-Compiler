@@ -71,6 +71,7 @@ Algunas caracter\'isticas interesantes:
 
 La definici\'on de los componentes l\'exicos del lenguaje \Cp es similar al lenguaje \C, y se define de la siguiente forma:
 \begin{itemize}
+    \item \textbf{Keywords:} \texttt{int}, \texttt{char}, \texttt{double}, \texttt{float}, \texttt{long}, \texttt{short}, \texttt{unsigned}, \texttt{sizeof}, \texttt{if}, \texttt{else}, \texttt{while}, \texttt{for}, \texttt{break}, \texttt{continue}, \texttt{true}, \texttt{false}, \texttt{struct}, \texttt{void}, \texttt{return}, \texttt{switch}, \texttt{case}, \texttt{default}, \texttt{do}. Tienen el mismo uso que en \C.
     \item \textbf{Identificadores:} Puede componerse de letras, n\'umeros y guiones bajos, pero no pueden empezar con un n\'umero.
     \item \textbf{Valores constantes:} Pueden ser n\'umeros enteros con o sin signo (expresables en base 8, 10 y 16), n\'umeros de punto flotante, caracteres y strings.
     \item \textbf{Operadores aritm\'eticos:} \texttt{+} para suma, \texttt{-} para resta, \texttt{*} para multiplicaci\'on \texttt{/} para divisi\'on y \texttt{\%} para el resto de la divisi\'on.
@@ -83,6 +84,243 @@ La definici\'on de los componentes l\'exicos del lenguaje \Cp es similar al leng
     \item \textbf{Operador coma:} \texttt{exp1,exp2} ejecuta \texttt{a}, luego \texttt{b} y retorna \texttt{b}.
     \item \textbf{Operadores varios:} \texttt{sizeof} retorna el tama\~no en bytes de una expresi\'on o tipo; llamadas a m\'etodos (\texttt{f(exp1,exp2)}); acceso a miembros (\texttt{estructura.miembro}); y acceso a elementos de un array (\texttt{arr[i]}).
 \end{itemize}
+
+\section*{Toda la gram\'atica}
+\begin{verbatim}
+grammar Cmm2;
+
+build:
+    (
+        declare_statement
+        | forward_function_definition
+        | function_definition
+        | struct_definition
+        | ';'
+    )*
+;
+
+declare_statement:
+    declare_expression ';'
+;
+
+declare_expression:
+    type VAR ('=' expression)? (',' VAR ('=' expression)?)*
+    | type VAR '[' comma_expression ']'
+;
+
+compare_op:
+    '=='
+    | '<='
+    | '>='
+    | '<'
+    | '>'
+;
+
+assign_op:
+    '='
+    | '+='
+    | '-='
+    | '*='
+    | '/='
+    | '%='
+    | '<<='
+    | '>>='
+    | '&='
+    | '^='
+    | '|='
+;
+
+unary_left_op:
+    '++'
+    | '--'
+    | '+'
+    | '-'
+    | '!'
+    | '~'
+;
+
+statement:
+    comma_expression?';'
+    | declare_statement
+    | Break ';'
+    | Continue ';'
+    | Return comma_expression? ';'
+    | Case INT_NUMBER ':'
+    | Default ':'
+    | if_statement
+    | while_statement
+    | for_statement
+    | switch_statement
+    | do_statement
+    | '{' statement* '}' 
+;
+
+if_statement:
+    If '(' comma_expression ')' statement (Else statement)?
+;
+
+switch_statement:
+    Switch '(' comma_expression ')' '{' statement* '}'
+;
+
+while_statement:
+    While'(' comma_expression ')' statement
+;
+
+for_statement:
+    For '('
+    (comma_expression | declare_expression)? ';'
+    comma_expression? ';'
+    comma_expression?
+    ')' statement
+;
+
+do_statement:
+    Do statement While '(' comma_expression ')' ';'
+;
+
+
+function_call_expression : 
+    VAR '(' (expression (',' expression)*)? ')'  
+;
+
+function_definition : 
+    (type | 'void') VAR '('
+    ((type '&'? VAR (',' type '&'? VAR)*)? | 'void')
+    ')' '{' statement* '}'  
+;
+
+forward_function_definition:
+    (type | 'void') VAR '('
+    ((type '&'? VAR? (',' type '&'? VAR?)*)? | 'void')
+    ')' ';'
+;
+
+struct_definition:
+    'struct' VAR '{'
+        declare_statement*
+    '}' ';'
+;
+
+FLOAT_NUMBER :
+    [0-9]* '.' [0-9]+
+    | [0-9]+ '.' [0-9]*
+;
+
+INT_NUMBER:
+    DEC_NUMBER ('u' | 'U')? ('ll' | 'LL')?
+    | OCT_NUMBER ('u' | 'U')? ('ll' | 'LL')?
+    | HEX_NUMBER ('u' | 'U')? ('ll' | 'LL')?
+    | CHAR_CONSTANT
+;
+
+STRING_CONSTANT :
+    '"' ~('"')* '"'
+;
+
+CHAR_CONSTANT:
+    '\'' ~('\'')* '\''
+;
+
+
+DEC_NUMBER:
+    '0'
+    | [1-9][0-9]*
+;
+
+OCT_NUMBER:
+    '0'[0-7]+
+;
+
+HEX_NUMBER:
+    ('0x' | '0X')[0-9a-fA-F]+
+;
+
+type:
+    Unsigned? Int
+    | Unsigned? Char
+    | Double
+    | Unsigned? Long
+    | Unsigned? Short
+    | Float
+    | 'struct' VAR
+;
+
+//KEYWORDS
+Int:'int';
+Char:'char';
+If:'if';
+Else:'else';
+While:'while';
+For:'for';
+Break:'break';
+Continue:'continue';
+True:'true';
+False:'false';
+Struct:'struct';
+Void:'void';
+Return:'return';
+
+Switch:'switch';
+Case:'case';
+Default:'default';
+Do:'do';
+
+Double:'double';
+Long:'long';
+Short:'short';
+Float:'float';
+Unsigned:'unsigned';
+Sizeof:'sizeof';
+
+VAR:
+    [a-zA-Z_][a-zA-Z0-9_]*
+;
+
+
+WS
+    : [ \t\u000C\r\n]+ -> skip
+;
+
+COMMENT:
+    '//' ~[\n]* -> skip
+;
+
+MULTILINE_COMMENT:
+    '/*' .*? '*/' -> skip
+;
+
+comma_expression:
+    expression
+    | comma_expression ',' expression
+;
+
+expression:
+    '(' comma_expression ')'
+    | INT_NUMBER
+    | STRING_CONSTANT
+    | CHAR_CONSTANT
+    | VAR
+    | expression '.' VAR
+    | 'sizeof' '(' (expression | type) ')'
+    | function_call_expression
+    | expression '[' expression ']'
+    | expression ('++' | '--')
+    | unary_left_op expression
+    | expression ('*' | '/' | '%') expression
+    | expression ('+' | '-') expression
+    | expression ('<<' | '>>') expression
+    | expression ('<' | '<=' | '>' | '>=') expression
+    | expression ('==' | '!=') expression
+    | expression '&' expression
+    | expression '^' expression
+    | expression '|' expression
+    | expression '&&' expression
+    | expression '||' expression
+    | <assoc=right> expression '?' comma_expression ':' expression
+    | <assoc=right> expression assign_op expression
+;
+\end{verbatim}
 
 \section*{Conclusiones}
 \end{document}
