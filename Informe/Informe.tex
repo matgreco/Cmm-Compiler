@@ -53,7 +53,7 @@ Algunas caracter\'isticas interesantes:
     \item Comma expression
 \end{itemize}
 
-\section*{Caracter\'iticas no incluidas}
+\subsection*{Caracter\'iticas no incluidas}
 \begin{itemize}
     \item Macros:
 
@@ -67,7 +67,7 @@ Algunas caracter\'isticas interesantes:
     No se incluy\'o debido a que complica la gram\'atica. Eso permitir\'ia utilizar una expresi\'on de tipo \texttt{VAR} como una definici\'on de tipo. Al no incluirlo, el lenguaje no pierde capacidades, ya que una estructura personalizada \texttt{S} tiene tipo \texttt{struct S}.
 \end{itemize}
 
-\section*{Definiciones l\'exicas}
+\subsection*{Definiciones l\'exicas}
 
 La definici\'on de los componentes l\'exicos del lenguaje \Cp es similar al lenguaje \C, y se define de la siguiente forma:
 \begin{itemize}
@@ -85,7 +85,45 @@ La definici\'on de los componentes l\'exicos del lenguaje \Cp es similar al leng
     \item \textbf{Operadores varios:} \texttt{sizeof} retorna el tama\~no en bytes de una expresi\'on o tipo; llamadas a m\'etodos (\texttt{f(exp1,exp2)}); acceso a miembros (\texttt{estructura.miembro}); y acceso a elementos de un array (\texttt{arr[i]}).
 \end{itemize}
 
+\subsection*{Resoluci\'on de ambig\"uedades y precedencias}
+
+Las \'unicas ambig\"uedades presentes en el lenguaje son
+\begin{itemize}
+    \item Problema If/If/Else: En este caso, si se da
+    \begin{verbatim}
+    if(exp1) if(exp2) st1; else st2;
+    \end{verbatim}
+    el \texttt{else} corresponde siempre al \texttt{if} m\'as al interior, es decir, es equivalente a
+    \begin{verbatim}
+    if(exp1)
+    {
+        if(exp2)
+        {
+            st1;
+        }
+        else
+        {
+            st2;
+        }
+    }
+    \end{verbatim}
+    \item Problemas del estilo
+    \begin{verbatim}
+    a = b ? c : d = e;
+    \end{verbatim}
+    En este caso, el standard no determina si el orden debe ser
+    \begin{verbatim}
+    a = (b ? c : (d = e));
+    \end{verbatim}
+    o bien
+    \begin{verbatim}
+    a = ((b ? c : d) = e);
+    \end{verbatim}
+    Por lo tanto, dejamos este problema como \textit{undefined behavior}.
+\end{itemize}
+
 \section*{Toda la gram\'atica}
+Antes que todo, cabe resaltar que si bien esta gram\'atica no es LL(*) dado que tiene recursiones por la izquierda, ANTLR4 es capaz de reconocer algunas de estas recursiones y por detras las modifica para que la gram\'atica resultante sea efectivamente LL(*). Por ejemplo, para la variable \texttt{expression}, la modificaci\'on es escencialmente la misma que agregar tantos niveles asociados a expresiones como prioridades para operaciones hay.
 \begin{verbatim}
 grammar Cmm2;
 
@@ -322,5 +360,4 @@ expression:
 ;
 \end{verbatim}
 
-\section*{Conclusiones}
 \end{document}
