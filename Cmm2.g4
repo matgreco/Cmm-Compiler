@@ -222,7 +222,7 @@ COMMENT:
 ;
 
 MULTILINE_COMMENT:
-    '/*' ~[*/]* '*/' -> skip
+    '/*' .*? '*/' -> skip
 ;
 
 /*

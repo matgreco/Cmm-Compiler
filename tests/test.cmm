@@ -25,7 +25,7 @@ int main(){
 
     // Comentario
     /*
-    comentario de varias lineas
+    comentario de varias lineas *
     */
 
     int a = 1, b=3,c,d=6;

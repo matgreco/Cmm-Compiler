@@ -1,0 +1,88 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+
+\newcommand{\Cp}{\texttt{C+-}}
+\newcommand{\C}{\texttt{C}}
+\newcommand{\Cpp}{\texttt{C++}}
+
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+%If you want to title your bold things something different just make another thing exactly like this but replace "problem" with the name of the thing you want, like theorem or lemma or whatever
+
+
+\begin{document}
+
+%\renewcommand{\qedsymbol}{\filledbox}
+%Good resources for looking up how to do stuff:
+%Binary operators: http://www.access2science.com/latex/Binary.html
+%General help: http://en.wikibooks.org/wiki/LaTeX/Mathematics
+%Or just google stuff
+
+\title{Reporte}
+\author{Mat\'ias Greco, Javier Reyes}
+\date{2 de Octubre, 2018}
+\maketitle
+
+\section*{Introducci\'on}
+El presente reporte explica el trabajo realizado para el desarrollo de un anailzador l\'exico y sint\'actico para el lenguaje de programaci\'on \Cp.
+
+El lenguaje \Cp corresponde a un subconjunto del lenguaje \C, con la adici\'on de algunas caracter\'isticas de \Cpp, como la posibilidad de definir una funci\'on con paso por valor o paso por referencia.
+
+El analizador l\'exico y sint\'actico fue desarrollado en la herramienta ANTLR4 (ANother Tool for Language Recognition) con lenguaje de salida \Cpp.
+
+
+\section*{Caracter\'isticas del lenguaje}
+
+El lenguaje \Cp incluye las siguientes caracter\'isticas, propias del standard \texttt{C89}
+\begin{itemize}
+    \item Funciones.
+    \item Declaraciones.
+    \item Asignaciones.
+    \item Expresiones l\'ogicas y de operaciones.
+    \item If.
+    \item Switch (case y default).
+    \item While.
+    \item For.
+    \item Do While.
+    \item Struct
+\end{itemize}
+
+Algunas caracter\'isticas interesantes:
+\begin{itemize}
+    \item Comma expression
+\end{itemize}
+
+\section*{Caracter\'iticas no incluidas}
+\begin{itemize}
+    \item Macros:
+
+    No se incluy\'o debido a que complica todo el proceso. Requerir\'ia una precompilaci\'on y la capacidad de incluir otros archivos.
+    \item Punteros:
+
+    No se incluy\'o debido a que complica la gram\'atica, por la aparici\'on de una infinidad de tipos distintos (del estilo \texttt{int***}). Tambi\'en requiere una administraci\'on de memoria que se escapa un poco de nuestro objetivo.
+
+    \item Typedef:
+
+    No se incluy\'o debido a que complica la gram\'atica. Eso permitir\'ia utilizar una expresi\'on de tipo \texttt{VAR} como una definici\'on de tipo. Al no incluirlo, el lenguaje no pierde capacidades, ya que una estructura personalizada \texttt{S} tiene tipo \texttt{struct S}.
+\end{itemize}
+
+\section*{Definiciones l\'exicas}
+
+La definici\'on de los componentes l\'exicos del lenguaje \Cp es similar al lenguaje \C, y se define de la siguiente forma:
+\begin{itemize}
+    \item \textbf{Identificadores:} Puede componerse de letras, n\'umeros y guiones bajos, pero no pueden empezar con un n\'umero.
+    \item \textbf{Valores constantes:} Pueden ser n\'umeros enteros con o sin signo (expresables en base 8, 10 y 16), n\'umeros de punto flotante, caracteres y strings.
+    \item \textbf{Operadores aritm\'eticos:} \texttt{+} para suma, \texttt{-} para resta, \texttt{*} para multiplicaci\'on \texttt{/} para divisi\'on y \texttt{\%} para el resto de la divisi\'on.
+    \item \textbf{Operadores de comparaci\'on:} \texttt{==}, \texttt{!=}, \texttt{<=}, \texttt{>=}, \texttt{<}, \texttt{>}.
+    \item \textbf{Operadores unarios:} \texttt{++}, \texttt{--}, \texttt{+}, \texttt{-}, \texttt{!}, $\mathtt\sim$.
+    \item \textbf{Operadores de shift:} \texttt{<<}, \texttt{>>}.
+    \item \textbf{Operadores bitwise:} \texttt{\&}, \texttt{\^}, \texttt{|}.
+    \item \textbf{Operadores l\'ogicos:} \texttt{\&\&}, \texttt{||}.
+    \item \textbf{Operador ternario:} \texttt{ ? : }
+    \item \textbf{Operador coma:} \texttt{exp1,exp2} ejecuta \texttt{a}, luego \texttt{b} y retorna \texttt{b}.
+    \item \textbf{Operadores varios:} \texttt{sizeof} retorna el tama\~no en bytes de una expresi\'on o tipo; llamadas a m\'etodos (\texttt{f(exp1,exp2)}); acceso a miembros (\texttt{estructura.miembro}); y acceso a elementos de un array (\texttt{arr[i]}).
+\end{itemize}
+
+\section*{Conclusiones}
+\end{document}
