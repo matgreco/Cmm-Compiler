@@ -23,10 +23,6 @@ declare_expression:
     | type VAR '[' comma_expression ']'
 ;
 
-assign_expression:
-    (VAR | member_var) assign_op expression
-;
-
 
 compare_op:
     '=='
@@ -68,6 +64,7 @@ statement:
     | Continue ';'
     | Return comma_expression? ';'
     | Case INT_NUMBER ':' //modificar para usar constant expression (?)
+    | Default ':'
 //    | VAR ':' //label
 //    | Goto VAR ';'
     | if_statement
@@ -87,14 +84,8 @@ if_statement:
 //    | If '(' expression ')' '{' statement* '}' Else statement
 ;
 switch_statement:
-    Switch '(' expression ')' '{' statement* '}'
+    Switch '(' comma_expression ')' '{' statement* '}'
 ;
-
-default_statement : 
-    Default ':' statement*
-;
-
-
 
 while_statement:
     While'(' comma_expression ')' statement
@@ -326,5 +317,5 @@ expression:
     | expression '&&' expression
     | expression '||' expression
     | <assoc=right> expression '?' comma_expression ':' expression
-    | <assoc=right>assign_expression
+    | <assoc=right> expression assign_op expression
 ;
