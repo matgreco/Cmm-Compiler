@@ -11,12 +11,23 @@
 
 
 ## CODIGOS PARA PROBAR Y GENERAR EL ARBOL
+Para ejecutar códigos de prueba bajo la gramática definida por C+- y ver el AST generado, debe ejecutar el script compile.sh junto con el archivo a ejecutar.
 
-### prueba evaluando un if que asigna dos variables
+I.E.:
+
+- ./compile.sh tests/error_do.cmm 
+- ./compile.sh tests/error_if.cmm 
+- ./compile.sh tests/test.cmm 
+- ./compile.sh tests/test_comma_operation.cmm 
+- ./compile.sh tests/test_function_struct.cmm
+- ./compile.sh tests/test_struct.cmm
+- ./compile.sh tests/test_switch.cmm
+
+## Pruebas con código inline
+- prueba evaluando un if que asigna dos variables
 echo "if(casa == 10){casaa = 20; casab =0; }" | grun Cmm2 build -gui
 
-### una funcion
+- una funcion
 echo "void main(){int unavariable; unavariable = funcion1(argumento1, argumento2, 3);}" | grun Cmm2 build -gui
 
-### Para probar desde archivos
-grun Cmm2 build -gui < test.cmm
+
