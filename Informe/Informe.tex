@@ -81,7 +81,7 @@ La definici\'on de los componentes l\'exicos del lenguaje \Cp es similar al leng
     \item \textbf{Operadores bitwise:} \texttt{\&}, \texttt{\^}, \texttt{|}.
     \item \textbf{Operadores l\'ogicos:} \texttt{\&\&}, \texttt{||}.
     \item \textbf{Operador ternario:} \texttt{ ? : }
-    \item \textbf{Operador coma:} \texttt{exp1,exp2} ejecuta \texttt{a}, luego \texttt{b} y retorna \texttt{b}.
+    \item \textbf{Operador coma:} \texttt{exp1,exp2} ejecuta \texttt{exp1}, luego \texttt{exp2} y retorna \texttt{exp2}.
     \item \textbf{Operadores varios:} \texttt{sizeof} retorna el tama\~no en bytes de una expresi\'on o tipo; llamadas a m\'etodos (\texttt{f(exp1,exp2)}); acceso a miembros (\texttt{estructura.miembro}); y acceso a elementos de un array (\texttt{arr[i]}).
 \end{itemize}
 
@@ -121,6 +121,8 @@ Las \'unicas ambig\"uedades presentes en el lenguaje son
     \end{verbatim}
     Por lo tanto, dejamos este problema como \textit{undefined behavior}.
 \end{itemize}
+
+Las precedencias son las standard para \C y para lenguajes de programaci\'on similares.
 
 \section*{Toda la gram\'atica}
 Antes que todo, cabe resaltar que si bien esta gram\'atica no es LL(*) dado que tiene recursiones por la izquierda, ANTLR4 es capaz de reconocer algunas de estas recursiones y por detras las modifica para que la gram\'atica resultante sea efectivamente LL(*). Por ejemplo, para la variable \texttt{expression}, la modificaci\'on es escencialmente la misma que agregar tantos niveles asociados a expresiones como prioridades para operaciones hay.
