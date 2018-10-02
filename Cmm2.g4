@@ -19,17 +19,14 @@ declare_statement:
 ;
 
 declare_expression:
-    Static? Unsigned? type VAR ('=' expression (',' VAR ('=' expression)?)*)?
-    | Static? Unsigned? type VAR '[' comma_expression ']'
+    type VAR ('=' expression)? (',' VAR ('=' expression)?)*
+    | type VAR '[' comma_expression ']'
 ;
 
 assign_expression:
     (VAR | member_var) assign_op expression
 ;
 
-compare_expression:
-    expression compare_op expression
-;
 
 compare_op:
     '=='
@@ -70,6 +67,9 @@ statement:
     | Break ';'
     | Continue ';'
     | Return comma_expression? ';'
+    | Case INT_NUMBER ':' //modificar para usar constant expression (?)
+//    | VAR ':' //label
+//    | Goto VAR ';'
     | if_statement
     | while_statement
     | for_statement
@@ -87,11 +87,7 @@ if_statement:
 //    | If '(' expression ')' '{' statement* '}' Else statement
 ;
 switch_statement:
-    Switch '(' expression ')' '{' (case_statement)* (default_statement)? '}'
-;
-
-case_statement :
-    Case ( expression ) ':' statement*
+    Switch '(' expression ')' '{' statement* '}'
 ;
 
 default_statement : 
@@ -106,12 +102,12 @@ while_statement:
 ;
 
 for_statement:
-    For '('(comma_expression | declare_expression) ';' comma_expression ';' comma_expression ')' statement
+    For '('(comma_expression | declare_expression)? ';' comma_expression? ';' comma_expression? ')' statement
 //    | For '('(expression | declare_expression) ';' expression ';' expression ')' '{' statement* '}'
 ;
 
 do_statement:
-    Do statement While '(' comma_expression ')' 
+    Do statement While '(' comma_expression ')' ';'
 ;
 
 
@@ -120,11 +116,11 @@ function_call_expression :
 ;
 
 function_definition : 
-    (type | 'void') VAR '(' ((type VAR (',' type VAR)*)? | 'void') ')' '{' statement* '}'  
+    (type | 'void') VAR '(' ((type '&'? VAR (',' type '&'? VAR)*)? | 'void') ')' '{' statement* '}'  
 ;
 
 forward_function_definition:
-    (type | 'void') VAR '(' ((type VAR? (',' type VAR?)*)? | 'void') ')' ';'
+    (type | 'void') VAR '(' ((type '&'? VAR? (',' type '&'? VAR?)*)? | 'void') ')' ';'
 ;
 
 struct_definition:
@@ -133,12 +129,16 @@ struct_definition:
     '}' ';'
 ;
 
+FLOAT_NUMBER :
+    [0-9]* '.' [0-9]+
+    | [0-9]+ '.' [0-9]*
+;
 
-
-NUMBER:
-    DEC_NUMBER
-    | OCT_NUMBER
-    | HEX_NUMBER
+INT_NUMBER:
+    DEC_NUMBER ('u' | 'U')? ('ll' | 'LL')?
+    | OCT_NUMBER ('u' | 'U')? ('ll' | 'LL')?
+    | HEX_NUMBER ('u' | 'U')? ('ll' | 'LL')?
+    | CHAR_CONSTANT
 ;
 
 //TODO? poner escape characters?
@@ -165,11 +165,11 @@ HEX_NUMBER:
 ;
 
 type:
-    Int
-    | Char
+    Unsigned? Int
+    | Unsigned? Char
     | Double
-    | Long
-    | Short
+    | Unsigned? Long
+    | Unsigned? Short
     | Float
     | 'struct' VAR
 //  | String //?
@@ -190,26 +190,28 @@ Struct:'struct';
 Void:'void';
 Return:'return';
 
-Auto:'auto';
 Switch:'switch';
 Case:'case';
 Default:'default';
 Do:'do';
 
-
-Const:'const';
-
-
 Double:'double';
 Long:'long';
 Short:'short';
 Float:'float';
-
-Static:'static';
 Unsigned:'unsigned';
+Sizeof:'sizeof';
+
+
+//unused
+Const:'const';
+Static:'static';
+Auto:'auto';
+Goto:'goto';
+
+
 
 //Typedef:'typedef';
-//Sizeof:'sizeof';
 
 //String:'string'; //?
 
@@ -240,6 +242,7 @@ MULTILINE_COMMENT:
         ()
         []
         .
+        sizeof()
     2   left_unary_operator_expression
         ++/--
         left unary +/-
@@ -302,12 +305,14 @@ member_var:
 
 expression:
     '(' comma_expression ')'
-    | NUMBER
+    | INT_NUMBER
     | STRING_CONSTANT
     | CHAR_CONSTANT
     | VAR
-    | member_var
-    | function_call_expression | ((VAR | member_var) '[' expression ']') // expression[expression] para permitir usar 0[var] == var[0]
+    | expression '.' VAR
+    | 'sizeof' '(' (expression | type) ')'
+    | function_call_expression
+    | expression '[' expression ']' // expression[expression] para permitir usar 0[var] == var[0]
     | expression ('++' | '--')
     | unary_left_op expression
     | expression ('*' | '/' | '%') expression
@@ -320,5 +325,6 @@ expression:
     | expression '|' expression
     | expression '&&' expression
     | expression '||' expression
+    | <assoc=right> expression '?' comma_expression ':' expression
     | <assoc=right>assign_expression
 ;
