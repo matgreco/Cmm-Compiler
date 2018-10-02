@@ -12,6 +12,7 @@
 
 ## CODIGOS PARA PROBAR Y GENERAR EL ARBOL
 Para ejecutar códigos de prueba bajo la gramática definida por C+- y ver el AST generado, debe ejecutar el script compile.sh junto con el archivo a ejecutar.
+Recordar que es necesario tener java instalado
 
 I.E.:
 
