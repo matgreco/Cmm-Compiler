@@ -21,7 +21,7 @@
 %General help: http://en.wikibooks.org/wiki/LaTeX/Mathematics
 %Or just google stuff
 
-\title{Reporte}
+\title{Reporte 1. Lenguaje C+-}
 \author{Mat\'ias Greco, Javier Reyes}
 \date{2 de Octubre, 2018}
 \maketitle
@@ -32,6 +32,8 @@ El presente reporte explica el trabajo realizado para el desarrollo de un anailz
 El lenguaje \texttt{C+-} corresponde a un subconjunto del lenguaje \C, con la adici\'on de algunas caracter\'isticas de \Cpp, como la posibilidad de definir una funci\'on con paso por valor o paso por referencia.
 
 El analizador l\'exico y sint\'actico fue desarrollado en la herramienta ANTLR4 (ANother Tool for Language Recognition) con lenguaje de salida \Cpp.
+
+El repositorio del proyecto está disponible en github\footnote{https://github.com/matgreco/Cmm-Compiler}.
 
 
 \section*{Caracter\'isticas del lenguaje}
@@ -50,7 +52,7 @@ El lenguaje \texttt{C+-} incluye las siguientes caracter\'isticas, propias del s
     \item Struct.
 \end{itemize}
 
-Algunas caracter\'isticas interesantes:
+Algunas caracter\'isticas interesantes incluidas:
 \begin{itemize}
     \item Comma expression
 \end{itemize}
@@ -59,7 +61,7 @@ Algunas caracter\'isticas interesantes:
 \begin{itemize}
     \item Macros:
 
-    No se incluy\'o debido a que complica todo el proceso. Requerir\'ia una precompilaci\'on y la capacidad de incluir otros archivos.
+    No se incluy\'o debido a que complica todo el proceso. Requerir\'ia una precompilaci\'on y la capacidad de incluir otros archivos mediante enlazado.
     \item Punteros:
 
     No se incluy\'o debido a que complica la gram\'atica, por la aparici\'on de una infinidad de tipos distintos (del estilo \texttt{int***}). Tambi\'en requiere una administraci\'on de memoria que se escapa un poco de nuestro objetivo.
@@ -89,7 +91,7 @@ La definici\'on de los componentes l\'exicos del lenguaje \texttt{C+-} es simila
 
 \subsection*{Resoluci\'on de ambig\"uedades y precedencias}
 
-Las \'unicas ambig\"uedades presentes en el lenguaje son
+Las ambig\"uedades presentes en el lenguaje son
 \begin{itemize}
     \item Problema If/If/Else: En este caso, si se da
     \begin{verbatim}
@@ -125,6 +127,33 @@ Las \'unicas ambig\"uedades presentes en el lenguaje son
 \end{itemize}
 
 Las precedencias son las standard para \texttt{C} y para lenguajes de programaci\'on similares.
+
+\section*{Pruebas}
+En el repositorio se encuentras siete c\'odigos de prueba, dos de los cuales arrojan errores con la intenci\'on de probar el funcionamiento del analizador l\'exico.
+Una de las pruebas mas sencillas que se realiz\'o fue utilizando el c\'odigo siguiente, donde se muestran una llamada a una funci\'on (la funci\'on principal), declaraciones, asignaciones y la utilizaci\'on del operador coma. 
+\begin{verbatim}
+int main()
+{
+    int a = 10;
+    int b = 30;
+    int c;
+    
+    c = a,b,a;
+    
+    printf("%d",c);
+
+    return 0;
+}
+\end{verbatim}
+Este c\'odigo, al pasar por el analizador l\'exico y sint\'actico, arroja el AST dispuesto en la figura 1.
+
+
+\centerline{\includegraphics[trim={0 9cm 0 0},scale=0.45]{arbol1.jpg}}
+\centerline{Figura 1: AST obtenido.}
+\clearpage
+
+\section*{Conclusiones}
+En este reporte se presentó la definición de la gramática para el subconjunto del lenguaje C llamado C+-. Este trabajo fue realizado utilizando ANTLR4, el cual permitió facilmente diferenciar entre reglas sint\'a cticas y tokens a trav\'es de la utilizaci\'on de may\'usculas.
 
 \section*{Ap\'endice 1: Toda la gram\'atica}
 Antes que todo, cabe resaltar que si bien esta gram\'atica no es LL(*) dado que tiene recursiones por la izquierda, ANTLR4 es capaz de reconocer algunas de estas recursiones y por detras las modifica para que la gram\'atica resultante sea efectivamente LL(*). Por ejemplo, para la variable \texttt{expression}, la modificaci\'on es escencialmente la misma que agregar tantos niveles asociados a expresiones como prioridades para operaciones hay.
@@ -342,7 +371,7 @@ expression:
     | INT_NUMBER
     | STRING_CONSTANT
     | CHAR_CONSTANT
-    | FLOAT_NUMBER
+    | FLOAT_CONSTANT
     | VAR
     | expression '.' VAR
     | 'sizeof' '(' (expression | type) ')'
@@ -365,20 +394,6 @@ expression:
 ;
 \end{verbatim}
 
-\section*{Probar el AST}
-Para correr el analizador sobre un archivo, es solo necesario correr (en Linux) el script \texttt{compile.sh} junto con el archivo de prueba. En este caso, se puede usar
 
-\begin{itemize}
-    \item \texttt{./compile.sh tests/error\_do.cmm}
-    \item \texttt{./compile.sh tests/error\_if.cmm}
-    \item \texttt{./compile.sh tests/test.cmm}
-    \item \texttt{./compile.sh tests/test\_comma\_operation.cmm}
-    \item \texttt{./compile.sh tests/test\_function\_struct.cmm}
-    \item \texttt{./compile.sh tests/test\_struct.cmm}
-    \item \texttt{./compile.sh tests/test\_switch.cmm}
-\end{itemize}
-
-\subsection*{Ejemplo de \'arbol}
-\includegraphics[scale=0.45]{arbol1.jpg}
 
 \end{document}
