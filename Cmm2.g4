@@ -76,7 +76,7 @@ statement:
 ;
 
 if_statement:
-    If '(' comma_expression ')' statement (Else statement)*
+    If '(' comma_expression ')' statement (Else statement)?
 //    | If '(' comma_expression ')' statement Else statement
 //    | If '(' expression ')' '{' statement* '}'
 //    | If '(' expression ')' '{' statement* '}' Else '{' statement* '}'
@@ -294,6 +294,7 @@ expression:
     | INT_NUMBER
     | STRING_CONSTANT
     | CHAR_CONSTANT
+    | FLOAT_NUMBER
     | VAR
     | expression '.' VAR
     | 'sizeof' '(' (expression | type) ')'

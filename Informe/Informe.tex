@@ -2,6 +2,7 @@
 \usepackage[margin=1in]{geometry}
 \usepackage[spanish,es-lcroman]{babel}
 \usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage{graphicx}
 
 \newcommand{\Cp}{\texttt{C+-}}
 \newcommand{\C}{\texttt{C}}
@@ -341,6 +342,7 @@ expression:
     | INT_NUMBER
     | STRING_CONSTANT
     | CHAR_CONSTANT
+    | FLOAT_NUMBER
     | VAR
     | expression '.' VAR
     | 'sizeof' '(' (expression | type) ')'
@@ -375,5 +377,8 @@ Para correr el analizador sobre un archivo, es solo necesario correr (en Linux) 
     \item \texttt{./compile.sh tests/test\_struct.cmm}
     \item \texttt{./compile.sh tests/test\_switch.cmm}
 \end{itemize}
+
+\subsection*{Ejemplo de \'arbol}
+\includegraphics[scale=0.45]{arbol1.jpg}
 
 \end{document}
