@@ -19,8 +19,8 @@ declare_statement:
 ;
 
 declare_expression:
-    type VAR ('=' expression)? (',' VAR ('=' expression)?)*
-    | type VAR '[' comma_expression ']'
+    type_cmm VAR ('=' expression)? (',' VAR ('=' expression)?)*
+    | type_cmm VAR '[' comma_expression ']'
 ;
 
 
@@ -107,11 +107,11 @@ function_call_expression :
 ;
 
 function_definition : 
-    (type | 'void') VAR '(' ((type '&'? VAR (',' type '&'? VAR)*)? | 'void') ')' '{' statement* '}'  
+    (type_cmm | 'void') VAR '(' ((type_cmm '&'? VAR (',' type_cmm '&'? VAR)*)? | 'void') ')' '{' statement* '}'  
 ;
 
 forward_function_definition:
-    (type | 'void') VAR '(' ((type '&'? VAR? (',' type '&'? VAR?)*)? | 'void') ')' ';'
+    (type_cmm | 'void') VAR '(' ((type_cmm '&'? VAR? (',' type_cmm '&'? VAR?)*)? | 'void') ')' ';'
 ;
 
 struct_definition:
@@ -155,7 +155,7 @@ HEX_NUMBER:
     ('0x' | '0X')[0-9a-fA-F]+
 ;
 
-type:
+type_cmm:
     Unsigned? Int
     | Unsigned? Char
     | Double
@@ -175,8 +175,8 @@ While:'while';
 For:'for';
 Break:'break';
 Continue:'continue';
-True:'true';
-False:'false';
+True_cmm:'true';
+False_cmm:'false';
 Struct:'struct';
 Void:'void';
 Return:'return';
@@ -202,7 +202,7 @@ Sizeof:'sizeof';
 
 
 
-//Typedef:'typedef';
+//type_cmmdef:'type_cmmdef';
 
 //String:'string'; //?
 
@@ -297,7 +297,7 @@ expression:
     | FLOAT_NUMBER
     | VAR
     | expression '.' VAR
-    | 'sizeof' '(' (expression | type) ')'
+    | 'sizeof' '(' (expression | type_cmm) ')'
     | function_call_expression
     | expression '[' expression ']' // expression[expression] para permitir usar 0[var] == var[0]
     | expression ('++' | '--')
