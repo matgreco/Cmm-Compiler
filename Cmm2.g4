@@ -16,44 +16,19 @@ build:
 
 declare_statement:
     declare_expression ';'
+    declare_assign_expression ';'
 ;
 
 declare_expression:
-    Type_cmm VAR ('=' expression)? #declare_normal
+    Type_cmm VAR #declare_normal
     | Type_cmm VAR '[' comma_expression ']' #declare_array
 ;
 
 
-compare_op:
-    '=='
-    | '<='
-    | '>='
-    | '<'
-    | '>'
+declare_assign_expression:
+    Type_cmm VAR ('=' expression)?
 ;
 
-assign_op:
-    '='
-    | '+='
-    | '-='
-    | '*='
-    | '/='
-    | '%='
-    | '<<='
-    | '>>='
-    | '&='
-    | '^='
-    | '|='
-;
-
-unary_left_op:
-    '++'
-    | '--'
-    | '+'
-    | '-'
-    | '!'
-    | '~'
-;
 
 case_statement:
     Case INT_NUMBER ':'
@@ -327,5 +302,5 @@ expression:
     | expression op='&&' expression #expOp
     | expression op='||' expression #expOp
     | <assoc=right> expression '?' comma_expression ':' expression #expTerOp
-    | <assoc=right> expression op=('='| '+='| '-='| '*='| '/='| '%='| '<<='| '>>='| '&='| '^='| '|=') expression #expOp
+    | <assoc=right> expression op=('='| '+='| '-='| '*='| '/='| '%='| '<<='| '>>='| '&='| '^='| '|=') expression #expAssign
 ;

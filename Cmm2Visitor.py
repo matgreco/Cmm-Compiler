@@ -29,18 +29,8 @@ class Cmm2Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by Cmm2Parser#compare_op.
-    def visitCompare_op(self, ctx:Cmm2Parser.Compare_opContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by Cmm2Parser#assign_op.
-    def visitAssign_op(self, ctx:Cmm2Parser.Assign_opContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by Cmm2Parser#unary_left_op.
-    def visitUnary_left_op(self, ctx:Cmm2Parser.Unary_left_opContext):
+    # Visit a parse tree produced by Cmm2Parser#declare_assign_expression.
+    def visitDeclare_assign_expression(self, ctx:Cmm2Parser.Declare_assign_expressionContext):
         return self.visitChildren(ctx)
 
 
@@ -126,6 +116,11 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#comma_expression.
     def visitComma_expression(self, ctx:Cmm2Parser.Comma_expressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by Cmm2Parser#expAssign.
+    def visitExpAssign(self, ctx:Cmm2Parser.ExpAssignContext):
         return self.visitChildren(ctx)
 
 
