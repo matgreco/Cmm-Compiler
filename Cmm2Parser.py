@@ -8,7 +8,7 @@ import sys
 def serializedATN():
     with StringIO() as buf:
         buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3R")
-        buf.write("\u0152\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
+        buf.write("\u0151\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
         buf.write("\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16")
         buf.write("\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22\4\23\t\23")
         buf.write("\4\24\t\24\4\25\t\25\4\26\t\26\3\2\3\2\3\2\3\2\3\2\7\2")
@@ -34,21 +34,21 @@ def serializedATN():
         buf.write("\24\f\24\16\24\u00f6\13\24\3\24\3\24\3\24\3\25\3\25\3")
         buf.write("\25\3\25\3\25\3\25\7\25\u0101\n\25\f\25\16\25\u0104\13")
         buf.write("\25\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26")
-        buf.write("\3\26\3\26\3\26\3\26\5\26\u0114\n\26\3\26\3\26\3\26\3")
-        buf.write("\26\5\26\u011a\n\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26")
+        buf.write("\3\26\3\26\3\26\5\26\u0113\n\26\3\26\3\26\3\26\3\26\5")
+        buf.write("\26\u0119\n\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26")
         buf.write("\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26")
         buf.write("\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26")
         buf.write("\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26")
-        buf.write("\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\7\26\u014d")
-        buf.write("\n\26\f\26\16\26\u0150\13\26\3\26\2\4(*\27\2\4\6\b\n\f")
-        buf.write("\16\20\22\24\26\30\32\34\36 \"$&(*\2\f\3\2\7\13\4\2\4")
-        buf.write("\4\f\25\3\2\26\33\4\2\67\67CC\3\2#%\3\2\30\31\3\2&\'\3")
-        buf.write("\2\b\13\4\2\7\7((\3\2\26\27\2\u017e\2\63\3\2\2\2\4\66")
-        buf.write("\3\2\2\2\6E\3\2\2\2\bG\3\2\2\2\nI\3\2\2\2\fK\3\2\2\2\16")
-        buf.write("Q\3\2\2\2\20q\3\2\2\2\22s\3\2\2\2\24|\3\2\2\2\26\u0089")
-        buf.write("\3\2\2\2\30\u008f\3\2\2\2\32\u00a0\3\2\2\2\34\u00a8\3")
-        buf.write("\2\2\2\36\u00b6\3\2\2\2 \u00bc\3\2\2\2\"\u00da\3\2\2\2")
-        buf.write("$\u00ec\3\2\2\2&\u00ee\3\2\2\2(\u00fa\3\2\2\2*\u0119\3")
+        buf.write("\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\7\26\u014c\n")
+        buf.write("\26\f\26\16\26\u014f\13\26\3\26\2\4(*\27\2\4\6\b\n\f\16")
+        buf.write("\20\22\24\26\30\32\34\36 \"$&(*\2\f\3\2\7\13\4\2\4\4\f")
+        buf.write("\25\3\2\26\33\4\2\67\67CC\3\2#%\3\2\30\31\3\2&\'\3\2\b")
+        buf.write("\13\4\2\7\7((\3\2\26\27\2\u017c\2\63\3\2\2\2\4\66\3\2")
+        buf.write("\2\2\6E\3\2\2\2\bG\3\2\2\2\nI\3\2\2\2\fK\3\2\2\2\16Q\3")
+        buf.write("\2\2\2\20q\3\2\2\2\22s\3\2\2\2\24|\3\2\2\2\26\u0089\3")
+        buf.write("\2\2\2\30\u008f\3\2\2\2\32\u00a0\3\2\2\2\34\u00a8\3\2")
+        buf.write("\2\2\36\u00b6\3\2\2\2 \u00bc\3\2\2\2\"\u00da\3\2\2\2$")
+        buf.write("\u00ec\3\2\2\2&\u00ee\3\2\2\2(\u00fa\3\2\2\2*\u0118\3")
         buf.write("\2\2\2,\62\5\4\3\2-\62\5$\23\2.\62\5\"\22\2/\62\5&\24")
         buf.write("\2\60\62\7\3\2\2\61,\3\2\2\2\61-\3\2\2\2\61.\3\2\2\2\61")
         buf.write("/\3\2\2\2\61\60\3\2\2\2\62\65\3\2\2\2\63\61\3\2\2\2\63")
@@ -127,45 +127,44 @@ def serializedATN():
         buf.write("\2\2\2\u0102\u0100\3\2\2\2\u0102\u0103\3\2\2\2\u0103)")
         buf.write("\3\2\2\2\u0104\u0102\3\2\2\2\u0105\u0106\b\26\1\2\u0106")
         buf.write("\u0107\7\37\2\2\u0107\u0108\5(\25\2\u0108\u0109\7 \2\2")
-        buf.write("\u0109\u011a\3\2\2\2\u010a\u011a\7\61\2\2\u010b\u011a")
-        buf.write("\7\62\2\2\u010c\u011a\7\63\2\2\u010d\u011a\7\60\2\2\u010e")
-        buf.write("\u011a\7O\2\2\u010f\u0110\7N\2\2\u0110\u0113\7\37\2\2")
-        buf.write("\u0111\u0114\5*\26\2\u0112\u0114\7\67\2\2\u0113\u0111")
-        buf.write("\3\2\2\2\u0113\u0112\3\2\2\2\u0114\u0115\3\2\2\2\u0115")
-        buf.write("\u011a\7 \2\2\u0116\u011a\5\34\17\2\u0117\u0118\t\4\2")
-        buf.write("\2\u0118\u011a\5*\26\17\u0119\u0105\3\2\2\2\u0119\u010a")
-        buf.write("\3\2\2\2\u0119\u010b\3\2\2\2\u0119\u010c\3\2\2\2\u0119")
-        buf.write("\u010d\3\2\2\2\u0119\u010e\3\2\2\2\u0119\u010f\3\2\2\2")
-        buf.write("\u0119\u0116\3\2\2\2\u0119\u0117\3\2\2\2\u011a\u014e\3")
-        buf.write("\2\2\2\u011b\u011c\f\16\2\2\u011c\u011d\t\6\2\2\u011d")
-        buf.write("\u014d\5*\26\17\u011e\u011f\f\r\2\2\u011f\u0120\t\7\2")
-        buf.write("\2\u0120\u014d\5*\26\16\u0121\u0122\f\f\2\2\u0122\u0123")
-        buf.write("\t\b\2\2\u0123\u014d\5*\26\r\u0124\u0125\f\13\2\2\u0125")
-        buf.write("\u0126\t\t\2\2\u0126\u014d\5*\26\f\u0127\u0128\f\n\2\2")
-        buf.write("\u0128\u0129\t\n\2\2\u0129\u014d\5*\26\13\u012a\u012b")
-        buf.write("\f\t\2\2\u012b\u012c\7)\2\2\u012c\u014d\5*\26\n\u012d")
-        buf.write("\u012e\f\b\2\2\u012e\u012f\7*\2\2\u012f\u014d\5*\26\t")
-        buf.write("\u0130\u0131\f\7\2\2\u0131\u0132\7+\2\2\u0132\u014d\5")
-        buf.write("*\26\b\u0133\u0134\f\6\2\2\u0134\u0135\7,\2\2\u0135\u014d")
-        buf.write("\5*\26\7\u0136\u0137\f\5\2\2\u0137\u0138\7-\2\2\u0138")
-        buf.write("\u014d\5*\26\6\u0139\u013a\f\4\2\2\u013a\u013b\7.\2\2")
-        buf.write("\u013b\u013c\5(\25\2\u013c\u013d\7\34\2\2\u013d\u013e")
-        buf.write("\5*\26\4\u013e\u014d\3\2\2\2\u013f\u0140\f\3\2\2\u0140")
-        buf.write("\u0141\t\3\2\2\u0141\u014d\5*\26\3\u0142\u0143\f\24\2")
-        buf.write("\2\u0143\u0144\7\"\2\2\u0144\u014d\7O\2\2\u0145\u0146")
-        buf.write("\f\21\2\2\u0146\u0147\7\5\2\2\u0147\u0148\5*\26\2\u0148")
-        buf.write("\u0149\7\6\2\2\u0149\u014d\3\2\2\2\u014a\u014b\f\20\2")
-        buf.write("\2\u014b\u014d\t\13\2\2\u014c\u011b\3\2\2\2\u014c\u011e")
-        buf.write("\3\2\2\2\u014c\u0121\3\2\2\2\u014c\u0124\3\2\2\2\u014c")
-        buf.write("\u0127\3\2\2\2\u014c\u012a\3\2\2\2\u014c\u012d\3\2\2\2")
-        buf.write("\u014c\u0130\3\2\2\2\u014c\u0133\3\2\2\2\u014c\u0136\3")
-        buf.write("\2\2\2\u014c\u0139\3\2\2\2\u014c\u013f\3\2\2\2\u014c\u0142")
-        buf.write("\3\2\2\2\u014c\u0145\3\2\2\2\u014c\u014a\3\2\2\2\u014d")
-        buf.write("\u0150\3\2\2\2\u014e\u014c\3\2\2\2\u014e\u014f\3\2\2\2")
-        buf.write("\u014f+\3\2\2\2\u0150\u014e\3\2\2\2\"\61\63=EQT`mqz\u0084")
+        buf.write("\u0109\u0119\3\2\2\2\u010a\u0119\7\61\2\2\u010b\u0119")
+        buf.write("\7\62\2\2\u010c\u0119\7\60\2\2\u010d\u0119\7O\2\2\u010e")
+        buf.write("\u010f\7N\2\2\u010f\u0112\7\37\2\2\u0110\u0113\5*\26\2")
+        buf.write("\u0111\u0113\7\67\2\2\u0112\u0110\3\2\2\2\u0112\u0111")
+        buf.write("\3\2\2\2\u0113\u0114\3\2\2\2\u0114\u0119\7 \2\2\u0115")
+        buf.write("\u0119\5\34\17\2\u0116\u0117\t\4\2\2\u0117\u0119\5*\26")
+        buf.write("\17\u0118\u0105\3\2\2\2\u0118\u010a\3\2\2\2\u0118\u010b")
+        buf.write("\3\2\2\2\u0118\u010c\3\2\2\2\u0118\u010d\3\2\2\2\u0118")
+        buf.write("\u010e\3\2\2\2\u0118\u0115\3\2\2\2\u0118\u0116\3\2\2\2")
+        buf.write("\u0119\u014d\3\2\2\2\u011a\u011b\f\16\2\2\u011b\u011c")
+        buf.write("\t\6\2\2\u011c\u014c\5*\26\17\u011d\u011e\f\r\2\2\u011e")
+        buf.write("\u011f\t\7\2\2\u011f\u014c\5*\26\16\u0120\u0121\f\f\2")
+        buf.write("\2\u0121\u0122\t\b\2\2\u0122\u014c\5*\26\r\u0123\u0124")
+        buf.write("\f\13\2\2\u0124\u0125\t\t\2\2\u0125\u014c\5*\26\f\u0126")
+        buf.write("\u0127\f\n\2\2\u0127\u0128\t\n\2\2\u0128\u014c\5*\26\13")
+        buf.write("\u0129\u012a\f\t\2\2\u012a\u012b\7)\2\2\u012b\u014c\5")
+        buf.write("*\26\n\u012c\u012d\f\b\2\2\u012d\u012e\7*\2\2\u012e\u014c")
+        buf.write("\5*\26\t\u012f\u0130\f\7\2\2\u0130\u0131\7+\2\2\u0131")
+        buf.write("\u014c\5*\26\b\u0132\u0133\f\6\2\2\u0133\u0134\7,\2\2")
+        buf.write("\u0134\u014c\5*\26\7\u0135\u0136\f\5\2\2\u0136\u0137\7")
+        buf.write("-\2\2\u0137\u014c\5*\26\6\u0138\u0139\f\4\2\2\u0139\u013a")
+        buf.write("\7.\2\2\u013a\u013b\5(\25\2\u013b\u013c\7\34\2\2\u013c")
+        buf.write("\u013d\5*\26\4\u013d\u014c\3\2\2\2\u013e\u013f\f\3\2\2")
+        buf.write("\u013f\u0140\t\3\2\2\u0140\u014c\5*\26\3\u0141\u0142\f")
+        buf.write("\24\2\2\u0142\u0143\7\"\2\2\u0143\u014c\7O\2\2\u0144\u0145")
+        buf.write("\f\21\2\2\u0145\u0146\7\5\2\2\u0146\u0147\5*\26\2\u0147")
+        buf.write("\u0148\7\6\2\2\u0148\u014c\3\2\2\2\u0149\u014a\f\20\2")
+        buf.write("\2\u014a\u014c\t\13\2\2\u014b\u011a\3\2\2\2\u014b\u011d")
+        buf.write("\3\2\2\2\u014b\u0120\3\2\2\2\u014b\u0123\3\2\2\2\u014b")
+        buf.write("\u0126\3\2\2\2\u014b\u0129\3\2\2\2\u014b\u012c\3\2\2\2")
+        buf.write("\u014b\u012f\3\2\2\2\u014b\u0132\3\2\2\2\u014b\u0135\3")
+        buf.write("\2\2\2\u014b\u0138\3\2\2\2\u014b\u013e\3\2\2\2\u014b\u0141")
+        buf.write("\3\2\2\2\u014b\u0144\3\2\2\2\u014b\u0149\3\2\2\2\u014c")
+        buf.write("\u014f\3\2\2\2\u014d\u014b\3\2\2\2\u014d\u014e\3\2\2\2")
+        buf.write("\u014e+\3\2\2\2\u014f\u014d\3\2\2\2\"\61\63=EQT`mqz\u0084")
         buf.write("\u0093\u0097\u009b\u00af\u00b2\u00b8\u00be\u00c1\u00cb")
-        buf.write("\u00cf\u00d6\u00da\u00e4\u00e8\u00ec\u00f4\u0102\u0113")
-        buf.write("\u0119\u014c\u014e")
+        buf.write("\u00cf\u00d6\u00da\u00e4\u00e8\u00ec\u00f4\u0102\u0112")
+        buf.write("\u0118\u014b\u014d")
         return buf.getvalue()
 
 
@@ -979,13 +978,13 @@ class Cmm2Parser ( Parser ):
             self.state = 111
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [Cmm2Parser.T__0, Cmm2Parser.T__19, Cmm2Parser.T__20, Cmm2Parser.T__21, Cmm2Parser.T__22, Cmm2Parser.T__23, Cmm2Parser.T__24, Cmm2Parser.T__28, Cmm2Parser.FLOAT_NUMBER, Cmm2Parser.INT_NUMBER, Cmm2Parser.STRING_CONSTANT, Cmm2Parser.CHAR_CONSTANT, Cmm2Parser.Sizeof, Cmm2Parser.VAR]:
+            if token in [Cmm2Parser.T__0, Cmm2Parser.T__19, Cmm2Parser.T__20, Cmm2Parser.T__21, Cmm2Parser.T__22, Cmm2Parser.T__23, Cmm2Parser.T__24, Cmm2Parser.T__28, Cmm2Parser.FLOAT_NUMBER, Cmm2Parser.INT_NUMBER, Cmm2Parser.STRING_CONSTANT, Cmm2Parser.Sizeof, Cmm2Parser.VAR]:
                 localctx = Cmm2Parser.Normal_statementContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
                 self.state = 82
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if ((((_la - 20)) & ~0x3f) == 0 and ((1 << (_la - 20)) & ((1 << (Cmm2Parser.T__19 - 20)) | (1 << (Cmm2Parser.T__20 - 20)) | (1 << (Cmm2Parser.T__21 - 20)) | (1 << (Cmm2Parser.T__22 - 20)) | (1 << (Cmm2Parser.T__23 - 20)) | (1 << (Cmm2Parser.T__24 - 20)) | (1 << (Cmm2Parser.T__28 - 20)) | (1 << (Cmm2Parser.FLOAT_NUMBER - 20)) | (1 << (Cmm2Parser.INT_NUMBER - 20)) | (1 << (Cmm2Parser.STRING_CONSTANT - 20)) | (1 << (Cmm2Parser.CHAR_CONSTANT - 20)) | (1 << (Cmm2Parser.Sizeof - 20)) | (1 << (Cmm2Parser.VAR - 20)))) != 0):
+                if ((((_la - 20)) & ~0x3f) == 0 and ((1 << (_la - 20)) & ((1 << (Cmm2Parser.T__19 - 20)) | (1 << (Cmm2Parser.T__20 - 20)) | (1 << (Cmm2Parser.T__21 - 20)) | (1 << (Cmm2Parser.T__22 - 20)) | (1 << (Cmm2Parser.T__23 - 20)) | (1 << (Cmm2Parser.T__24 - 20)) | (1 << (Cmm2Parser.T__28 - 20)) | (1 << (Cmm2Parser.FLOAT_NUMBER - 20)) | (1 << (Cmm2Parser.INT_NUMBER - 20)) | (1 << (Cmm2Parser.STRING_CONSTANT - 20)) | (1 << (Cmm2Parser.Sizeof - 20)) | (1 << (Cmm2Parser.VAR - 20)))) != 0):
                     self.state = 81
                     self.comma_expression(0)
 
@@ -1025,7 +1024,7 @@ class Cmm2Parser ( Parser ):
                 self.state = 94
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if ((((_la - 20)) & ~0x3f) == 0 and ((1 << (_la - 20)) & ((1 << (Cmm2Parser.T__19 - 20)) | (1 << (Cmm2Parser.T__20 - 20)) | (1 << (Cmm2Parser.T__21 - 20)) | (1 << (Cmm2Parser.T__22 - 20)) | (1 << (Cmm2Parser.T__23 - 20)) | (1 << (Cmm2Parser.T__24 - 20)) | (1 << (Cmm2Parser.T__28 - 20)) | (1 << (Cmm2Parser.FLOAT_NUMBER - 20)) | (1 << (Cmm2Parser.INT_NUMBER - 20)) | (1 << (Cmm2Parser.STRING_CONSTANT - 20)) | (1 << (Cmm2Parser.CHAR_CONSTANT - 20)) | (1 << (Cmm2Parser.Sizeof - 20)) | (1 << (Cmm2Parser.VAR - 20)))) != 0):
+                if ((((_la - 20)) & ~0x3f) == 0 and ((1 << (_la - 20)) & ((1 << (Cmm2Parser.T__19 - 20)) | (1 << (Cmm2Parser.T__20 - 20)) | (1 << (Cmm2Parser.T__21 - 20)) | (1 << (Cmm2Parser.T__22 - 20)) | (1 << (Cmm2Parser.T__23 - 20)) | (1 << (Cmm2Parser.T__24 - 20)) | (1 << (Cmm2Parser.T__28 - 20)) | (1 << (Cmm2Parser.FLOAT_NUMBER - 20)) | (1 << (Cmm2Parser.INT_NUMBER - 20)) | (1 << (Cmm2Parser.STRING_CONSTANT - 20)) | (1 << (Cmm2Parser.Sizeof - 20)) | (1 << (Cmm2Parser.VAR - 20)))) != 0):
                     self.state = 93
                     self.comma_expression(0)
 
@@ -1077,7 +1076,7 @@ class Cmm2Parser ( Parser ):
                 self.state = 107
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << Cmm2Parser.T__0) | (1 << Cmm2Parser.T__19) | (1 << Cmm2Parser.T__20) | (1 << Cmm2Parser.T__21) | (1 << Cmm2Parser.T__22) | (1 << Cmm2Parser.T__23) | (1 << Cmm2Parser.T__24) | (1 << Cmm2Parser.T__26) | (1 << Cmm2Parser.T__28) | (1 << Cmm2Parser.FLOAT_NUMBER) | (1 << Cmm2Parser.INT_NUMBER) | (1 << Cmm2Parser.STRING_CONSTANT) | (1 << Cmm2Parser.CHAR_CONSTANT) | (1 << Cmm2Parser.Type_cmm) | (1 << Cmm2Parser.If) | (1 << Cmm2Parser.While) | (1 << Cmm2Parser.For) | (1 << Cmm2Parser.Break) | (1 << Cmm2Parser.Continue))) != 0) or ((((_la - 66)) & ~0x3f) == 0 and ((1 << (_la - 66)) & ((1 << (Cmm2Parser.Return - 66)) | (1 << (Cmm2Parser.Switch - 66)) | (1 << (Cmm2Parser.Case - 66)) | (1 << (Cmm2Parser.Default - 66)) | (1 << (Cmm2Parser.Do - 66)) | (1 << (Cmm2Parser.Sizeof - 66)) | (1 << (Cmm2Parser.VAR - 66)))) != 0):
+                while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << Cmm2Parser.T__0) | (1 << Cmm2Parser.T__19) | (1 << Cmm2Parser.T__20) | (1 << Cmm2Parser.T__21) | (1 << Cmm2Parser.T__22) | (1 << Cmm2Parser.T__23) | (1 << Cmm2Parser.T__24) | (1 << Cmm2Parser.T__26) | (1 << Cmm2Parser.T__28) | (1 << Cmm2Parser.FLOAT_NUMBER) | (1 << Cmm2Parser.INT_NUMBER) | (1 << Cmm2Parser.STRING_CONSTANT) | (1 << Cmm2Parser.Type_cmm) | (1 << Cmm2Parser.If) | (1 << Cmm2Parser.While) | (1 << Cmm2Parser.For) | (1 << Cmm2Parser.Break) | (1 << Cmm2Parser.Continue))) != 0) or ((((_la - 66)) & ~0x3f) == 0 and ((1 << (_la - 66)) & ((1 << (Cmm2Parser.Return - 66)) | (1 << (Cmm2Parser.Switch - 66)) | (1 << (Cmm2Parser.Case - 66)) | (1 << (Cmm2Parser.Default - 66)) | (1 << (Cmm2Parser.Do - 66)) | (1 << (Cmm2Parser.Sizeof - 66)) | (1 << (Cmm2Parser.VAR - 66)))) != 0):
                     self.state = 104
                     self.statement()
                     self.state = 109
@@ -1235,7 +1234,7 @@ class Cmm2Parser ( Parser ):
             self.state = 130
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << Cmm2Parser.T__0) | (1 << Cmm2Parser.T__19) | (1 << Cmm2Parser.T__20) | (1 << Cmm2Parser.T__21) | (1 << Cmm2Parser.T__22) | (1 << Cmm2Parser.T__23) | (1 << Cmm2Parser.T__24) | (1 << Cmm2Parser.T__26) | (1 << Cmm2Parser.T__28) | (1 << Cmm2Parser.FLOAT_NUMBER) | (1 << Cmm2Parser.INT_NUMBER) | (1 << Cmm2Parser.STRING_CONSTANT) | (1 << Cmm2Parser.CHAR_CONSTANT) | (1 << Cmm2Parser.Type_cmm) | (1 << Cmm2Parser.If) | (1 << Cmm2Parser.While) | (1 << Cmm2Parser.For) | (1 << Cmm2Parser.Break) | (1 << Cmm2Parser.Continue))) != 0) or ((((_la - 66)) & ~0x3f) == 0 and ((1 << (_la - 66)) & ((1 << (Cmm2Parser.Return - 66)) | (1 << (Cmm2Parser.Switch - 66)) | (1 << (Cmm2Parser.Case - 66)) | (1 << (Cmm2Parser.Default - 66)) | (1 << (Cmm2Parser.Do - 66)) | (1 << (Cmm2Parser.Sizeof - 66)) | (1 << (Cmm2Parser.VAR - 66)))) != 0):
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << Cmm2Parser.T__0) | (1 << Cmm2Parser.T__19) | (1 << Cmm2Parser.T__20) | (1 << Cmm2Parser.T__21) | (1 << Cmm2Parser.T__22) | (1 << Cmm2Parser.T__23) | (1 << Cmm2Parser.T__24) | (1 << Cmm2Parser.T__26) | (1 << Cmm2Parser.T__28) | (1 << Cmm2Parser.FLOAT_NUMBER) | (1 << Cmm2Parser.INT_NUMBER) | (1 << Cmm2Parser.STRING_CONSTANT) | (1 << Cmm2Parser.Type_cmm) | (1 << Cmm2Parser.If) | (1 << Cmm2Parser.While) | (1 << Cmm2Parser.For) | (1 << Cmm2Parser.Break) | (1 << Cmm2Parser.Continue))) != 0) or ((((_la - 66)) & ~0x3f) == 0 and ((1 << (_la - 66)) & ((1 << (Cmm2Parser.Return - 66)) | (1 << (Cmm2Parser.Switch - 66)) | (1 << (Cmm2Parser.Case - 66)) | (1 << (Cmm2Parser.Default - 66)) | (1 << (Cmm2Parser.Do - 66)) | (1 << (Cmm2Parser.Sizeof - 66)) | (1 << (Cmm2Parser.VAR - 66)))) != 0):
                 self.state = 127
                 self.statement()
                 self.state = 132
@@ -1371,7 +1370,7 @@ class Cmm2Parser ( Parser ):
             self.state = 145
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [Cmm2Parser.T__19, Cmm2Parser.T__20, Cmm2Parser.T__21, Cmm2Parser.T__22, Cmm2Parser.T__23, Cmm2Parser.T__24, Cmm2Parser.T__28, Cmm2Parser.FLOAT_NUMBER, Cmm2Parser.INT_NUMBER, Cmm2Parser.STRING_CONSTANT, Cmm2Parser.CHAR_CONSTANT, Cmm2Parser.Sizeof, Cmm2Parser.VAR]:
+            if token in [Cmm2Parser.T__19, Cmm2Parser.T__20, Cmm2Parser.T__21, Cmm2Parser.T__22, Cmm2Parser.T__23, Cmm2Parser.T__24, Cmm2Parser.T__28, Cmm2Parser.FLOAT_NUMBER, Cmm2Parser.INT_NUMBER, Cmm2Parser.STRING_CONSTANT, Cmm2Parser.Sizeof, Cmm2Parser.VAR]:
                 self.state = 143
                 self.comma_expression(0)
                 pass
@@ -1388,7 +1387,7 @@ class Cmm2Parser ( Parser ):
             self.state = 149
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if ((((_la - 20)) & ~0x3f) == 0 and ((1 << (_la - 20)) & ((1 << (Cmm2Parser.T__19 - 20)) | (1 << (Cmm2Parser.T__20 - 20)) | (1 << (Cmm2Parser.T__21 - 20)) | (1 << (Cmm2Parser.T__22 - 20)) | (1 << (Cmm2Parser.T__23 - 20)) | (1 << (Cmm2Parser.T__24 - 20)) | (1 << (Cmm2Parser.T__28 - 20)) | (1 << (Cmm2Parser.FLOAT_NUMBER - 20)) | (1 << (Cmm2Parser.INT_NUMBER - 20)) | (1 << (Cmm2Parser.STRING_CONSTANT - 20)) | (1 << (Cmm2Parser.CHAR_CONSTANT - 20)) | (1 << (Cmm2Parser.Sizeof - 20)) | (1 << (Cmm2Parser.VAR - 20)))) != 0):
+            if ((((_la - 20)) & ~0x3f) == 0 and ((1 << (_la - 20)) & ((1 << (Cmm2Parser.T__19 - 20)) | (1 << (Cmm2Parser.T__20 - 20)) | (1 << (Cmm2Parser.T__21 - 20)) | (1 << (Cmm2Parser.T__22 - 20)) | (1 << (Cmm2Parser.T__23 - 20)) | (1 << (Cmm2Parser.T__24 - 20)) | (1 << (Cmm2Parser.T__28 - 20)) | (1 << (Cmm2Parser.FLOAT_NUMBER - 20)) | (1 << (Cmm2Parser.INT_NUMBER - 20)) | (1 << (Cmm2Parser.STRING_CONSTANT - 20)) | (1 << (Cmm2Parser.Sizeof - 20)) | (1 << (Cmm2Parser.VAR - 20)))) != 0):
                 self.state = 148
                 self.comma_expression(0)
 
@@ -1398,7 +1397,7 @@ class Cmm2Parser ( Parser ):
             self.state = 153
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if ((((_la - 20)) & ~0x3f) == 0 and ((1 << (_la - 20)) & ((1 << (Cmm2Parser.T__19 - 20)) | (1 << (Cmm2Parser.T__20 - 20)) | (1 << (Cmm2Parser.T__21 - 20)) | (1 << (Cmm2Parser.T__22 - 20)) | (1 << (Cmm2Parser.T__23 - 20)) | (1 << (Cmm2Parser.T__24 - 20)) | (1 << (Cmm2Parser.T__28 - 20)) | (1 << (Cmm2Parser.FLOAT_NUMBER - 20)) | (1 << (Cmm2Parser.INT_NUMBER - 20)) | (1 << (Cmm2Parser.STRING_CONSTANT - 20)) | (1 << (Cmm2Parser.CHAR_CONSTANT - 20)) | (1 << (Cmm2Parser.Sizeof - 20)) | (1 << (Cmm2Parser.VAR - 20)))) != 0):
+            if ((((_la - 20)) & ~0x3f) == 0 and ((1 << (_la - 20)) & ((1 << (Cmm2Parser.T__19 - 20)) | (1 << (Cmm2Parser.T__20 - 20)) | (1 << (Cmm2Parser.T__21 - 20)) | (1 << (Cmm2Parser.T__22 - 20)) | (1 << (Cmm2Parser.T__23 - 20)) | (1 << (Cmm2Parser.T__24 - 20)) | (1 << (Cmm2Parser.T__28 - 20)) | (1 << (Cmm2Parser.FLOAT_NUMBER - 20)) | (1 << (Cmm2Parser.INT_NUMBER - 20)) | (1 << (Cmm2Parser.STRING_CONSTANT - 20)) | (1 << (Cmm2Parser.Sizeof - 20)) | (1 << (Cmm2Parser.VAR - 20)))) != 0):
                 self.state = 152
                 self.comma_expression(0)
 
@@ -1533,7 +1532,7 @@ class Cmm2Parser ( Parser ):
             self.state = 176
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if ((((_la - 20)) & ~0x3f) == 0 and ((1 << (_la - 20)) & ((1 << (Cmm2Parser.T__19 - 20)) | (1 << (Cmm2Parser.T__20 - 20)) | (1 << (Cmm2Parser.T__21 - 20)) | (1 << (Cmm2Parser.T__22 - 20)) | (1 << (Cmm2Parser.T__23 - 20)) | (1 << (Cmm2Parser.T__24 - 20)) | (1 << (Cmm2Parser.T__28 - 20)) | (1 << (Cmm2Parser.FLOAT_NUMBER - 20)) | (1 << (Cmm2Parser.INT_NUMBER - 20)) | (1 << (Cmm2Parser.STRING_CONSTANT - 20)) | (1 << (Cmm2Parser.CHAR_CONSTANT - 20)) | (1 << (Cmm2Parser.Sizeof - 20)) | (1 << (Cmm2Parser.VAR - 20)))) != 0):
+            if ((((_la - 20)) & ~0x3f) == 0 and ((1 << (_la - 20)) & ((1 << (Cmm2Parser.T__19 - 20)) | (1 << (Cmm2Parser.T__20 - 20)) | (1 << (Cmm2Parser.T__21 - 20)) | (1 << (Cmm2Parser.T__22 - 20)) | (1 << (Cmm2Parser.T__23 - 20)) | (1 << (Cmm2Parser.T__24 - 20)) | (1 << (Cmm2Parser.T__28 - 20)) | (1 << (Cmm2Parser.FLOAT_NUMBER - 20)) | (1 << (Cmm2Parser.INT_NUMBER - 20)) | (1 << (Cmm2Parser.STRING_CONSTANT - 20)) | (1 << (Cmm2Parser.Sizeof - 20)) | (1 << (Cmm2Parser.VAR - 20)))) != 0):
                 self.state = 168
                 self.expression(0)
                 self.state = 173
@@ -1796,7 +1795,7 @@ class Cmm2Parser ( Parser ):
                 self.state = 212
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << Cmm2Parser.T__0) | (1 << Cmm2Parser.T__19) | (1 << Cmm2Parser.T__20) | (1 << Cmm2Parser.T__21) | (1 << Cmm2Parser.T__22) | (1 << Cmm2Parser.T__23) | (1 << Cmm2Parser.T__24) | (1 << Cmm2Parser.T__26) | (1 << Cmm2Parser.T__28) | (1 << Cmm2Parser.FLOAT_NUMBER) | (1 << Cmm2Parser.INT_NUMBER) | (1 << Cmm2Parser.STRING_CONSTANT) | (1 << Cmm2Parser.CHAR_CONSTANT) | (1 << Cmm2Parser.Type_cmm) | (1 << Cmm2Parser.If) | (1 << Cmm2Parser.While) | (1 << Cmm2Parser.For) | (1 << Cmm2Parser.Break) | (1 << Cmm2Parser.Continue))) != 0) or ((((_la - 66)) & ~0x3f) == 0 and ((1 << (_la - 66)) & ((1 << (Cmm2Parser.Return - 66)) | (1 << (Cmm2Parser.Switch - 66)) | (1 << (Cmm2Parser.Case - 66)) | (1 << (Cmm2Parser.Default - 66)) | (1 << (Cmm2Parser.Do - 66)) | (1 << (Cmm2Parser.Sizeof - 66)) | (1 << (Cmm2Parser.VAR - 66)))) != 0):
+                while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << Cmm2Parser.T__0) | (1 << Cmm2Parser.T__19) | (1 << Cmm2Parser.T__20) | (1 << Cmm2Parser.T__21) | (1 << Cmm2Parser.T__22) | (1 << Cmm2Parser.T__23) | (1 << Cmm2Parser.T__24) | (1 << Cmm2Parser.T__26) | (1 << Cmm2Parser.T__28) | (1 << Cmm2Parser.FLOAT_NUMBER) | (1 << Cmm2Parser.INT_NUMBER) | (1 << Cmm2Parser.STRING_CONSTANT) | (1 << Cmm2Parser.Type_cmm) | (1 << Cmm2Parser.If) | (1 << Cmm2Parser.While) | (1 << Cmm2Parser.For) | (1 << Cmm2Parser.Break) | (1 << Cmm2Parser.Continue))) != 0) or ((((_la - 66)) & ~0x3f) == 0 and ((1 << (_la - 66)) & ((1 << (Cmm2Parser.Return - 66)) | (1 << (Cmm2Parser.Switch - 66)) | (1 << (Cmm2Parser.Case - 66)) | (1 << (Cmm2Parser.Default - 66)) | (1 << (Cmm2Parser.Do - 66)) | (1 << (Cmm2Parser.Sizeof - 66)) | (1 << (Cmm2Parser.VAR - 66)))) != 0):
                     self.state = 209
                     self.statement()
                     self.state = 214
@@ -2284,8 +2283,6 @@ class Cmm2Parser ( Parser ):
             return self.getToken(Cmm2Parser.INT_NUMBER, 0)
         def STRING_CONSTANT(self):
             return self.getToken(Cmm2Parser.STRING_CONSTANT, 0)
-        def CHAR_CONSTANT(self):
-            return self.getToken(Cmm2Parser.CHAR_CONSTANT, 0)
         def FLOAT_NUMBER(self):
             return self.getToken(Cmm2Parser.FLOAT_NUMBER, 0)
         def VAR(self):
@@ -2369,7 +2366,7 @@ class Cmm2Parser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 279
+            self.state = 278
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,29,self._ctx)
             if la_ == 1:
@@ -2406,7 +2403,7 @@ class Cmm2Parser ( Parser ):
                 self._ctx = localctx
                 _prevctx = localctx
                 self.state = 266
-                self.match(Cmm2Parser.CHAR_CONSTANT)
+                self.match(Cmm2Parser.FLOAT_NUMBER)
                 pass
 
             elif la_ == 5:
@@ -2414,56 +2411,48 @@ class Cmm2Parser ( Parser ):
                 self._ctx = localctx
                 _prevctx = localctx
                 self.state = 267
-                self.match(Cmm2Parser.FLOAT_NUMBER)
-                pass
-
-            elif la_ == 6:
-                localctx = Cmm2Parser.ExpAtomContext(self, localctx)
-                self._ctx = localctx
-                _prevctx = localctx
-                self.state = 268
                 self.match(Cmm2Parser.VAR)
                 pass
 
-            elif la_ == 7:
+            elif la_ == 6:
                 localctx = Cmm2Parser.ExpSizeofContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
-                self.state = 269
+                self.state = 268
                 self.match(Cmm2Parser.Sizeof)
-                self.state = 270
+                self.state = 269
                 self.match(Cmm2Parser.T__28)
-                self.state = 273
+                self.state = 272
                 self._errHandler.sync(self)
                 token = self._input.LA(1)
-                if token in [Cmm2Parser.T__19, Cmm2Parser.T__20, Cmm2Parser.T__21, Cmm2Parser.T__22, Cmm2Parser.T__23, Cmm2Parser.T__24, Cmm2Parser.T__28, Cmm2Parser.FLOAT_NUMBER, Cmm2Parser.INT_NUMBER, Cmm2Parser.STRING_CONSTANT, Cmm2Parser.CHAR_CONSTANT, Cmm2Parser.Sizeof, Cmm2Parser.VAR]:
-                    self.state = 271
+                if token in [Cmm2Parser.T__19, Cmm2Parser.T__20, Cmm2Parser.T__21, Cmm2Parser.T__22, Cmm2Parser.T__23, Cmm2Parser.T__24, Cmm2Parser.T__28, Cmm2Parser.FLOAT_NUMBER, Cmm2Parser.INT_NUMBER, Cmm2Parser.STRING_CONSTANT, Cmm2Parser.Sizeof, Cmm2Parser.VAR]:
+                    self.state = 270
                     self.expression(0)
                     pass
                 elif token in [Cmm2Parser.Type_cmm]:
-                    self.state = 272
+                    self.state = 271
                     self.match(Cmm2Parser.Type_cmm)
                     pass
                 else:
                     raise NoViableAltException(self)
 
-                self.state = 275
+                self.state = 274
                 self.match(Cmm2Parser.T__29)
                 pass
 
-            elif la_ == 8:
+            elif la_ == 7:
                 localctx = Cmm2Parser.ExpFunctionCallContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
-                self.state = 276
+                self.state = 275
                 self.function_call_expression()
                 pass
 
-            elif la_ == 9:
+            elif la_ == 8:
                 localctx = Cmm2Parser.ExpLeftUnaryContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
-                self.state = 277
+                self.state = 276
                 localctx.op = self._input.LT(1)
                 _la = self._input.LA(1)
                 if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << Cmm2Parser.T__19) | (1 << Cmm2Parser.T__20) | (1 << Cmm2Parser.T__21) | (1 << Cmm2Parser.T__22) | (1 << Cmm2Parser.T__23) | (1 << Cmm2Parser.T__24))) != 0)):
@@ -2471,13 +2460,13 @@ class Cmm2Parser ( Parser ):
                 else:
                     self._errHandler.reportMatch(self)
                     self.consume()
-                self.state = 278
+                self.state = 277
                 self.expression(13)
                 pass
 
 
             self._ctx.stop = self._input.LT(-1)
-            self.state = 332
+            self.state = 331
             self._errHandler.sync(self)
             _alt = self._interp.adaptivePredict(self._input,31,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
@@ -2485,17 +2474,17 @@ class Cmm2Parser ( Parser ):
                     if self._parseListeners is not None:
                         self.triggerExitRuleEvent()
                     _prevctx = localctx
-                    self.state = 330
+                    self.state = 329
                     self._errHandler.sync(self)
                     la_ = self._interp.adaptivePredict(self._input,30,self._ctx)
                     if la_ == 1:
                         localctx = Cmm2Parser.ExpOpContext(self, Cmm2Parser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 281
+                        self.state = 280
                         if not self.precpred(self._ctx, 12):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 12)")
-                        self.state = 282
+                        self.state = 281
                         localctx.op = self._input.LT(1)
                         _la = self._input.LA(1)
                         if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << Cmm2Parser.T__32) | (1 << Cmm2Parser.T__33) | (1 << Cmm2Parser.T__34))) != 0)):
@@ -2503,18 +2492,18 @@ class Cmm2Parser ( Parser ):
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 283
+                        self.state = 282
                         self.expression(13)
                         pass
 
                     elif la_ == 2:
                         localctx = Cmm2Parser.ExpOpContext(self, Cmm2Parser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 284
+                        self.state = 283
                         if not self.precpred(self._ctx, 11):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 11)")
-                        self.state = 285
+                        self.state = 284
                         localctx.op = self._input.LT(1)
                         _la = self._input.LA(1)
                         if not(_la==Cmm2Parser.T__21 or _la==Cmm2Parser.T__22):
@@ -2522,18 +2511,18 @@ class Cmm2Parser ( Parser ):
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 286
+                        self.state = 285
                         self.expression(12)
                         pass
 
                     elif la_ == 3:
                         localctx = Cmm2Parser.ExpOpContext(self, Cmm2Parser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 287
+                        self.state = 286
                         if not self.precpred(self._ctx, 10):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 10)")
-                        self.state = 288
+                        self.state = 287
                         localctx.op = self._input.LT(1)
                         _la = self._input.LA(1)
                         if not(_la==Cmm2Parser.T__35 or _la==Cmm2Parser.T__36):
@@ -2541,18 +2530,18 @@ class Cmm2Parser ( Parser ):
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 289
+                        self.state = 288
                         self.expression(11)
                         pass
 
                     elif la_ == 4:
                         localctx = Cmm2Parser.ExpOpContext(self, Cmm2Parser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 290
+                        self.state = 289
                         if not self.precpred(self._ctx, 9):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 9)")
-                        self.state = 291
+                        self.state = 290
                         localctx.op = self._input.LT(1)
                         _la = self._input.LA(1)
                         if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << Cmm2Parser.T__5) | (1 << Cmm2Parser.T__6) | (1 << Cmm2Parser.T__7) | (1 << Cmm2Parser.T__8))) != 0)):
@@ -2560,18 +2549,18 @@ class Cmm2Parser ( Parser ):
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 292
+                        self.state = 291
                         self.expression(10)
                         pass
 
                     elif la_ == 5:
                         localctx = Cmm2Parser.ExpOpContext(self, Cmm2Parser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 293
+                        self.state = 292
                         if not self.precpred(self._ctx, 8):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 8)")
-                        self.state = 294
+                        self.state = 293
                         localctx.op = self._input.LT(1)
                         _la = self._input.LA(1)
                         if not(_la==Cmm2Parser.T__4 or _la==Cmm2Parser.T__37):
@@ -2579,100 +2568,100 @@ class Cmm2Parser ( Parser ):
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 295
+                        self.state = 294
                         self.expression(9)
                         pass
 
                     elif la_ == 6:
                         localctx = Cmm2Parser.ExpOpContext(self, Cmm2Parser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 296
+                        self.state = 295
                         if not self.precpred(self._ctx, 7):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 7)")
-                        self.state = 297
+                        self.state = 296
                         localctx.op = self.match(Cmm2Parser.T__38)
-                        self.state = 298
+                        self.state = 297
                         self.expression(8)
                         pass
 
                     elif la_ == 7:
                         localctx = Cmm2Parser.ExpOpContext(self, Cmm2Parser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 299
+                        self.state = 298
                         if not self.precpred(self._ctx, 6):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 6)")
-                        self.state = 300
+                        self.state = 299
                         localctx.op = self.match(Cmm2Parser.T__39)
-                        self.state = 301
+                        self.state = 300
                         self.expression(7)
                         pass
 
                     elif la_ == 8:
                         localctx = Cmm2Parser.ExpOpContext(self, Cmm2Parser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 302
+                        self.state = 301
                         if not self.precpred(self._ctx, 5):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 5)")
-                        self.state = 303
+                        self.state = 302
                         localctx.op = self.match(Cmm2Parser.T__40)
-                        self.state = 304
+                        self.state = 303
                         self.expression(6)
                         pass
 
                     elif la_ == 9:
                         localctx = Cmm2Parser.ExpOpContext(self, Cmm2Parser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 305
+                        self.state = 304
                         if not self.precpred(self._ctx, 4):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 4)")
-                        self.state = 306
+                        self.state = 305
                         localctx.op = self.match(Cmm2Parser.T__41)
-                        self.state = 307
+                        self.state = 306
                         self.expression(5)
                         pass
 
                     elif la_ == 10:
                         localctx = Cmm2Parser.ExpOpContext(self, Cmm2Parser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 308
+                        self.state = 307
                         if not self.precpred(self._ctx, 3):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 3)")
-                        self.state = 309
+                        self.state = 308
                         localctx.op = self.match(Cmm2Parser.T__42)
-                        self.state = 310
+                        self.state = 309
                         self.expression(4)
                         pass
 
                     elif la_ == 11:
                         localctx = Cmm2Parser.ExpTerOpContext(self, Cmm2Parser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 311
+                        self.state = 310
                         if not self.precpred(self._ctx, 2):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 2)")
-                        self.state = 312
+                        self.state = 311
                         self.match(Cmm2Parser.T__43)
-                        self.state = 313
+                        self.state = 312
                         self.comma_expression(0)
-                        self.state = 314
+                        self.state = 313
                         self.match(Cmm2Parser.T__25)
-                        self.state = 315
+                        self.state = 314
                         self.expression(2)
                         pass
 
                     elif la_ == 12:
                         localctx = Cmm2Parser.ExpOpContext(self, Cmm2Parser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 317
+                        self.state = 316
                         if not self.precpred(self._ctx, 1):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 1)")
-                        self.state = 318
+                        self.state = 317
                         localctx.op = self._input.LT(1)
                         _la = self._input.LA(1)
                         if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << Cmm2Parser.T__1) | (1 << Cmm2Parser.T__9) | (1 << Cmm2Parser.T__10) | (1 << Cmm2Parser.T__11) | (1 << Cmm2Parser.T__12) | (1 << Cmm2Parser.T__13) | (1 << Cmm2Parser.T__14) | (1 << Cmm2Parser.T__15) | (1 << Cmm2Parser.T__16) | (1 << Cmm2Parser.T__17) | (1 << Cmm2Parser.T__18))) != 0)):
@@ -2680,46 +2669,46 @@ class Cmm2Parser ( Parser ):
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 319
+                        self.state = 318
                         self.expression(1)
                         pass
 
                     elif la_ == 13:
                         localctx = Cmm2Parser.ExpDotContext(self, Cmm2Parser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 320
+                        self.state = 319
                         if not self.precpred(self._ctx, 18):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 18)")
-                        self.state = 321
+                        self.state = 320
                         self.match(Cmm2Parser.T__31)
-                        self.state = 322
+                        self.state = 321
                         self.match(Cmm2Parser.VAR)
                         pass
 
                     elif la_ == 14:
                         localctx = Cmm2Parser.ExpArrayContext(self, Cmm2Parser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 323
+                        self.state = 322
                         if not self.precpred(self._ctx, 15):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 15)")
-                        self.state = 324
+                        self.state = 323
                         self.match(Cmm2Parser.T__2)
-                        self.state = 325
+                        self.state = 324
                         self.expression(0)
-                        self.state = 326
+                        self.state = 325
                         self.match(Cmm2Parser.T__3)
                         pass
 
                     elif la_ == 15:
                         localctx = Cmm2Parser.ExpRightUnaryContext(self, Cmm2Parser.ExpressionContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expression)
-                        self.state = 328
+                        self.state = 327
                         if not self.precpred(self._ctx, 14):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 14)")
-                        self.state = 329
+                        self.state = 328
                         localctx.op = self._input.LT(1)
                         _la = self._input.LA(1)
                         if not(_la==Cmm2Parser.T__19 or _la==Cmm2Parser.T__20):
@@ -2730,7 +2719,7 @@ class Cmm2Parser ( Parser ):
                         pass
 
              
-                self.state = 334
+                self.state = 333
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,31,self._ctx)
 

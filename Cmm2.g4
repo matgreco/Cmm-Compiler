@@ -141,9 +141,9 @@ FLOAT_NUMBER :
 ;
 
 INT_NUMBER:
-    DEC_NUMBER ('u' | 'U')? ('ll' | 'LL')?
-    | OCT_NUMBER ('u' | 'U')? ('ll' | 'LL')?
-    | HEX_NUMBER ('u' | 'U')? ('ll' | 'LL')?
+    DEC_NUMBER ('ll' | 'LL')?
+    | OCT_NUMBER ('ll' | 'LL')?
+    | HEX_NUMBER ('ll' | 'LL')?
     | CHAR_CONSTANT
 ;
 
@@ -171,11 +171,11 @@ HEX_NUMBER:
 ;
 
 Type_cmm:
-    Unsigned? Int
-    | Unsigned? Char
+    Int
+    | Char
     | Double
-    | Unsigned? Long
-    | Unsigned? Short
+    | Long
+    | Short
     | Float
     | 'struct' VAR
 //  | String //?
@@ -308,7 +308,6 @@ expression:
     '(' comma_expression ')' #expPar
     | INT_NUMBER #expAtom
     | STRING_CONSTANT #expAtom
-    | CHAR_CONSTANT #expAtom
     | FLOAT_NUMBER #expAtom
     | VAR #expAtom
     | expression '.' VAR #expDot
