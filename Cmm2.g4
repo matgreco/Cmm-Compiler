@@ -16,17 +16,17 @@ build:
 
 declare_statement:
     declare_expression ';'
-    declare_assign_expression ';'
+    | declare_assign_expression ';'
 ;
 
 declare_expression:
-    Type_cmm VAR #declare_normal
-    | Type_cmm VAR '[' comma_expression ']' #declare_array
+    type_cmm VAR #declare_normal
+    | type_cmm VAR '[' expression ']' #declare_array
 ;
 
 
 declare_assign_expression:
-    Type_cmm VAR ('=' expression)?
+    type_cmm VAR ('=' expression)?
 ;
 
 
@@ -84,24 +84,24 @@ function_call_expression :
 
 FUNCTION_ARGUMENT_OPTION:
     '&'
-    | '[' ']'
+    | '[' [ \t\u000C\r\n]* ']'
 ;
 
 function_argument:
-    Type_cmm op=FUNCTION_ARGUMENT_OPTION? VAR
+    type_cmm op=FUNCTION_ARGUMENT_OPTION? VAR
 ;
 
 forward_function_argument:
-    Type_cmm op=FUNCTION_ARGUMENT_OPTION? VAR?
+    type_cmm op=FUNCTION_ARGUMENT_OPTION? VAR?
 ;
 
 
 function_definition : 
-    T=(Type_cmm | 'void') VAR '(' (function_argument (',' function_argument)*) |('void'?) ')' '{' statement* '}'  
+    (type_cmm | 'void') VAR '(' ((function_argument (',' function_argument)*)? |'void') ')' '{' statement* '}'  
 ;
 
 forward_function_definition:
-    T = (Type_cmm | 'void') VAR '('(forward_function_argument (',' forward_function_argument)*) |('void'?) ')' ';'
+    (type_cmm | 'void') VAR '('((forward_function_argument (',' forward_function_argument)*)? |'void') ')' ';'
 ;
 
 struct_definition:
@@ -145,7 +145,7 @@ HEX_NUMBER:
     ('0x' | '0X')[0-9a-fA-F]+
 ;
 
-Type_cmm:
+type_cmm:
     Int
     | Char
     | Double
@@ -286,7 +286,7 @@ expression:
     | FLOAT_NUMBER #expAtom
     | VAR #expAtom
     | expression '.' VAR #expDot
-    | 'sizeof' '(' (expression | Type_cmm) ')' #expSizeof
+    | 'sizeof' '(' (expression | type_cmm) ')' #expSizeof
     | function_call_expression #expFunctionCall
     | expression '[' expression ']' #expArray// expression[expression] para permitir usar 0[var] == var[0]
     | expression op=('++' | '--') #expRightUnary

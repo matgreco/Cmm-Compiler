@@ -8,6 +8,40 @@ from anytree import Node, RenderTree
 
 # This class defines a complete generic visitor for a parse tree produced by Cmm2Parser.
 
+
+def Initialize_scope(scope):
+	nuevo_scope = Node(dict({}),scope)
+	return nuevo_scope
+
+def Finalize_scope(scope):
+	nuevo_scope = scope.parent
+	return nuevo_scope
+
+def Consultar(scope, name):
+	test_scope = scope
+	while True :
+		if name in test_scope.name:
+			print("OK, simbolo encontrado, valor: ", test_scope.name[name])
+			return test_scope.name[name]
+		else:
+			if test_scope.is_root == True:
+				break
+			test_scope = test_scope.parent
+
+	if test_scope.is_root == True :
+		print("Simbolo no existe")
+
+
+
+
+
+
+
+
+
+
+
+
 def Error(msg, line):
     print("Error en linea: "+str(line)+": " + str(msg))
 
@@ -15,7 +49,7 @@ def Error(msg, line):
 def stoi(s:str):
     if s[0] == '\'':
         if len(s) != 3:
-            Error("Caracter invalido: "+s)
+            Error("Caracter invalido: "+s,0)
             return [0,'int']
         else:
             return [ord(s[1]),'char']
@@ -27,7 +61,7 @@ def stoi(s:str):
             base = 16
         elif s[0] == "0":
             base = 8
-        return [(int(s) & (2<<64 - 1)), 'long']
+        return [(int(s,base) & (2<<64 - 1)), 'long']
     else:
         base = 10
         if s[0:2] in ["0x","0X"]:
@@ -35,7 +69,7 @@ def stoi(s:str):
             base = 16
         elif s[0] == "0":
             base = 8
-        return [(int(s) & (2<<32 - 1)), 'int']
+        return [(int(s,base) & (2<<32 - 1)), 'int']
 
 
 
@@ -58,6 +92,7 @@ class Cmm2Visitor(ParseTreeVisitor):
         self.structs = []
         self.tree = Node(dict({}))
         self.where = 'global' #'global', 'function', 'struct'
+        self.last_loop = None
 
     # Visit a parse tree produced by Cmm2Parser#build.
     def visitBuild(self, ctx:Cmm2Parser.BuildContext):
@@ -71,9 +106,9 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#declare_normal.
     def visitDeclare_normal(self, ctx:Cmm2Parser.Declare_normalContext):
-        vtype = ctx.Type_cmm().getText()
+        vtype = self.visit(ctx.type_cmm())
         name = ctx.VAR().getText()
-        line = ctx.start.getLine()
+        line = ctx.start.line
         if name in self.tree.name:
             Error(name + " ya est\'a definida en este scope en la linea " + str(self.tree.name[name].line), line)
         else:
@@ -83,19 +118,27 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#declare_array.
     def visitDeclare_array(self, ctx:Cmm2Parser.Declare_arrayContext):
-        vtype = ctx.Type_cmm().getText()
+        vtype = self.visit(ctx.type_cmm())
         name = ctx.VAR().getText()
-        line = ctx.start.getLine()
-        val = self.visit(ctx.comma_expression())
+        line = ctx.start.line
+        val = self.visit(ctx.expression())
         if name in self.tree.name:
             Error(name + " ya est\'a definida en este scope en la linea " + str(self.tree.name[name].line), line)
         else:
-            self.tree.name[name] = symbol("variable", name, vtype, [], line)
+            self.tree.name[name] = symbol("variable", name, vtype + "[]", [], line)
         return None
     
     # Visit a parse tree produced by Cmm2Parser#declare_assign_expression.
     def visitDeclare_assign_expression(self, ctx:Cmm2Parser.Declare_assign_expressionContext):
-        return self.visitChildren(ctx)
+        vtype = self.visit(ctx.type_cmm())
+        name = ctx.VAR().getText()
+        line = ctx.start.line
+        if name in self.tree.name:
+            Error(name + " ya est\'a definida en este scope en la linea " + str(self.tree.name[name].line), line)
+        else:
+            self.tree.name[name] = symbol("variable", name, vtype, [], line)
+        val = self.visit(ctx.expression())
+        return None
 
     # Visit a parse tree produced by Cmm2Parser#case_statement.
     def visitCase_statement(self, ctx:Cmm2Parser.Case_statementContext):
@@ -119,7 +162,9 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#block_statement.
     def visitBlock_statement(self, ctx:Cmm2Parser.Block_statementContext):
-        return self.visitChildren(ctx)
+        self.tree = Initialize_scope(self.tree)
+        self.visitChildren(ctx)
+        self.tree = Finalize_scope(self.tree)
 
 
     # Visit a parse tree produced by Cmm2Parser#if_statement.
@@ -164,7 +209,16 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#function_definition.
     def visitFunction_definition(self, ctx:Cmm2Parser.Function_definitionContext):
-        return self.visitChildren(ctx)
+
+
+
+        self.tree = Initialize_scope(self.tree)
+        i = 0
+        while ctx.statement(i) != None:
+            self.visit(ctx.statement(i))
+            i += 1
+        self.tree = Finalize_scope(self.tree)
+
 
 
     # Visit a parse tree produced by Cmm2Parser#forward_function_definition.
@@ -175,7 +229,8 @@ class Cmm2Visitor(ParseTreeVisitor):
     # Visit a parse tree produced by Cmm2Parser#struct_definition.
     def visitStruct_definition(self, ctx:Cmm2Parser.Struct_definitionContext):
         name = ctx.VAR().getText()
-        line = ctx.start.getLine()
+        print(ctx.start.__dict__)
+        line = ctx.start.line
         if Consultar(self.tree, name) != None:
             Error(name + " ya esta definido en linea" + str(Consultar(self.tree,name).line),line)
         self.where = 'struct'
@@ -192,6 +247,25 @@ class Cmm2Visitor(ParseTreeVisitor):
             self.tree.name[name] = symbol('struct', name, "", members, line)
         self.where = 'global'
         return
+
+
+    # Visit a parse tree produced by Cmm2Parser#type_cmm.
+    def visitType_cmm(self, ctx:Cmm2Parser.Type_cmmContext):
+        if ctx.Int() != None:
+            return "int"
+        if ctx.Char() != None:
+            return "char"
+        if ctx.Double() != None:
+            return "double"
+        if ctx.Long() != None:
+            return "long"
+        if ctx.Short() != None:
+            return "short"
+        if ctx.Float() != None:
+            return "float"
+        if ctx.VAR() != None:
+            return ["struct", ctx.VAR().getText()]
+
 
 
     # Visit a parse tree produced by Cmm2Parser#comma_expression.
@@ -283,30 +357,31 @@ class Cmm2Visitor(ParseTreeVisitor):
             return None
         type1 = left.value[0]
         type2 = right.value[0]
-        return symbol(left.stype,"",list(left.value))
+        return symbol(left.stype,"", left.vtype,list(left.value))
 
 
     # Visit a parse tree produced by Cmm2Parser#expAtom.
     def visitExpAtom(self, ctx:Cmm2Parser.ExpAtomContext):
         if ctx.VAR() != None:
             if Consultar(self.tree, ctx.VAR().getText()) == None:
-                line = ctx.start.getLine()
+                line = ctx.start.line
+                
                 Error(ctx.VAR().getText() + " no esta definido", line)
                 return None
             else:
-                x = Contultar(self.tree, ctx.VAR().getText())
+                x = Consultar(self.tree, ctx.VAR().getText())
                 if x.stype == "function" or x.stype == "struct":
-                    line = ctx.start.getLine()
+                    line = ctx.start.line
                     Error(x.name+ " no es una variable", line)
                     return None
                 return x
         if ctx.INT_NUMBER() != None:
-            val = stoi(INT_NUMBER().getText())
+            val = stoi(ctx.INT_NUMBER().getText())
             return symbol('value', val[0], val[1],[])
         if ctx.STRING_CONSTANT() != None:
-            return Symbol('value', ctx.STRING_CONSTANT().getText(),"char[]",[])
+            return symbol('value', ctx.STRING_CONSTANT().getText(),"char[]",[])
         if ctx.FLOAT_NUMBER() != None:
-            return Symbol('value', float(ctx.FLOAT_NUMBER().getText()), "double",[])
+            return symbol('value', float(ctx.FLOAT_NUMBER().getText()), "double",[])
 
 
     # Visit a parse tree produced by Cmm2Parser#expPar.
@@ -316,7 +391,7 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#expSizeof.
     def visitExpSizeof(self, ctx:Cmm2Parser.ExpSizeofContext):
-        return symbol("value", "", ["int"])
+        return symbol("value", "", "int", [])
 
 
 

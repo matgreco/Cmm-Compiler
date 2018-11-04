@@ -114,6 +114,11 @@ class Cmm2Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by Cmm2Parser#type_cmm.
+    def visitType_cmm(self, ctx:Cmm2Parser.Type_cmmContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by Cmm2Parser#comma_expression.
     def visitComma_expression(self, ctx:Cmm2Parser.Comma_expressionContext):
         return self.visitChildren(ctx)
