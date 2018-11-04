@@ -101,7 +101,10 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#declare_statement.
     def visitDeclare_statement(self, ctx:Cmm2Parser.Declare_statementContext):
-        return self.visitChildren(ctx)
+        if ctx.declare_assign_expression() != None:
+            return self.visit(ctx.declare_assign_expression())
+        else:
+            return self.visit(ctx.declare_expression())
 
 
     # Visit a parse tree produced by Cmm2Parser#declare_normal.
@@ -113,6 +116,7 @@ class Cmm2Visitor(ParseTreeVisitor):
             Error(name + " ya est\'a definida en este scope en la linea " + str(self.tree.name[name].line), line)
         else:
             self.tree.name[name] = symbol("variable", name, vtype, [], line)
+            return self.tree.name[name]
         return None
 
 
@@ -126,6 +130,7 @@ class Cmm2Visitor(ParseTreeVisitor):
             Error(name + " ya est\'a definida en este scope en la linea " + str(self.tree.name[name].line), line)
         else:
             self.tree.name[name] = symbol("variable", name, vtype + "[]", [], line)
+            return self.tree.name[name]
         return None
     
     # Visit a parse tree produced by Cmm2Parser#declare_assign_expression.
@@ -137,6 +142,7 @@ class Cmm2Visitor(ParseTreeVisitor):
             Error(name + " ya est\'a definida en este scope en la linea " + str(self.tree.name[name].line), line)
         else:
             self.tree.name[name] = symbol("variable", name, vtype, [], line)
+            return self.tree.name[name]
         val = self.visit(ctx.expression())
         return None
 
@@ -237,13 +243,13 @@ class Cmm2Visitor(ParseTreeVisitor):
         self.tree = Initialize_scope(self.tree)
         members = []
         i = 0
-        member = self.visit(ctx.declare_statement(i))
+        member = ctx.declare_statement(i)
         while member != None:
-            members.append(member)
+            members.append(self.visit(member))
             i += 1
-            member = self.visit(ctx.declare_statement(i))
+            member = ctx.declare_statement(i)
         self.tree = Finalize_scope(self.tree)
-        if Consultar(self.tree, name) != None:
+        if Consultar(self.tree, name) == None:
             self.tree.name[name] = symbol('struct', name, "", members, line)
         self.where = 'global'
         return
