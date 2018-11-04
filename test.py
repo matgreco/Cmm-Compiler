@@ -11,9 +11,8 @@ def main(argv):
     parser = Cmm2Parser(stream)
     tree = parser.build()
 
-    printer = Cmm2Listener()
-    walker = ParseTreeWalker()
-    walker.walk(printer, tree)
+    visitor = Cmm2Visitor()
+    result = visitor.visit(tree)
  
 if __name__ == '__main__':
     main(sys.argv)

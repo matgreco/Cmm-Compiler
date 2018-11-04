@@ -19,8 +19,8 @@ declare_statement:
 ;
 
 declare_expression:
-    type_cmm VAR ('=' expression)? (',' VAR ('=' expression)?)*
-    | type_cmm VAR '[' comma_expression ']'
+    Type_cmm VAR ('=' expression)? #declare_normal
+    | Type_cmm VAR '[' comma_expression ']' #declare_array
 ;
 
 
@@ -55,24 +55,25 @@ unary_left_op:
     | '~'
 ;
 
-
+case_statement:
+    Case INT_NUMBER ':'
+    | Default;
 
 statement:
-    comma_expression?';'
-    | declare_statement
-    | Break ';'
-    | Continue ';'
-    | Return comma_expression? ';'
-    | Case INT_NUMBER ':' //modificar para usar constant expression (?)
-    | Default ':'
+    comma_expression?';' #normal_statement
+    | declare_expression ';' #normal_statement
+    | Break ';' #break_statement
+    | Continue ';' #continue_statement
+    | Return comma_expression? ';' #normal_statement
+    | case_statement #normal_statement
 //    | VAR ':' //label
 //    | Goto VAR ';'
-    | if_statement
-    | while_statement
-    | for_statement
-    | switch_statement
-    | do_statement
-    | '{' statement* '}' 
+    | if_statement #normal_statement
+    | while_statement #normal_statement
+    | for_statement #normal_statement
+    | switch_statement #normal_statement
+    | do_statement #normal_statement
+    | '{' statement* '}' #block_statement
 ;
 
 if_statement:
@@ -106,12 +107,26 @@ function_call_expression :
     VAR '(' (expression (',' expression)*)? ')'  
 ;
 
+FUNCTION_ARGUMENT_OPTION:
+    '&'
+    | '[' ']'
+;
+
+function_argument:
+    Type_cmm op=FUNCTION_ARGUMENT_OPTION? VAR
+;
+
+forward_function_argument:
+    Type_cmm op=FUNCTION_ARGUMENT_OPTION? VAR?
+;
+
+
 function_definition : 
-    (type_cmm | 'void') VAR '(' ((type_cmm '&'? VAR (',' type_cmm '&'? VAR)*)? | 'void') ')' '{' statement* '}'  
+    T=(Type_cmm | 'void') VAR '(' (function_argument (',' function_argument)*) |('void'?) ')' '{' statement* '}'  
 ;
 
 forward_function_definition:
-    (type_cmm | 'void') VAR '(' ((type_cmm '&'? VAR? (',' type_cmm '&'? VAR?)*)? | 'void') ')' ';'
+    T = (Type_cmm | 'void') VAR '('(forward_function_argument (',' forward_function_argument)*) |('void'?) ')' ';'
 ;
 
 struct_definition:
@@ -155,7 +170,7 @@ HEX_NUMBER:
     ('0x' | '0X')[0-9a-fA-F]+
 ;
 
-type_cmm:
+Type_cmm:
     Unsigned? Int
     | Unsigned? Char
     | Double
@@ -290,28 +305,28 @@ comma_expression:
 
 
 expression:
-    '(' comma_expression ')'
-    | INT_NUMBER
-    | STRING_CONSTANT
-    | CHAR_CONSTANT
-    | FLOAT_NUMBER
-    | VAR
-    | expression '.' VAR
-    | 'sizeof' '(' (expression | type_cmm) ')'
-    | function_call_expression
-    | expression '[' expression ']' // expression[expression] para permitir usar 0[var] == var[0]
-    | expression ('++' | '--')
-    | unary_left_op expression
-    | expression ('*' | '/' | '%') expression
-    | expression ('+' | '-') expression
-    | expression ('<<' | '>>') expression
-    | expression ('<' | '<=' | '>' | '>=') expression
-    | expression ('==' | '!=') expression
-    | expression '&' expression
-    | expression '^' expression
-    | expression '|' expression
-    | expression '&&' expression
-    | expression '||' expression
-    | <assoc=right> expression '?' comma_expression ':' expression
-    | <assoc=right> expression assign_op expression
+    '(' comma_expression ')' #expPar
+    | INT_NUMBER #expAtom
+    | STRING_CONSTANT #expAtom
+    | CHAR_CONSTANT #expAtom
+    | FLOAT_NUMBER #expAtom
+    | VAR #expAtom
+    | expression '.' VAR #expDot
+    | 'sizeof' '(' (expression | Type_cmm) ')' #expSizeof
+    | function_call_expression #expFunctionCall
+    | expression '[' expression ']' #expArray// expression[expression] para permitir usar 0[var] == var[0]
+    | expression op=('++' | '--') #expRightUnary
+    | op=('++'| '--'| '+'| '-'| '!'| '~') expression #expLeftUnary
+    | expression op=('*' | '/' | '%') expression #expOp
+    | expression op=('+' | '-') expression #expOp
+    | expression op=('<<' | '>>') expression #expOp
+    | expression op=('<' | '<=' | '>' | '>=') expression #expOp
+    | expression op=('==' | '!=') expression #expOp
+    | expression op='&' expression #expOp
+    | expression op='^' expression #expOp
+    | expression op='|' expression #expOp
+    | expression op='&&' expression #expOp
+    | expression op='||' expression #expOp
+    | <assoc=right> expression '?' comma_expression ':' expression #expTerOp
+    | <assoc=right> expression op=('='| '+='| '-='| '*='| '/='| '%='| '<<='| '>>='| '&='| '^='| '|=') expression #expOp
 ;
