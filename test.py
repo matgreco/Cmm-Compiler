@@ -2,8 +2,8 @@ import sys
 from antlr4 import *
 from Cmm2Lexer import Cmm2Lexer
 from Cmm2Parser import Cmm2Parser
-from Cmm2Listener import Cmm2Listener
-from Cmm2Visitor__ import Cmm2Visitor
+#from Cmm2Listener import Cmm2Listener
+from Cmm2Visitor__ import *
  
 
 input = FileStream(sys.argv[1])
@@ -14,4 +14,6 @@ tree = parser.build()
 
 visitor = Cmm2Visitor()
 result = visitor.visit(tree)
+
+mostrarArbol(visitor.tree)
 
