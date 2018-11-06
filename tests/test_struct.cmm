@@ -9,6 +9,7 @@ int main(){
 	struct account a;
 	struct noexiste b;	// error semantico
 	a.account_number = 123;
+    a.xxx = 1;
 	printf("%d\n",a.account_number);
 
 	return(0);

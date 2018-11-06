@@ -102,7 +102,7 @@ class symbol:
 class Cmm2Visitor(ParseTreeVisitor):
 
     def __init__(self):
-        self.structs = dict() #[[member1, type], [member1, type], ...]
+        self.structs = dict() #{"member":"type"}
         self.functions = dict() #[return_type, [arg_type, opt], [arg_type, opt], ...]
         self.tree = Node(dict({}))
         self.where = 'global' #'global', 'function', 'struct'
@@ -129,10 +129,15 @@ class Cmm2Visitor(ParseTreeVisitor):
         vtype = self.visit(ctx.type_cmm())
         name = ctx.VAR().getText()
         line = ctx.start.line
+        if vtype[0] == "struct":
+            if not vtype[1] in self.structs:
+                Error("La estructura " + vtype[1] + " no esta definida", line)
         if name in self.tree.name:
             Error(name + " ya est\'a definida en este scope en la linea " + str(self.tree.name[name].line), line)
         else:
             self.tree.name[name] = symbol("variable", name, vtype, [], line)
+            return self.tree.name[name]
+                
         return None
 
 
@@ -142,10 +147,18 @@ class Cmm2Visitor(ParseTreeVisitor):
         name = ctx.VAR().getText()
         line = ctx.start.line
         val = self.visit(ctx.expression())
+        if vtype[0] == "struct":
+            if not vtype[1] in self.structs:
+                Error("La estructura " + vtype[1] + " no esta definida", line)
         if name in self.tree.name:
             Error(name + " ya est\'a definida en este scope en la linea " + str(self.tree.name[name].line), line)
         else:
-            self.tree.name[name] = symbol("variable", name, vtype + "[]", [], line)
+            if vtype[0] == "struct":
+                vtype[0] = "struct[]"
+                self.tree.name[name] = symbol("variable", name, vtype, [], line)
+            else:
+                self.tree.name[name] = symbol("variable", name, vtype + "[]", [], line)
+            return self.tree.name[name]
         return None
     
     # Visit a parse tree produced by Cmm2Parser#declare_assign_expression.
@@ -266,7 +279,10 @@ class Cmm2Visitor(ParseTreeVisitor):
         if ctx.op != None:
             op = ctx.op.text
             if op[0] == '[': #array
-                vtype+='[]'
+                if vtype[0] == "struct":
+                    vtype[0] = "struct[]"
+                else:
+                    vtype+='[]'
             if op == '&':
                 return [vtype, name, '&']
         return [vtype, name, '']
@@ -293,6 +309,9 @@ class Cmm2Visitor(ParseTreeVisitor):
         while ctx.function_argument(i) != None:
             args.append(self.visit(ctx.function_argument(i)))
             i += 1
+        self.functions[name]=[vtype]
+        for arg in args:
+            self.functions[name].append([arg[0], arg[2]])
         
         if not name in self.tree.name:
             self.tree.name[name] = symbol('funcion', name, vtype, args, line)
@@ -306,9 +325,6 @@ class Cmm2Visitor(ParseTreeVisitor):
             self.visit(ctx.statement(i))
             i += 1
         self.tree = Finalize_scope(self.tree)
-        self.functions[name]=[vtype]
-        for arg in args:
-            self.functions[name].append([arg[0], arg[2]])
         return None
 
 
@@ -329,18 +345,16 @@ class Cmm2Visitor(ParseTreeVisitor):
         self.tree = Initialize_scope(self.tree)
         members = []
         i = 0
-        member = self.visit(ctx.declare_statement(i))
-        while member != None:
-            members.append(member)
+        while ctx.declare_statement(i) != None:
+            members.append(self.visit(ctx.declare_statement(i)))
             i += 1
-            member = self.visit(ctx.declare_statement(i))
         self.tree = Finalize_scope(self.tree)
         if Consultar(self.tree, name) == None:
             self.tree.name[name] = symbol('struct', name, "", members, line)
         self.where = 'global'
-        self.structs[name] = []
-        for member in members:
-            self.structs[name].append([member.name, member.vtype])
+        self.structs[name] = dict()
+        for mem in members:
+            self.structs[name][mem.name] = mem.vtype
         return None
 
 
@@ -389,7 +403,20 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#expDot.
     def visitExpDot(self, ctx:Cmm2Parser.ExpDotContext):
-        return self.visitChildren(ctx)
+        left = self.visit(ctx.expression())
+        name = ctx.VAR().getText()
+        line = ctx.start.line
+        if left.stype != "variable":
+            Error("La expresion no es una estructura.", line)
+            return None
+        if left.vtype[0] != "struct":
+            Error(left.name + " no es una estructura.", line)
+            return None
+        if not name in self.structs[left.vtype[1]]:
+            Error(name + " no es miembro de "+ left.vtype[1], line)
+            return None
+        
+        return symbol("variable", left.name + "." + name, self.structs[left.vtype[1]][name], [], 0)
 
 
     # Visit a parse tree produced by Cmm2Parser#expTerOp.
