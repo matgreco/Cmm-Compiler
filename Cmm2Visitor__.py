@@ -180,7 +180,11 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#normal_statement.
     def visitNormal_statement(self, ctx:Cmm2Parser.Normal_statementContext):
-        return self.visitChildren(ctx)
+        if str(ctx.Return()) == "return" :
+            print("########################")
+            return "RETORNO"
+        else :
+            return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by Cmm2Parser#break_statement.
@@ -323,6 +327,8 @@ class Cmm2Visitor(ParseTreeVisitor):
         i = 0
         while ctx.statement(i) != None:
             self.visit(ctx.statement(i))
+            if ctx.statement(i).Return():
+                print("OOOOOOOOOOOOOOOKKK")
             i += 1
         self.tree = Finalize_scope(self.tree)
         return None
@@ -388,6 +394,17 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#expAssign.
     def visitExpAssign(self, ctx:Cmm2Parser.ExpAssignContext):
+        left = self.visit(ctx.expression(0))
+        right = self.visit(ctx.expression(1))
+
+        if right.stype == "funcion_call" :
+            if Consultar(self.tree, right.name) == None:
+                Error("La funcion "+right.name+" no ha sido definida.", left.line ) 
+                print(left.name)
+            else :
+                if Consultar(self.tree, right.name).vtype == "void":
+                    Error("No se puede asignar una funcion de tipo VOID a una variable", left.line ) 
+
         return self.visitChildren(ctx)
 
 
@@ -398,8 +415,13 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#expFunctionCall.
     def visitExpFunctionCall(self, ctx:Cmm2Parser.ExpFunctionCallContext):
-        return self.visitChildren(ctx)
-
+        #print("FUNCION CALL", ctx.function_call_expression().VAR().getText() )
+        #print("DATO: ", ctx.function_call_expression().expression(1))
+        #return self.visitChildren(ctx)
+        #return symbol("funcion_call", ctx.function_call_expression().VAR().getText() , self.structs[left.vtype[1]][name], [], 0)
+        #def __init__(self, stype, name, vtype, info, line = 0):
+        return symbol("funcion_call", ctx.function_call_expression().VAR().getText() , [] , [], 0)
+        #return ctx.function_call_expression().VAR().getText()
 
     # Visit a parse tree produced by Cmm2Parser#expDot.
     def visitExpDot(self, ctx:Cmm2Parser.ExpDotContext):

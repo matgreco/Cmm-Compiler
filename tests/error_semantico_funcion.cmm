@@ -1,0 +1,12 @@
+void funcionvoid(int b){
+	b=10;
+	return b;
+}
+void main(){
+	int c;
+	c = c + 1;
+	c = c;
+	c = funcionvoid(c);
+
+	return 0;
+}
