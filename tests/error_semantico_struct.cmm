@@ -1,0 +1,15 @@
+struct account {
+   int account_number;
+   char first_name[10];
+   char last_name[10];
+   float balance;
+};
+
+int main(){
+	struct account a;
+	int b;
+	b = a + 1;
+	printf("%d\n",a.account_number);
+
+	return(0);
+}
