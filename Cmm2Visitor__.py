@@ -38,8 +38,10 @@ def Consultar(scope, name):
 
 
 def mostrarArbol(nodo):
+    print("+++++++++++++++++++++++++ TABLA DE SIMBOLOS +++++++++++++++++++++++++++++++")
     for pre, fill, node in RenderTree(nodo):
-        print( pre, node.name)
+        if node.name :
+            print( pre, node.name)
 
 
 
@@ -94,7 +96,7 @@ class symbol:
     def __str__(self):
         return self.name + "("+ self.stype + " " + self.vtype[0] + ")"
     def __repr__(self):
-        return "("+ self.vtype + ")"
+        return "("+ str(self.vtype) + ")"
 
     
 class Cmm2Visitor(ParseTreeVisitor):
@@ -187,13 +189,13 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#if_statement.
     def visitIf_statement(self, ctx:Cmm2Parser.If_statementContext):
-        self.tree = Initialize_scope(self.tree)
+        #self.tree = Initialize_scope(self.tree)
         expression = self.visit(ctx.comma_expression())
         if_true = self.visit(ctx.statement(0))
         if_false = None
         if ctx.statement(1) != None:
             if_false = self.visit(ctx.statement(1))
-        self.tree = Finalize_scope(self.tree)
+        #self.tree = Finalize_scope(self.tree)
         return None
 
 
@@ -204,10 +206,10 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#while_statement.
     def visitWhile_statement(self, ctx:Cmm2Parser.While_statementContext):
-        self.tree = Initialize_scope(self.tree)
+        #self.tree = Initialize_scope(self.tree)
         expression = self.visit(ctx.comma_expression())
-        block = self.visit(ctx.statement(0))
-        self.tree = Finalize_scope(self.tree)
+        block = self.visit(ctx.statement())
+        #self.tree = Finalize_scope(self.tree)
         return None
 
     # Visit a parse tree produced by Cmm2Parser#for_1.
@@ -244,10 +246,10 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#do_statement.
     def visitDo_statement(self, ctx:Cmm2Parser.Do_statementContext):
-        self.tree = Initialize_scope(self.tree)
+        #self.tree = Initialize_scope(self.tree)
         block = self.visit(ctx.statement(0))
         expression = self.visit(ctx.comma_expression())
-        self.tree = Finalize_scope(self.tree)
+        #self.tree = Finalize_scope(self.tree)
         return None
 
 
@@ -297,7 +299,7 @@ class Cmm2Visitor(ParseTreeVisitor):
     # Visit a parse tree produced by Cmm2Parser#struct_definition.
     def visitStruct_definition(self, ctx:Cmm2Parser.Struct_definitionContext):
         name = ctx.VAR().getText()
-        print(ctx.start.__dict__)
+        #print(ctx.start.__dict__)
         line = ctx.start.line
         if Consultar(self.tree, name) != None:
             Error(name + " ya esta definido en linea" + str(Consultar(self.tree,name).line),line)
@@ -311,7 +313,7 @@ class Cmm2Visitor(ParseTreeVisitor):
             i += 1
             member = self.visit(ctx.declare_statement(i))
         self.tree = Finalize_scope(self.tree)
-        if Consultar(self.tree, name) != None:
+        if Consultar(self.tree, name) == None:
             self.tree.name[name] = symbol('struct', name, "", members, line)
         self.where = 'global'
         return
