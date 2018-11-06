@@ -8,7 +8,10 @@ void main(){
 	int a;
 	a = 10;
 	int x;
+	int xaa;
 	x = 20;
+	xaa = x + a;
+	xaa = x + 10;
 
 	{
 		int x;
