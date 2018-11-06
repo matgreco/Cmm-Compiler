@@ -414,9 +414,9 @@ class Cmm2Visitor(ParseTreeVisitor):
         left = self.visit(ctx.expression(0))
         right = self.visit(ctx.expression(1))
 
-        if str(left.vtype[0]) == "struct" :
+        if left is not None and  str(left.vtype[0]) == "struct" :
             Error("No se pueden realizar operaciones con un struct", left.line)
-        if str(right.vtype[0]) == "struct" :
+        if right is not None and str(right.vtype[0]) == "struct" :
             Error("No se pueden realizar operaciones con un struct", right.line)
 
         #print("---------------------------- L y R ", left.vtype, right.vtype)
