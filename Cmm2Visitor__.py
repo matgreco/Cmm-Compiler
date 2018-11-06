@@ -102,7 +102,8 @@ class symbol:
 class Cmm2Visitor(ParseTreeVisitor):
 
     def __init__(self):
-        self.structs = []
+        self.structs = dict() #[[member1, type], [member1, type], ...]
+        self.functions = dict() #[return_type, [arg_type, opt], [arg_type, opt], ...]
         self.tree = Node(dict({}))
         self.where = 'global' #'global', 'function', 'struct'
         self.last_loop = None
@@ -260,7 +261,14 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#function_argument.
     def visitFunction_argument(self, ctx:Cmm2Parser.Function_argumentContext):
-        return self.visitChildren(ctx)
+        vtype = self.visit(ctx.type_cmm())
+        name = ctx.VAR().getText()
+        op = ctx.op.text
+        if op[0] == '[': #array
+            vtype+='[]'
+        if op == '&':
+            return [vtype, name, '&']
+        return [vtype, name, '']
 
 
     # Visit a parse tree produced by Cmm2Parser#forward_function_argument.
@@ -275,19 +283,32 @@ class Cmm2Visitor(ParseTreeVisitor):
             vtype = "void"
         else:
             vtype = self.visit(ctx.type_cmm())
-        name = ctx.VAR().getText()
-        members = []
         line = ctx.start.line
-        if Consultar(self.tree, name) == None:
-            self.tree.name[name] = symbol('funcion', name, vtype, members, line)
+        name = ctx.VAR().getText()
+        if name in self.tree.name:
+            Error(name + " Ya esta definido en linea "+str(self.tree.name[name].line), line)
+        i = 0
+        args = []
+        while ctx.function_argument(i) != None:
+            args.append(self.visit(ctx.function_argument(i)))
+            i += 1
+        
+        if not name in self.tree.name:
+            self.tree.name[name] = symbol('funcion', name, vtype, args, line)
 
         #inicializa el scope y agrega lo de adentro
         self.tree = Initialize_scope(self.tree)
+        for arg in args:
+            self.tree.name[arg.name] = symbol("variable", name, vtype, [], line)
         i = 0
         while ctx.statement(i) != None:
             self.visit(ctx.statement(i))
             i += 1
         self.tree = Finalize_scope(self.tree)
+        self.functions[name]=[vtype]
+        for arg in args:
+            self.functions[name].append([arg[0], arg[2]])
+        return None
 
 
 
@@ -316,7 +337,10 @@ class Cmm2Visitor(ParseTreeVisitor):
         if Consultar(self.tree, name) == None:
             self.tree.name[name] = symbol('struct', name, "", members, line)
         self.where = 'global'
-        return
+        self.structs[name] = []
+        for member in members:
+            self.structs[name].append([member.name, member.vtype])
+        return None
 
 
     # Visit a parse tree produced by Cmm2Parser#type_cmm.
