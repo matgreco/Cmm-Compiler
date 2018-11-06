@@ -114,7 +114,10 @@ class Cmm2Visitor(ParseTreeVisitor):
     # Visit a parse tree produced by Cmm2Parser#declare_statement.
     def visitDeclare_statement(self, ctx:Cmm2Parser.Declare_statementContext):
         #print(self.visit(ctx.type_cmm()))
-        return self.visitChildren(ctx)
+        if ctx.declare_expression() != None:
+            return self.visit(ctx.declare_expression())
+        if ctx.declare_assign_expression() != None:
+            return self.visit(ctx.declare_assign_expression())
 
 
     # Visit a parse tree produced by Cmm2Parser#declare_normal.
@@ -184,7 +187,14 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#if_statement.
     def visitIf_statement(self, ctx:Cmm2Parser.If_statementContext):
-        return self.visitChildren(ctx)
+        self.tree = Initialize_scope(self.tree)
+        expression = self.visit(ctx.comma_expression())
+        if_true = self.visit(ctx.statement(0))
+        if_false = None
+        if ctx.statement(1) != None:
+            if_false = self.visit(ctx.statement(1))
+        self.tree = Finalize_scope(self.tree)
+        return None
 
 
     # Visit a parse tree produced by Cmm2Parser#switch_statement.
@@ -194,30 +204,51 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#while_statement.
     def visitWhile_statement(self, ctx:Cmm2Parser.While_statementContext):
-        return self.visitChildren(ctx)
+        self.tree = Initialize_scope(self.tree)
+        expression = self.visit(ctx.comma_expression())
+        block = self.visit(ctx.statement(0))
+        self.tree = Finalize_scope(self.tree)
+        return None
 
     # Visit a parse tree produced by Cmm2Parser#for_1.
     def visitFor_1(self, ctx:Cmm2Parser.For_1Context):
-        return self.visitChildren(ctx)
+        if ctx.comma_expression() != None:
+            return self.visit(ctx.comma_expression())
+        if ctx.declare_statement != None:
+            return self.visit(ctx.declare_statement())
+        return None
 
 
     # Visit a parse tree produced by Cmm2Parser#for_2.
     def visitFor_2(self, ctx:Cmm2Parser.For_2Context):
-        return self.visitChildren(ctx)
+        if ctx.comma_expression() != None:
+            return self.visit(ctx.comma_expression())
+        return None
 
 
     # Visit a parse tree produced by Cmm2Parser#for_3.
     def visitFor_3(self, ctx:Cmm2Parser.For_3Context):
-        return self.visitChildren(ctx)
+        if ctx.comma_expression() != None:
+            return self.visit(ctx.comma_expression())
+        return None
 
 
     # Visit a parse tree produced by Cmm2Parser#for_statement.
     def visitFor_statement(self, ctx:Cmm2Parser.For_statementContext):
-        return self.visitChildren(ctx)
+        self.tree = Initialize_scope(self.tree)
+        if_init = self.visit(ctx.for_1())
+        if_cond = self.visit(ctx.for_2())
+        if_loop = self.visit(ctx.for_3())
+        self.visit(ctx.statement())
+        self.tree = Finalize_scope(self.tree)
 
     # Visit a parse tree produced by Cmm2Parser#do_statement.
     def visitDo_statement(self, ctx:Cmm2Parser.Do_statementContext):
-        return self.visitChildren(ctx)
+        self.tree = Initialize_scope(self.tree)
+        block = self.visit(ctx.statement(0))
+        expression = self.visit(ctx.comma_expression())
+        self.tree = Finalize_scope(self.tree)
+        return None
 
 
     # Visit a parse tree produced by Cmm2Parser#function_call_expression.
