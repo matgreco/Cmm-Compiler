@@ -26,9 +26,8 @@ declare_expression:
 
 
 declare_assign_expression:
-    type_cmm VAR ('=' expression)?
+    type_cmm VAR '=' expression
 ;
-
 
 case_statement:
     Case INT_NUMBER ':'
@@ -36,7 +35,7 @@ case_statement:
 
 statement:
     comma_expression?';' #normal_statement
-    | declare_expression ';' #normal_statement
+    | declare_statement  #normal_statement
     | Break ';' #break_statement
     | Continue ';' #continue_statement
     | Return comma_expression? ';' #normal_statement
@@ -68,9 +67,21 @@ while_statement:
 //    | While '(' expression ')' '{' statement* '}'
 ;
 
+for_1:
+    comma_expression? ';'
+    | declare_statement
+;
+
+for_2:
+    comma_expression? ';'
+;
+
+for_3:
+    comma_expression? 
+;
+
 for_statement:
-    For '('(comma_expression | declare_expression)? ';' comma_expression? ';' comma_expression? ')' statement
-//    | For '('(expression | declare_expression) ';' expression ';' expression ')' '{' statement* '}'
+    For '(' for_1 for_2 for_3 ')' statement
 ;
 
 do_statement:

@@ -74,6 +74,21 @@ class Cmm2Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by Cmm2Parser#for_1.
+    def visitFor_1(self, ctx:Cmm2Parser.For_1Context):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by Cmm2Parser#for_2.
+    def visitFor_2(self, ctx:Cmm2Parser.For_2Context):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by Cmm2Parser#for_3.
+    def visitFor_3(self, ctx:Cmm2Parser.For_3Context):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by Cmm2Parser#for_statement.
     def visitFor_statement(self, ctx:Cmm2Parser.For_statementContext):
         return self.visitChildren(ctx)

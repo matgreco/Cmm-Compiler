@@ -44,30 +44,12 @@ class Cmm2Listener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by Cmm2Parser#compare_op.
-    def enterCompare_op(self, ctx:Cmm2Parser.Compare_opContext):
+    # Enter a parse tree produced by Cmm2Parser#declare_assign_expression.
+    def enterDeclare_assign_expression(self, ctx:Cmm2Parser.Declare_assign_expressionContext):
         pass
 
-    # Exit a parse tree produced by Cmm2Parser#compare_op.
-    def exitCompare_op(self, ctx:Cmm2Parser.Compare_opContext):
-        pass
-
-
-    # Enter a parse tree produced by Cmm2Parser#assign_op.
-    def enterAssign_op(self, ctx:Cmm2Parser.Assign_opContext):
-        pass
-
-    # Exit a parse tree produced by Cmm2Parser#assign_op.
-    def exitAssign_op(self, ctx:Cmm2Parser.Assign_opContext):
-        pass
-
-
-    # Enter a parse tree produced by Cmm2Parser#unary_left_op.
-    def enterUnary_left_op(self, ctx:Cmm2Parser.Unary_left_opContext):
-        pass
-
-    # Exit a parse tree produced by Cmm2Parser#unary_left_op.
-    def exitUnary_left_op(self, ctx:Cmm2Parser.Unary_left_opContext):
+    # Exit a parse tree produced by Cmm2Parser#declare_assign_expression.
+    def exitDeclare_assign_expression(self, ctx:Cmm2Parser.Declare_assign_expressionContext):
         pass
 
 
@@ -143,6 +125,33 @@ class Cmm2Listener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by Cmm2Parser#for_1.
+    def enterFor_1(self, ctx:Cmm2Parser.For_1Context):
+        pass
+
+    # Exit a parse tree produced by Cmm2Parser#for_1.
+    def exitFor_1(self, ctx:Cmm2Parser.For_1Context):
+        pass
+
+
+    # Enter a parse tree produced by Cmm2Parser#for_2.
+    def enterFor_2(self, ctx:Cmm2Parser.For_2Context):
+        pass
+
+    # Exit a parse tree produced by Cmm2Parser#for_2.
+    def exitFor_2(self, ctx:Cmm2Parser.For_2Context):
+        pass
+
+
+    # Enter a parse tree produced by Cmm2Parser#for_3.
+    def enterFor_3(self, ctx:Cmm2Parser.For_3Context):
+        pass
+
+    # Exit a parse tree produced by Cmm2Parser#for_3.
+    def exitFor_3(self, ctx:Cmm2Parser.For_3Context):
+        pass
+
+
     # Enter a parse tree produced by Cmm2Parser#for_statement.
     def enterFor_statement(self, ctx:Cmm2Parser.For_statementContext):
         pass
@@ -215,12 +224,30 @@ class Cmm2Listener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by Cmm2Parser#type_cmm.
+    def enterType_cmm(self, ctx:Cmm2Parser.Type_cmmContext):
+        pass
+
+    # Exit a parse tree produced by Cmm2Parser#type_cmm.
+    def exitType_cmm(self, ctx:Cmm2Parser.Type_cmmContext):
+        pass
+
+
     # Enter a parse tree produced by Cmm2Parser#comma_expression.
     def enterComma_expression(self, ctx:Cmm2Parser.Comma_expressionContext):
         pass
 
     # Exit a parse tree produced by Cmm2Parser#comma_expression.
     def exitComma_expression(self, ctx:Cmm2Parser.Comma_expressionContext):
+        pass
+
+
+    # Enter a parse tree produced by Cmm2Parser#expAssign.
+    def enterExpAssign(self, ctx:Cmm2Parser.ExpAssignContext):
+        pass
+
+    # Exit a parse tree produced by Cmm2Parser#expAssign.
+    def exitExpAssign(self, ctx:Cmm2Parser.ExpAssignContext):
         pass
 
 

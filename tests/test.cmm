@@ -1,11 +1,14 @@
 int func(int xx){
-	int a;
+	int a;		
 	int RRR;
 	a = 10;
+	b = 202;	// error semantico 
 }
 
 void main(){
-	int a;
+	int a;		// ok
+	int b = 10; // ok
+	int c = b;	// OK
 	a = 10;
 	int x;
 	int xaa;
