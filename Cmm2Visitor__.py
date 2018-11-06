@@ -338,21 +338,23 @@ class Cmm2Visitor(ParseTreeVisitor):
 
 	# Visit a parse tree produced by Cmm2Parser#expOp.
 	def visitExpOp(self, ctx:Cmm2Parser.ExpOpContext):
-		print("///////////////////////////////////////////////",ctx.expression(0))
-		left = self.tree.name[ctx.expression(0).VAR().getText()]
-		right = left
+		
+		#left = self.tree.name[ctx.expression(0).VAR().getText()]
+		left = self.visit(ctx.expression(0))
+		right = self.visit(ctx.expression(1))
 		#right = ctx.expression(1).VAR().getText()
 		op = ctx.op.text
-
+		"""
 		if Consultar(self.tree, left) != None:
 			print("AAAAAAAA  ",self.tree.name[left].stype)
 		else :
 			print("Error en linea",ctx.op.line , ": variable ",left ,"no está declarada")
 
+		"""
 		#print("los tipos son ", Consultar(self.tree, left).stype)
 
 		if op == '+':
-			print("SUMAA entre ",left,right)
+			#print("SUMAA entre ",left,right)
 			pass
 		elif op == '-':
 			pass
