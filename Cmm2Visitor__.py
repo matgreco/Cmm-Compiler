@@ -263,11 +263,12 @@ class Cmm2Visitor(ParseTreeVisitor):
     def visitFunction_argument(self, ctx:Cmm2Parser.Function_argumentContext):
         vtype = self.visit(ctx.type_cmm())
         name = ctx.VAR().getText()
-        op = ctx.op.text
-        if op[0] == '[': #array
-            vtype+='[]'
-        if op == '&':
-            return [vtype, name, '&']
+        if ctx.op != None:
+            op = ctx.op.text
+            if op[0] == '[': #array
+                vtype+='[]'
+            if op == '&':
+                return [vtype, name, '&']
         return [vtype, name, '']
 
 
@@ -299,7 +300,7 @@ class Cmm2Visitor(ParseTreeVisitor):
         #inicializa el scope y agrega lo de adentro
         self.tree = Initialize_scope(self.tree)
         for arg in args:
-            self.tree.name[arg.name] = symbol("variable", name, vtype, [], line)
+            self.tree.name[arg[1]] = symbol("variable", arg[1], arg[0], [], line)
         i = 0
         while ctx.statement(i) != None:
             self.visit(ctx.statement(i))
