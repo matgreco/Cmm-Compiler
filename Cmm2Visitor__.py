@@ -94,7 +94,7 @@ class symbol:
         #value: []
         self.line = line
     def __str__(self):
-        return self.name + "("+ self.stype + " " + self.vtype[0] + ")"
+        return str(self.name) + "("+ str(self.stype) + " " + str(self.vtype[0]) + ")"
     def __repr__(self):
         return "("+ str(self.vtype) + ")"
 
@@ -388,6 +388,11 @@ class Cmm2Visitor(ParseTreeVisitor):
         #left = self.tree.name[ctx.expression(0).VAR().getText()]
         left = self.visit(ctx.expression(0))
         right = self.visit(ctx.expression(1))
+
+        if str(left.vtype[0]) == "struct" :
+            Error("No se pueden realizar operaciones con un struct", left.line)
+        if str(right.vtype[0]) == "struct" :
+            Error("No se pueden realizar operaciones con un struct", right.line)
 
         #print("---------------------------- L y R ", left.vtype, right.vtype)
         #right = ctx.expression(1).VAR().getText()

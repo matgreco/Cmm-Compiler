@@ -1,0 +1,16 @@
+int funcion(int[] x, int y){
+	int a;
+	a = x[0];
+	int b;
+	b = y;
+
+	return b; 
+}
+
+int main(){
+	int arreglo[10];
+	int b;
+	b = funcion(arreglo, b);
+	
+	return 0;
+}
