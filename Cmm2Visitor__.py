@@ -38,11 +38,12 @@ def Consultar(scope, name):
 
 
 def mostrarArbol(nodo):
+    print()
     print("+++++++++++++++++++++++++ TABLA DE SIMBOLOS +++++++++++++++++++++++++++++++")
     for pre, fill, node in RenderTree(nodo):
         if node.name :
             print( pre, node.name)
-
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
 
 
@@ -181,7 +182,6 @@ class Cmm2Visitor(ParseTreeVisitor):
     # Visit a parse tree produced by Cmm2Parser#normal_statement.
     def visitNormal_statement(self, ctx:Cmm2Parser.Normal_statementContext):
         if str(ctx.Return()) == "return" :
-            print("########################")
             return "RETORNO"
         else :
             return self.visitChildren(ctx)
@@ -327,8 +327,10 @@ class Cmm2Visitor(ParseTreeVisitor):
         i = 0
         while ctx.statement(i) != None:
             self.visit(ctx.statement(i))
-            if ctx.statement(i).Return():
-                print("OOOOOOOOOOOOOOOKKK")
+            # si hay return, verifica que no sea void
+            if ctx.statement(i).Return() and vtype == "void":
+                Error("Una declaracion de funcion VOID no puede retornar valor",line+i )
+                
             i += 1
         self.tree = Finalize_scope(self.tree)
         return None
