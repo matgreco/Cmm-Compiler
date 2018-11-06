@@ -328,7 +328,7 @@ class Cmm2Visitor(ParseTreeVisitor):
         while ctx.statement(i) != None:
             self.visit(ctx.statement(i))
             # si hay return, verifica que no sea void
-            if ctx.statement(i).Return() and vtype == "void":
+            if hasattr(ctx.statement(i), 'Return') and ctx.statement(i).Return() and vtype == "void":
                 Error("Una declaracion de funcion VOID no puede retornar valor",line+i )
                 
             i += 1
@@ -465,22 +465,12 @@ class Cmm2Visitor(ParseTreeVisitor):
         left = self.visit(ctx.expression(0))
         right = self.visit(ctx.expression(1))
 
-        if left is not None and  str(left.vtype[0]) == "struct" :
-            Error("No se pueden realizar operaciones con un struct", left.line)
-        if right is not None and str(right.vtype[0]) == "struct" :
-            Error("No se pueden realizar operaciones con un struct", right.line)
-
-        #print("---------------------------- L y R ", left.vtype, right.vtype)
-        #right = ctx.expression(1).VAR().getText()
         op = ctx.op.text
-        """
-        if Consultar(self.tree, left) != None:
-            print("AAAAAAAA  ",self.tree.name[left].stype)
-        else :
-            print("Error en linea",ctx.op.line , ": variable ",left ,"no está declarada")
-
-        """
-        #print("los tipos son ", Consultar(self.tree, left).stype)
+        
+        if left is not None and  str(left.vtype[0]) == "struct" and op != "=":
+            Error("No se pueden realizar operaciones con un struct", left.line)
+        elif right is not None and str(right.vtype[0]) == "struct" and op != "=" :
+            Error("No se pueden realizar operaciones con un struct", right.line)
 
         if op == '+':
             #print("SUMAA entre ",left,right)

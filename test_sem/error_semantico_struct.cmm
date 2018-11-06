@@ -9,7 +9,6 @@ int main(){
 	struct account a;
 	int b;
 	b = a + 1;		// error semantico, no se puede sumar una estructura
-	b = a.account_number;
 	printf("%d\n",a.account_number);
 
 	return(0);
