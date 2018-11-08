@@ -1,12 +1,8 @@
-int gama;
-
 int func(int xx){
 	int a;		
 	int RRR;
-	a = 20;
-	return a;
+	a = 10;
 }
-
 void main(){
 	int a;		// ok
 	int b = 10; // ok
@@ -14,6 +10,7 @@ void main(){
 	a = 10;
 	int x;
 	int xaa;
+	int gama;
 	x = 20;
 	xaa = x + a;
 	xaa = x + 10;
@@ -35,13 +32,10 @@ void main(){
 		beta = 30;
 	}
 
-
 	for(int contador=0; contador<20; contador++){
 		int gama;
 		gama = 40;
 	}
 
-	if(gama == 30){
-		gama = 40;
-	}
+	
 }

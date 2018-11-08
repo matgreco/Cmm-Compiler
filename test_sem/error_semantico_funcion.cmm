@@ -2,11 +2,15 @@ void funcionvoid(int b){
 	b=10;
 	return b;
 }
-void main(){
+int main(){
 	int c;
 	c = c + 1;
 	c = c;
 	c = funcionvoid(c);
+	//c = 10
 
 	return 0;
 }
+
+
+

@@ -407,7 +407,7 @@ class Cmm2Visitor(ParseTreeVisitor):
                 if Consultar(self.tree, right.name).vtype == "void":
                     Error("No se puede asignar una funcion de tipo VOID a una variable", left.line ) 
 
-        return self.visitChildren(ctx)
+        return None
 
 
     # Visit a parse tree produced by Cmm2Parser#expRightUnary.
