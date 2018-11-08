@@ -29,23 +29,23 @@ declare_assign_expression:
     type_cmm VAR '=' expression
 ;
 
-case_statement:
+/*case_statement:
     Case INT_NUMBER ':'
     | Default;
-
+*/
 statement:
     comma_expression?';' #normal_statement
     | declare_statement  #normal_statement
     | Break ';' #break_statement
     | Continue ';' #continue_statement
-    | Return comma_expression? ';' #normal_statement
-    | case_statement #normal_statement
+    | Return comma_expression? ';' #return_statement
+//    | case_statement #normal_statement
 //    | VAR ':' //label
 //    | Goto VAR ';'
     | if_statement #normal_statement
     | while_statement #normal_statement
     | for_statement #normal_statement
-    | switch_statement #normal_statement
+//    | switch_statement #normal_statement
     | do_statement #normal_statement
     | '{' statement* '}' #block_statement
 ;
@@ -58,9 +58,9 @@ if_statement:
 //    | If '(' expression ')' statement Else '{' statement* '}'
 //    | If '(' expression ')' '{' statement* '}' Else statement
 ;
-switch_statement:
+/*switch_statement:
     Switch '(' comma_expression ')' '{' statement* '}'
-;
+;*/
 
 while_statement:
     While'(' comma_expression ')' statement
@@ -300,8 +300,9 @@ expression:
     | 'sizeof' '(' (expression | type_cmm) ')' #expSizeof
     | function_call_expression #expFunctionCall
     | expression '[' expression ']' #expArray// expression[expression] para permitir usar 0[var] == var[0]
-    | expression op=('++' | '--') #expRightUnary
-    | op=('++'| '--'| '+'| '-'| '!'| '~') expression #expLeftUnary
+//    | expression op=('++' | '--') #expRightUnary
+//    | op=('++'| '--'| '+'| '-'| '!'| '~') expression #expLeftUnary
+    | op=('+'| '-'| '!'| '~') expression #expLeftUnary
     | expression op=('*' | '/' | '%') expression #expOp
     | expression op=('+' | '-') expression #expOp
     | expression op=('<<' | '>>') expression #expOp

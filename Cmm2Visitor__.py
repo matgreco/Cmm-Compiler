@@ -53,7 +53,7 @@ def mostrarArbol(nodo):
 
 
 def Error(msg, line):
-    print("Error en linea: "+str(line)+": " + str(msg))
+    print("Error en linea "+str(line)+": " + str(msg))
 
 
 def stoi(s:str):
@@ -100,6 +100,14 @@ class symbol:
         return "("+ str(self.vtype) + ")"
 
     
+
+
+
+
+
+
+
+
 class Cmm2Visitor(ParseTreeVisitor):
 
     def __init__(self):
@@ -107,7 +115,6 @@ class Cmm2Visitor(ParseTreeVisitor):
         self.functions = dict() #[return_type, [arg_type, opt], [arg_type, opt], ...]
         self.tree = Node(dict({}))
         self.where = 'global' #'global', 'function', 'struct'
-        self.last_loop = None
 
 
     # Visit a parse tree produced by Cmm2Parser#build.
@@ -174,28 +181,64 @@ class Cmm2Visitor(ParseTreeVisitor):
         val = self.visit(ctx.expression())
         return None
 
-    # Visit a parse tree produced by Cmm2Parser#case_statement.
-    def visitCase_statement(self, ctx:Cmm2Parser.Case_statementContext):
-        return self.visitChildren(ctx)
-
 
     # Visit a parse tree produced by Cmm2Parser#normal_statement.
     def visitNormal_statement(self, ctx:Cmm2Parser.Normal_statementContext):
-        if str(ctx.Return()) == "return" :
-            return "RETORNO"
-        else :
-            return self.visitChildren(ctx)
+        return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by Cmm2Parser#break_statement.
     def visitBreak_statement(self, ctx:Cmm2Parser.Break_statementContext):
-        return self.visitChildren(ctx)
+        if Consultar(self.tree, "%loop") == None:
+            Error("Break statement fuera de un loop", ctx.start.line)
+            return None
+        return None
 
 
     # Visit a parse tree produced by Cmm2Parser#continue_statement.
     def visitContinue_statement(self, ctx:Cmm2Parser.Continue_statementContext):
-        return self.visitChildren(ctx)
+        if Consultar(self.tree, "%loop") == None:
+            Error("Continue statement fuera de un loop", ctx.start.line)
+            return None
+        return None
 
+
+    # Visit a parse tree produced by Cmm2Parser#return_statement.
+    def visitReturn_statement(self, ctx:Cmm2Parser.Return_statementContext):
+        '''
+        if ctx.comma_expression() == None:
+            return symbol("value", "", "void", [], ctx.start.line)
+        else:
+            x = self.visit(ctx.comma_expression())
+            x.line = ctx.start.line
+            return x
+        '''
+        #siempre deberia estar definida en una funcion:
+        vtype = Consultar(self.tree,"%return")
+        if ctx.comma_expression() == None:
+            if vtype != "void":
+                Error("La funcion debe retornar un valor", ctx.start.line)
+                return None
+            return None
+        
+        exp = self.visit(ctx.comma_expression())
+        if exp == None:
+            return
+        # si hay return, verifica que no sea void
+        if vtype == "void" and exp.vtype != "void":
+            Error("Una declaracion de funcion VOID no puede retornar valor",ctx.start.line)
+            return None
+        elif vtype[0] == "struct" and exp.vtype[0] == "struct":
+            if vtype[1] != exp.vtype[1]:
+                Error("La funcion  deberia retornar objetos de tipo struct " + vtype[1], ctx.start.line)
+                return None
+        elif vtype[0] == "struct":
+            Error("La funcion deberia retornar objetos de tipo struct " + vtype[1], exp.line)
+            return None
+        elif exp.vtype[0] == "struct":
+            Error("La funcion deberia retornar valores de tipo" + vtype, exp.line)
+            return None
+        return None
 
     # Visit a parse tree produced by Cmm2Parser#block_statement.
     def visitBlock_statement(self, ctx:Cmm2Parser.Block_statementContext):
@@ -217,24 +260,20 @@ class Cmm2Visitor(ParseTreeVisitor):
         return None
 
 
-    # Visit a parse tree produced by Cmm2Parser#switch_statement.
-    def visitSwitch_statement(self, ctx:Cmm2Parser.Switch_statementContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by Cmm2Parser#while_statement.
     def visitWhile_statement(self, ctx:Cmm2Parser.While_statementContext):
-        #self.tree = Initialize_scope(self.tree)
+        self.tree = Initialize_scope(self.tree)
+        self.tree.name["%loop"] = "while"
         expression = self.visit(ctx.comma_expression())
         block = self.visit(ctx.statement())
-        #self.tree = Finalize_scope(self.tree)
+        self.tree = Finalize_scope(self.tree)
         return None
 
     # Visit a parse tree produced by Cmm2Parser#for_1.
     def visitFor_1(self, ctx:Cmm2Parser.For_1Context):
         if ctx.comma_expression() != None:
             return self.visit(ctx.comma_expression())
-        if ctx.declare_statement != None:
+        if ctx.declare_statement() != None:
             return self.visit(ctx.declare_statement())
         return None
 
@@ -256,24 +295,50 @@ class Cmm2Visitor(ParseTreeVisitor):
     # Visit a parse tree produced by Cmm2Parser#for_statement.
     def visitFor_statement(self, ctx:Cmm2Parser.For_statementContext):
         self.tree = Initialize_scope(self.tree)
+        self.tree.name["%loop"] = "for"
         if_init = self.visit(ctx.for_1())
         if_cond = self.visit(ctx.for_2())
         if_loop = self.visit(ctx.for_3())
-        self.visit(ctx.statement())
+        block = self.visit(ctx.statement())
         self.tree = Finalize_scope(self.tree)
 
     # Visit a parse tree produced by Cmm2Parser#do_statement.
     def visitDo_statement(self, ctx:Cmm2Parser.Do_statementContext):
-        #self.tree = Initialize_scope(self.tree)
+        self.tree = Initialize_scope(self.tree)
+        self.tree.name["%loop"] = "do"
         block = self.visit(ctx.statement(0))
         expression = self.visit(ctx.comma_expression())
-        #self.tree = Finalize_scope(self.tree)
+        self.tree = Finalize_scope(self.tree)
         return None
 
 
     # Visit a parse tree produced by Cmm2Parser#function_call_expression.
     def visitFunction_call_expression(self, ctx:Cmm2Parser.Function_call_expressionContext):
-        return self.visitChildren(ctx)
+
+        name = ctx.VAR().getText()
+        args = []
+        i = 0
+        while ctx.expression(i) != None:
+            args.append(self.visit(ctx.expression(i)))
+            i += 1
+        if not name in self.functions:
+            Error("La funcion " + name +" no esta definida.", ctx.start.line)
+            return None
+        if len(args) != len(self.functions[name]) - 1:
+            Error("La funcion requiere " + str(len(self.functions[name]) - 1) + " argumentos, y se otorgan " + str(len(args)), ctx.start.line)
+            return None
+        for i in range(len(args)):
+            if args[i].vtype[0][0] == "struct" and self.functions[name][i][0][0] == "struct":
+                if args[i].vtype[0][1] != self.functions[name][i][0][1]:
+                    Error(name + " requiere un struct de tipo " + self.functions[name][i][0][1] + " y se otorga uno de tipo " + args[i].vtype[0][1], ctx.start.line)
+                    return None
+            elif args[i].vtype[0][0] == "struct" or self.functions[name][i][0][0] == "struct":
+                Error(name + " requiere un argumento de tipo " + self.functions[name][i][0] + " y se otorga un struct " + args[i].vtype[0][1], ctx.start.line)
+                return None
+
+
+
+        return symbol("value", "", self.functions[name][0], [])
 
 
     # Visit a parse tree produced by Cmm2Parser#function_argument.
@@ -318,19 +383,16 @@ class Cmm2Visitor(ParseTreeVisitor):
             self.functions[name].append([arg[0], arg[2]])
         
         if not name in self.tree.name:
-            self.tree.name[name] = symbol('funcion', name, vtype, args, line)
+            self.tree.name[name] = symbol('function', name, vtype, args, line)
 
         #inicializa el scope y agrega lo de adentro
         self.tree = Initialize_scope(self.tree)
+        self.tree.name["%return"] = vtype
         for arg in args:
             self.tree.name[arg[1]] = symbol("variable", arg[1], arg[0], [], line)
         i = 0
         while ctx.statement(i) != None:
-            self.visit(ctx.statement(i))
-            # si hay return, verifica que no sea void
-            if hasattr(ctx.statement(i), 'Return') and ctx.statement(i).Return() and vtype == "void":
-                Error("Una declaracion de funcion VOID no puede retornar valor",line+i )
-                
+            statement = self.visit(ctx.statement(i))
             i += 1
         self.tree = Finalize_scope(self.tree)
         return None
@@ -398,21 +460,48 @@ class Cmm2Visitor(ParseTreeVisitor):
     def visitExpAssign(self, ctx:Cmm2Parser.ExpAssignContext):
         left = self.visit(ctx.expression(0))
         right = self.visit(ctx.expression(1))
+        op = ctx.op.text
+        if left.stype != "variable":
+            Error("Solo se puede asignar a variables", ctx.start.line)
+            return None
+        if right.vtype == "void":
+            Error("No se puede asignar a la variable, dado que la expresion no retorna ningun valor", ctx.start.line)
+            return None
+        if left.vtype[0] == "struct" and right.vtype[0] == "struct":
+            if left.vtype[1] != right.vtype[1]:
+                Error("Se intenta asignar a un objeto de tipo struct "+ left.vtype[1] + " un objeto de tipo struct " + right.vtype[1], ctx.start.line)
+                return None
+            else:
+                if op != "=":
+                    Error("La asignacion tinene una operacion no definida para structs", ctx.start.line)
+                    return None
+                else:
+                    #asignar struct a struct
+                    return symbol("variable", right.name, right.vtype, [])
+        if op == "=":
+            pass
+        if op == "+=":
+            pass
+        if op == "-=":
+            pass
+        if op == "*=":
+            pass
+        if op == "/=":
+            pass
+        if op == "%=":
+            pass
+        if op == "<<=":
+            pass
+        if op == ">>=":
+            pass
+        if op == "&=":
+            pass
+        if op == "^=":
+            pass
+        if op == "|=":
+            pass
+        return symbol("variable", right.name, right.vtype, [])
 
-        if right.stype == "funcion_call" :
-            if Consultar(self.tree, right.name) == None:
-                Error("La funcion "+right.name+" no ha sido definida.", left.line ) 
-                print(left.name)
-            else :
-                if Consultar(self.tree, right.name).vtype == "void":
-                    Error("No se puede asignar una funcion de tipo VOID a una variable", left.line ) 
-
-        return None
-
-
-    # Visit a parse tree produced by Cmm2Parser#expRightUnary.
-    def visitExpRightUnary(self, ctx:Cmm2Parser.ExpRightUnaryContext):
-        return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by Cmm2Parser#expFunctionCall.
@@ -422,7 +511,11 @@ class Cmm2Visitor(ParseTreeVisitor):
         #return self.visitChildren(ctx)
         #return symbol("funcion_call", ctx.function_call_expression().VAR().getText() , self.structs[left.vtype[1]][name], [], 0)
         #def __init__(self, stype, name, vtype, info, line = 0):
-        return symbol("funcion_call", ctx.function_call_expression().VAR().getText() , [] , [], 0)
+
+
+        return self.visit(ctx.function_call_expression())
+
+        #return symbol("funcion_call", ctx.function_call_expression().VAR().getText() , [] , [], 0)
         #return ctx.function_call_expression().VAR().getText()
 
     # Visit a parse tree produced by Cmm2Parser#expDot.
@@ -430,8 +523,7 @@ class Cmm2Visitor(ParseTreeVisitor):
         left = self.visit(ctx.expression())
         name = ctx.VAR().getText()
         line = ctx.start.line
-        if left.stype != "variable":
-            Error("La expresion no es una estructura.", line)
+        if left == None:
             return None
         if left.vtype[0] != "struct":
             Error(left.name + " no es una estructura.", line)
@@ -450,12 +542,32 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#expArray.
     def visitExpArray(self, ctx:Cmm2Parser.ExpArrayContext):
-        return self.visitChildren(ctx)
-
+        left = self.visit(ctx.expression(0))
+        right = self.visit(ctx.expression(1))
+        if left == None or right == None:
+            return None
+        if left.vtype[0] != "struct[]" or left.vtype[-1] != "]":
+            Error("La expresion no corresponde a un array", ctx.start.line)
+            return None
+        if right.vtype[0] == "struct":
+            Error("No se puede indexar con un struct", ctx.start.line)
+            return None
+        if left.vtype[0] == "struct[]":
+            return symbol("variable", "", ["struct", left.vtype[1]], [])
+        else:
+            return symbol("variable", "", left.vtype[:-2], [])
 
     # Visit a parse tree produced by Cmm2Parser#expLeftUnary.
     def visitExpLeftUnary(self, ctx:Cmm2Parser.ExpLeftUnaryContext):
-        return self.visitChildren(ctx)
+        exp = self.visit(ctx.expression())
+        if exp == None:
+            return None
+        if exp.vtype[0] == "struct":
+            Error("No se pueden realizar operaciones con un struct", ctx.start.line)
+        if exp.vtype == "void":
+            Error("No se puede operar ya que la expresion no retorna un valor", ctx.start.line)
+        return symbol("value", "", exp.vtype, [])
+        
 
 
     # Visit a parse tree produced by Cmm2Parser#expOp.
@@ -465,12 +577,18 @@ class Cmm2Visitor(ParseTreeVisitor):
         left = self.visit(ctx.expression(0))
         right = self.visit(ctx.expression(1))
 
+        if left == None or right == None:
+            return None
+
         op = ctx.op.text
         
-        if left is not None and  str(left.vtype[0]) == "struct" and op != "=":
-            Error("No se pueden realizar operaciones con un struct", left.line)
-        elif right is not None and str(right.vtype[0]) == "struct" and op != "=" :
-            Error("No se pueden realizar operaciones con un struct", right.line)
+        if str(left.vtype[0]) == "struct" or str(right.vtype[0]) == "struct":
+            Error("No se pueden realizar operaciones con un struct", ctx.start.line)
+            return None
+        elif left.vtype == "void" or right.vtype == "void":
+            Error("No se puede realizar la operacion, dado que la expresion no retorna ningun valor", ctx.start.line)
+            return None
+        
 
         if op == '+':
             #print("SUMAA entre ",left,right)
@@ -509,8 +627,6 @@ class Cmm2Visitor(ParseTreeVisitor):
             pass
         elif op == '||':
             pass
-        if left == None or right == None:
-            return None
 
         type1 = left.stype
         type2 = right.stype

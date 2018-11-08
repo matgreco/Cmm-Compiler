@@ -53,15 +53,6 @@ class Cmm2Listener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by Cmm2Parser#case_statement.
-    def enterCase_statement(self, ctx:Cmm2Parser.Case_statementContext):
-        pass
-
-    # Exit a parse tree produced by Cmm2Parser#case_statement.
-    def exitCase_statement(self, ctx:Cmm2Parser.Case_statementContext):
-        pass
-
-
     # Enter a parse tree produced by Cmm2Parser#normal_statement.
     def enterNormal_statement(self, ctx:Cmm2Parser.Normal_statementContext):
         pass
@@ -89,6 +80,15 @@ class Cmm2Listener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by Cmm2Parser#return_statement.
+    def enterReturn_statement(self, ctx:Cmm2Parser.Return_statementContext):
+        pass
+
+    # Exit a parse tree produced by Cmm2Parser#return_statement.
+    def exitReturn_statement(self, ctx:Cmm2Parser.Return_statementContext):
+        pass
+
+
     # Enter a parse tree produced by Cmm2Parser#block_statement.
     def enterBlock_statement(self, ctx:Cmm2Parser.Block_statementContext):
         pass
@@ -104,15 +104,6 @@ class Cmm2Listener(ParseTreeListener):
 
     # Exit a parse tree produced by Cmm2Parser#if_statement.
     def exitIf_statement(self, ctx:Cmm2Parser.If_statementContext):
-        pass
-
-
-    # Enter a parse tree produced by Cmm2Parser#switch_statement.
-    def enterSwitch_statement(self, ctx:Cmm2Parser.Switch_statementContext):
-        pass
-
-    # Exit a parse tree produced by Cmm2Parser#switch_statement.
-    def exitSwitch_statement(self, ctx:Cmm2Parser.Switch_statementContext):
         pass
 
 
@@ -248,15 +239,6 @@ class Cmm2Listener(ParseTreeListener):
 
     # Exit a parse tree produced by Cmm2Parser#expAssign.
     def exitExpAssign(self, ctx:Cmm2Parser.ExpAssignContext):
-        pass
-
-
-    # Enter a parse tree produced by Cmm2Parser#expRightUnary.
-    def enterExpRightUnary(self, ctx:Cmm2Parser.ExpRightUnaryContext):
-        pass
-
-    # Exit a parse tree produced by Cmm2Parser#expRightUnary.
-    def exitExpRightUnary(self, ctx:Cmm2Parser.ExpRightUnaryContext):
         pass
 
 

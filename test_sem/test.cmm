@@ -7,6 +7,10 @@ int func(int xx){
 	return a;
 }
 
+void h(){
+	return;
+}
+
 void main(){
 	int a;		// ok
 	int b = 10; // ok
@@ -36,7 +40,7 @@ void main(){
 	}
 
 
-	for(int contador=0; contador<20; contador++){
+	for(int contador=0; contador<20; contador += 1){
 		int gama;
 		gama = 40;
 	}

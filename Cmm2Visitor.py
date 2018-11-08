@@ -34,11 +34,6 @@ class Cmm2Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by Cmm2Parser#case_statement.
-    def visitCase_statement(self, ctx:Cmm2Parser.Case_statementContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by Cmm2Parser#normal_statement.
     def visitNormal_statement(self, ctx:Cmm2Parser.Normal_statementContext):
         return self.visitChildren(ctx)
@@ -54,6 +49,11 @@ class Cmm2Visitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by Cmm2Parser#return_statement.
+    def visitReturn_statement(self, ctx:Cmm2Parser.Return_statementContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by Cmm2Parser#block_statement.
     def visitBlock_statement(self, ctx:Cmm2Parser.Block_statementContext):
         return self.visitChildren(ctx)
@@ -61,11 +61,6 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#if_statement.
     def visitIf_statement(self, ctx:Cmm2Parser.If_statementContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by Cmm2Parser#switch_statement.
-    def visitSwitch_statement(self, ctx:Cmm2Parser.Switch_statementContext):
         return self.visitChildren(ctx)
 
 
@@ -141,11 +136,6 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#expAssign.
     def visitExpAssign(self, ctx:Cmm2Parser.ExpAssignContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by Cmm2Parser#expRightUnary.
-    def visitExpRightUnary(self, ctx:Cmm2Parser.ExpRightUnaryContext):
         return self.visitChildren(ctx)
 
 
