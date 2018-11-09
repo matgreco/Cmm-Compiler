@@ -1,34 +1,31 @@
 # Cmm-Compiler
 
-## PARA INSTALAR 
-- export CLASSPATH=".:/home/mat/Escritorio/antlr/antlr-4.7.1-complete.jar:$CLASSPATH"
-- alias antlr4='java -jar /home/mat/Escritorio/antlr/antlr-4.7.1-complete.jar'
-- alias grun='java org.antlr.v4.gui.TestRig'
+## Requisitos:
+La ejecución del analisador semántico requiere lo siguiente:
+- Python 3 (sudo apt-get install python3)
+- Biblioteca Anytree para Python3 (pip install anytree)
 
-## PARA GENERAR EL LEXER Y PARSER
-- antlr4 Cmm2.g4
-- javac Cmm2*.java -cp /home/mat/Escritorio/antlr/antlr-4.7.1-complete.jar
+## Generar la tabla de símbolos de un programa
+Para la generación de la tabla de simbolos de un programa hecho en lenguaje C+- debe ejecutar el programa test.py entregando como parámetro el nombre del archivo cmm.
 
+Ejemplo:
 
-## CODIGOS PARA PROBAR Y GENERAR EL ARBOL
-Para ejecutar códigos de prueba bajo la gramática definida por C+- y ver el AST generado, debe ejecutar el script compile.sh junto con el archivo a ejecutar.
-Recordar que es necesario tener java instalado
+python3 test.py MIPROGRAMA.CMM
 
-I.E.:
+##Códigos de ejemplos:
 
-- ./compile.sh tests/error_do.cmm 
-- ./compile.sh tests/error_if.cmm 
-- ./compile.sh tests/test.cmm 
-- ./compile.sh tests/test_comma_operation.cmm 
-- ./compile.sh tests/test_function_struct.cmm
-- ./compile.sh tests/test_struct.cmm
-- ./compile.sh tests/test_switch.cmm
+Existen los siguientes ejemplos con errores:
 
-## Pruebas con código inline
-- prueba evaluando un if que asigna dos variables
-echo "if(casa == 10){casaa = 20; casab =0; }" | grun Cmm2 build -gui
+- python3 test.py test_sem/error_semantico_funcion.cmm
+- python3 test.py test_sem/error_semantico_loop.cmm
+- python3 test.py test_sem/error_semantico_struct.cmm
+- python3 test.py test_sem/error_sem_redeclaracion.cmm
+- python3 test.py test_sem/error_semantico_loop.cmm
+- python3 test.py test_sem/error_sem_struct.cmm
 
-- una funcion
-echo "void main(){int unavariable; unavariable = funcion1(argumento1, argumento2, 3);}" | grun Cmm2 build -gui
+Y los siguientes ejemplos sin errores: 
 
+- python3 test.py test_sem/test.cmm
+- python3 test.py test_sem/test_semantico_funcion.cmm
 
+ 
