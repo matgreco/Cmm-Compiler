@@ -1,6 +1,6 @@
 int funcion(int[] x, int y){
 	int a;
-	a = x[0];
+	a = 10;
 	int b;
 	b = y;
 

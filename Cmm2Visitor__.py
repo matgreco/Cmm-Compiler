@@ -461,10 +461,13 @@ class Cmm2Visitor(ParseTreeVisitor):
         left = self.visit(ctx.expression(0))
         right = self.visit(ctx.expression(1))
         op = ctx.op.text
+        if left is None or right is None :
+            return None
+       
         if left.stype != "variable":
             Error("Solo se puede asignar a variables", ctx.start.line)
             return None
-        if right.vtype == "void":
+        if right.vtype == "void" :
             Error("No se puede asignar a la variable, dado que la expresion no retorna ningun valor", ctx.start.line)
             return None
         if left.vtype[0] == "struct" and right.vtype[0] == "struct":
