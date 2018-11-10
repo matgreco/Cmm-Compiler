@@ -21,9 +21,9 @@
 %General help: http://en.wikibooks.org/wiki/LaTeX/Mathematics
 %Or just google stuff
 
-\title{Reporte 1. Lenguaje C+-}
+\title{Reporte 2. Analisador semántico para el Lenguaje C+-}
 \author{Mat\'ias Greco, Javier Reyes}
-\date{2 de Octubre, 2018}
+\date{9 de Noviembre, 2018}
 \maketitle
 
 \section*{Introducci\'on}
@@ -132,6 +132,8 @@ Este programa construye la siguiente tabla de s\'imbolos:
 
 
 
+
+
 **************** APENDICEE
 \section*{APENDICE}
 
@@ -153,313 +155,66 @@ La definici\'on de los componentes l\'exicos del lenguaje \texttt{C+-} es simila
     \item \textbf{Operadores varios:} \texttt{sizeof} retorna el tama\~no en bytes de una expresi\'on o tipo; llamadas a m\'etodos (\texttt{f(exp1,exp2)}); acceso a miembros (\texttt{estructura.miembro}); y acceso a elementos de un array (\texttt{arr[i]}).
 \end{itemize}
 
-\subsection*{Resoluci\'on de ambig\"uedades y precedencias}
+\subsection*{Restricciónes adicionales de la gramática}
 
+Existen dos tipos de instrucciones que fueron eliminados de la gramática admitida por el lenguaje.
 
-
-
-Las ambig\"uedades presentes en el lenguaje son
 \begin{itemize}
-    \item Problema If/If/Else: En este caso, si se da
-    \begin{verbatim}
-    if(exp1) if(exp2) st1; else st2;
-    \end{verbatim}
-    el \texttt{else} corresponde siempre al \texttt{if} m\'as al interior, es decir, es equivalente a
-    \begin{verbatim}
-    if(exp1)
-    {
-        if(exp2)
-        {
-            st1;
-        }
-        else
-        {
-            st2;
-        }
-    }
-    \end{verbatim}
-    \item Problemas del estilo
-    \begin{verbatim}
-    a = b ? c : d = e;
-    \end{verbatim}
-    En este caso, el standard no determina si el orden debe ser
-    \begin{verbatim}
-    a = (b ? c : (d = e));
-    \end{verbatim}
-    o bien
-    \begin{verbatim}
-    a = ((b ? c : d) = e);
-    \end{verbatim}
-    Por lo tanto, dejamos este problema como \textit{undefined behavior}.
-\end{itemize}
+    \item \textbf{Switch-case: } Debido a que se complicaba el funcionamiento del analisador semántico.
+    \item \textbf{operadores ++ y --} Dado que al ir acompañado de una variable, era dificil su identificación.
 
-Las precedencias son las standard para \texttt{C} y para lenguajes de programaci\'on similares.
+Ambas restricciones no le quitan capacidades al lenguaje y simplificaron la construcción del analisador semántico.
+
 
 \section*{Pruebas}
-En el repositorio se encuentras siete c\'odigos de prueba, dos de los cuales arrojan errores con la intenci\'on de probar el funcionamiento del analizador l\'exico.
-Una de las pruebas mas sencillas que se realiz\'o fue utilizando el c\'odigo siguiente, donde se muestran una llamada a una funci\'on (la funci\'on principal), declaraciones, asignaciones y la utilizaci\'on del operador coma. 
-\begin{verbatim}
-int main()
-{
-    int a = 10;
-    int b = 30;
-    int c;
-    
-    c = a,b,a;
-    
-    printf("%d",c);
+En el repositorio se encuentras nueve c\'odigos de prueba en lenguaje C+-, tres de los cuales construyen sin detectar errores en el código ingresado.
 
-    return 0;
+Entre las pruebas con error, se encuentan los siguientes:
+\item \textbf{Error semántico función: } El código contiene una función de tipo VOID que retorna un valor. Además se le asigna su resultado (de tipo VOID) a una variable, se llama a la función que requiere argumentos y no se le entregan argumentos, y se realizan operaciónes entre dos llamadas a la función.
+
+\item \textbf{Error semántico loop: } Contiene la expresión return sin un valor, dentro de la función main de tipo INT; tambien contiene las instrucciones continue y break fuera de un loop.  
+
+\item \textbf{Error semántico struct: } Genera una instancia de una estructura que no existe; como tambien se realiza una operación con una instancia de una estructura.
+
+
+Entre las pruebas sin error, se encuenta:
+\item \textbf{Test: } Es un programa que contiene muchas de las funcionalidades del lenguajes, entre las cuales se encuentra la definicion de variables globales, definicion de funciones que retornar un valor y tambien de tipo void, declaración de variables locales dentro de distintos ambitos con sus correspondientes operaciones; tambien contiene ciclos while y for correctamente definidos.
+
+\item \textbf{Test Scopes: } Contiene una prueba de definición de distintas variables dentro de varios scopes. Tambien se aprecia que permite redefinir una variable pero dentro de otro ámbito que la contenga. 
+
+\begin{verbatim}
+void main(){
+    int a;      // ok
+    int b = 10; // ok
+    a = 10;
+    int x;
+    x = 20;
+    {
+        int x;
+        x = 30;
+        {
+            int a;
+            a = 40;
+        }
+    }
 }
 \end{verbatim}
-Este c\'odigo, al pasar por el analizador l\'exico y sint\'actico, arroja el AST dispuesto en la figura 1.
+Este c\'odigo, al pasar por el analizador semántico construye la siguiente tabla de símbolos.
 
+\begin{verbatim}
+ {'main': (void)}
+└──  {'%return': 'void', 'a': (int), 'b': (int), 'x': (int)}
+    └──  {'x': (int)}
+        └──  {'a': (int)}
+\end{verbatim}
 
-\centerline{\includegraphics[trim={0 9cm 0 0},scale=0.45]{arbol1.jpg}}
-\centerline{Figura 1: AST obtenido.}
+En ella se aprecia la definición de la variable a y x en los distintos ámbitos.
 \clearpage
 
 \section*{Conclusiones}
-En este reporte se presentó la definición de la gramática para el subconjunto del lenguaje C llamado C+-. Este trabajo fue realizado utilizando ANTLR4, el cual permitió facilmente diferenciar entre reglas sint\'a cticas y tokens a trav\'es de la utilizaci\'on de may\'usculas.
+En este reporte se presentó el analisador semántico construido para el lenguaje llamado C+-. Dicho trabajo se realizó construyendo un arbol donde cada nodo representa un ámbito diferente del programa y permite verificar la visibilidad de las variables a través de los ámbitos antecesores como tambien para evitar la redeclaración de variables.
+En terminos generales, en analisador semántico es robusto y logra detectar una gran cantidad de errores de distinto tipo sin obtener falsos positivos.
 
-\section*{Ap\'endice 1: Toda la gram\'atica}
-Antes que todo, cabe resaltar que si bien esta gram\'atica no es LL(*) dado que tiene recursiones por la izquierda, ANTLR4 es capaz de reconocer algunas de estas recursiones y por detras las modifica para que la gram\'atica resultante sea efectivamente LL(*). Por ejemplo, para la variable \texttt{expression}, la modificaci\'on es escencialmente la misma que agregar tantos niveles asociados a expresiones como prioridades para operaciones hay.
-\begin{verbatim}
-grammar Cmm2;
-
-build:
-    (
-        declare_statement
-        | forward_function_definition
-        | function_definition
-        | struct_definition
-        | ';'
-    )*
-;
-
-declare_statement:
-    declare_expression ';'
-;
-
-declare_expression:
-    type VAR ('=' expression)? (',' VAR ('=' expression)?)*
-    | type VAR '[' comma_expression ']'
-;
-
-compare_op:
-    '=='
-    | '<='
-    | '>='
-    | '<'
-    | '>'
-;
-
-assign_op:
-    '='
-    | '+='
-    | '-='
-    | '*='
-    | '/='
-    | '%='
-    | '<<='
-    | '>>='
-    | '&='
-    | '^='
-    | '|='
-;
-
-unary_left_op:
-    '++'
-    | '--'
-    | '+'
-    | '-'
-    | '!'
-    | '~'
-;
-
-statement:
-    comma_expression?';'
-    | declare_statement
-    | Break ';'
-    | Continue ';'
-    | Return comma_expression? ';'
-    | Case INT_NUMBER ':'
-    | Default ':'
-    | if_statement
-    | while_statement
-    | for_statement
-    | switch_statement
-    | do_statement
-    | '{' statement* '}' 
-;
-
-if_statement:
-    If '(' comma_expression ')' statement (Else statement)?
-;
-
-switch_statement:
-    Switch '(' comma_expression ')' '{' statement* '}'
-;
-
-while_statement:
-    While'(' comma_expression ')' statement
-;
-
-for_statement:
-    For '('
-    (comma_expression | declare_expression)? ';'
-    comma_expression? ';'
-    comma_expression?
-    ')' statement
-;
-
-do_statement:
-    Do statement While '(' comma_expression ')' ';'
-;
-
-
-function_call_expression : 
-    VAR '(' (expression (',' expression)*)? ')'  
-;
-
-function_definition : 
-    (type | 'void') VAR '('
-    ((type '&'? VAR (',' type '&'? VAR)*)? | 'void')
-    ')' '{' statement* '}'  
-;
-
-forward_function_definition:
-    (type | 'void') VAR '('
-    ((type '&'? VAR? (',' type '&'? VAR?)*)? | 'void')
-    ')' ';'
-;
-
-struct_definition:
-    'struct' VAR '{'
-        declare_statement*
-    '}' ';'
-;
-
-FLOAT_NUMBER :
-    [0-9]* '.' [0-9]+
-    | [0-9]+ '.' [0-9]*
-;
-
-INT_NUMBER:
-    DEC_NUMBER ('u' | 'U')? ('ll' | 'LL')?
-    | OCT_NUMBER ('u' | 'U')? ('ll' | 'LL')?
-    | HEX_NUMBER ('u' | 'U')? ('ll' | 'LL')?
-    | CHAR_CONSTANT
-;
-
-STRING_CONSTANT :
-    '"' ~('"')* '"'
-;
-
-CHAR_CONSTANT:
-    '\'' ~('\'')* '\''
-;
-
-
-DEC_NUMBER:
-    '0'
-    | [1-9][0-9]*
-;
-
-OCT_NUMBER:
-    '0'[0-7]+
-;
-
-HEX_NUMBER:
-    ('0x' | '0X')[0-9a-fA-F]+
-;
-
-type:
-    Unsigned? Int
-    | Unsigned? Char
-    | Double
-    | Unsigned? Long
-    | Unsigned? Short
-    | Float
-    | 'struct' VAR
-;
-
-//KEYWORDS
-Int:'int';
-Char:'char';
-If:'if';
-Else:'else';
-While:'while';
-For:'for';
-Break:'break';
-Continue:'continue';
-True:'true';
-False:'false';
-Struct:'struct';
-Void:'void';
-Return:'return';
-
-Switch:'switch';
-Case:'case';
-Default:'default';
-Do:'do';
-
-Double:'double';
-Long:'long';
-Short:'short';
-Float:'float';
-Unsigned:'unsigned';
-Sizeof:'sizeof';
-
-VAR:
-    [a-zA-Z_][a-zA-Z0-9_]*
-;
-
-
-WS
-    : [ \t\u000C\r\n]+ -> skip
-;
-
-COMMENT:
-    '//' ~[\n]* -> skip
-;
-
-MULTILINE_COMMENT:
-    '/*' .*? '*/' -> skip
-;
-
-comma_expression:
-    expression
-    | comma_expression ',' expression
-;
-
-expression:
-    '(' comma_expression ')'
-    | INT_NUMBER
-    | STRING_CONSTANT
-    | CHAR_CONSTANT
-    | FLOAT_CONSTANT
-    | VAR
-    | expression '.' VAR
-    | 'sizeof' '(' (expression | type) ')'
-    | function_call_expression
-    | expression '[' expression ']'
-    | expression ('++' | '--')
-    | unary_left_op expression
-    | expression ('*' | '/' | '%') expression
-    | expression ('+' | '-') expression
-    | expression ('<<' | '>>') expression
-    | expression ('<' | '<=' | '>' | '>=') expression
-    | expression ('==' | '!=') expression
-    | expression '&' expression
-    | expression '^' expression
-    | expression '|' expression
-    | expression '&&' expression
-    | expression '||' expression
-    | <assoc=right> expression '?' comma_expression ':' expression
-    | <assoc=right> expression assign_op expression
-;
-\end{verbatim}
 
 
 
