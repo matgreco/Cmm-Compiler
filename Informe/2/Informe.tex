@@ -21,7 +21,7 @@
 %General help: http://en.wikibooks.org/wiki/LaTeX/Mathematics
 %Or just google stuff
 
-\title{Reporte 2. Analisador semántico para el Lenguaje C+-}
+\title{Reporte 2. analizador semántico para el Lenguaje C+-}
 \author{Mat\'ias Greco, Javier Reyes}
 \date{9 de Noviembre, 2018}
 \maketitle
@@ -33,7 +33,7 @@ El lenguaje \texttt{C+-} corresponde a un subconjunto del lenguaje \C, con la ad
 
 El an\'alisis  ' l\'exico y sint\'actico de este lenguaje de programación fue desarrollado previamente, obtenido un arbol sintáctico abstracto (AST) el cual se recorre nodo a nodo. Dicho analizador fue desarrollado en la herramienta ANTLR4 (ANother Tool for Language Recognition) con lenguaje de salida \Cpp. 
 
-El analisador sem\'antico fue desarrollado en el lenguaje de programación Python y su salida es una tabla de simbolos en la cual se encuentran todos los simbolos necesarios para desarrollar el an\'alisis sem\'antico correspondiente, y donde cada subarbol representa un \'ambito dentro del programa.
+El analizador sem\'antico fue desarrollado en el lenguaje de programación Python y su salida es una tabla de simbolos en la cual se encuentran todos los simbolos necesarios para desarrollar el an\'alisis sem\'antico correspondiente, y donde cada subarbol representa un \'ambito dentro del programa.
 
 El repositorio del proyecto está disponible en github\footnote{https://github.com/matgreco/Cmm-Compiler}.
 
@@ -100,7 +100,7 @@ La estructura \texttt{simbol} contiene los siguientes atributos:
     \item  \textbf{Info:} Contiene antecedentes adicionales del s\'imbolo. Por ejemplo, el n\'umero de argumentos de una funci\'on o el numero de datos miembro una estructura. 
     \item  \textbf{Line:} Corresponde a la l\'inea en la cual fue encontrado el s\'imbolo. Ser\'a \'util para retornar mensajes de error como: "Redeclaraci\'on de la variable X, ya fue definida en la l\'inea Y". 
 
-Una particularidad de nuestro analisador sem\'antico es que a la tabla de s\'imbolos tambien agrega los ciclos y las funciones como un nodo del \'arbol. Esto permite detectar el tipo de dato a retornar por la funci\'on o si el \'ambito corresponde a un ciclo, con la intenci\'on de hacer verificaciones como la instrucci\'on continue o break est\'en dentro de un ciclo, o si una funci\'on de tipo void tiene un valor en su instrucci\'on return.
+Una particularidad de nuestro analizador sem\'antico es que a la tabla de s\'imbolos tambien agrega los ciclos y las funciones como un nodo del \'arbol. Esto permite detectar el tipo de dato a retornar por la funci\'on o si el \'ambito corresponde a un ciclo, con la intenci\'on de hacer verificaciones como la instrucci\'on continue o break est\'en dentro de un ciclo, o si una funci\'on de tipo void tiene un valor en su instrucci\'on return.
 
 Ejemplo de una tabla de s\'imbolos con ciclos.
 
@@ -130,40 +130,15 @@ Este programa construye la siguiente tabla de s\'imbolos:
 
 
 
-
-
-
-
-**************** APENDICEE
-\section*{APENDICE}
-
-\subsection*{Definiciones l\'exicas}
-
-La definici\'on de los componentes l\'exicos del lenguaje \texttt{C+-} es similar al lenguaje \C, y se define de la siguiente forma:
-\begin{itemize}
-    \item \textbf{Keywords:} \texttt{int}, \texttt{char}, \texttt{double}, \texttt{float}, \texttt{long}, \texttt{short}, \texttt{unsigned}, \texttt{sizeof}, \texttt{if}, \texttt{else}, \texttt{while}, \texttt{for}, \texttt{break}, \texttt{continue}, \texttt{true}, \texttt{false}, \texttt{struct}, \texttt{void}, \texttt{return}, \texttt{switch}, \texttt{case}, \texttt{default}, \texttt{do}. Tienen el mismo uso que en \C.
-    \item \textbf{Identificadores:} Puede componerse de letras, n\'umeros y guiones bajos, pero no pueden empezar con un n\'umero.
-    \item \textbf{Valores constantes:} Pueden ser n\'umeros enteros con o sin signo (expresables en base 8, 10 y 16), n\'umeros de punto flotante, caracteres y strings.
-    \item \textbf{Operadores aritm\'eticos:} \texttt{+} para suma, \texttt{-} para resta, \texttt{*} para multiplicaci\'on \texttt{/} para divisi\'on y \texttt{\%} para el resto de la divisi\'on.
-    \item \textbf{Operadores de comparaci\'on:} \texttt{==}, \texttt{!=}, \texttt{<=}, \texttt{>=}, \texttt{<}, \texttt{>}.
-    \item \textbf{Operadores unarios:} \texttt{++}, \texttt{--}, \texttt{+}, \texttt{-}, \texttt{!}, $\mathtt\sim$.
-    \item \textbf{Operadores de shift:} \texttt{<{}<}, \texttt{>{}>}.
-    \item \textbf{Operadores bitwise:} \texttt{\&}, \texttt{\^}, \texttt{|}.
-    \item \textbf{Operadores l\'ogicos:} \texttt{\&\&}, \texttt{||}.
-    \item \textbf{Operador ternario:} \texttt{ ? : }
-    \item \textbf{Operador coma:} \texttt{exp1,exp2} ejecuta \texttt{exp1}, luego \texttt{exp2} y retorna \texttt{exp2}.
-    \item \textbf{Operadores varios:} \texttt{sizeof} retorna el tama\~no en bytes de una expresi\'on o tipo; llamadas a m\'etodos (\texttt{f(exp1,exp2)}); acceso a miembros (\texttt{estructura.miembro}); y acceso a elementos de un array (\texttt{arr[i]}).
-\end{itemize}
-
 \subsection*{Restricciónes adicionales de la gramática}
 
 Existen dos tipos de instrucciones que fueron eliminados de la gramática admitida por el lenguaje.
 
 \begin{itemize}
-    \item \textbf{Switch-case: } Debido a que se complicaba el funcionamiento del analisador semántico.
+    \item \textbf{Switch-case: } Debido a que se complicaba el funcionamiento del analizador semántico.
     \item \textbf{operadores ++ y --} Dado que al ir acompañado de una variable, era dificil su identificación.
 
-Ambas restricciones no le quitan capacidades al lenguaje y simplificaron la construcción del analisador semántico.
+Ambas restricciones no le quitan capacidades al lenguaje y simplificaron la construcción del analizador semántico.
 
 
 \section*{Pruebas}
@@ -212,10 +187,38 @@ En ella se aprecia la definición de la variable a y x en los distintos ámbitos
 \clearpage
 
 \section*{Conclusiones}
-En este reporte se presentó el analisador semántico construido para el lenguaje llamado C+-. Dicho trabajo se realizó construyendo un arbol donde cada nodo representa un ámbito diferente del programa y permite verificar la visibilidad de las variables a través de los ámbitos antecesores como tambien para evitar la redeclaración de variables.
-En terminos generales, en analisador semántico es robusto y logra detectar una gran cantidad de errores de distinto tipo sin obtener falsos positivos.
+En este reporte se presentó el analizador semántico construido para el lenguaje llamado C+-. Dicho trabajo se realizó construyendo un arbol donde cada nodo representa un ámbito diferente del programa y permite verificar la visibilidad de las variables a través de los ámbitos antecesores como tambien para evitar la redeclaración de variables.
+En t\'erminos generales, en analizador semántico es robusto y logra detectar una gran cantidad de errores de distinto tipo sin obtener falsos positivos.
 
 
+
+
+
+
+
+
+
+
+**************** APENDICEE
+\section*{APENDICE}
+
+\subsection*{Definiciones l\'exicas}
+
+La definici\'on de los componentes l\'exicos del lenguaje \texttt{C+-} es similar al lenguaje \C, y se define de la siguiente forma:
+\begin{itemize}
+    \item \textbf{Keywords:} \texttt{int}, \texttt{char}, \texttt{double}, \texttt{float}, \texttt{long}, \texttt{short}, \texttt{unsigned}, \texttt{sizeof}, \texttt{if}, \texttt{else}, \texttt{while}, \texttt{for}, \texttt{break}, \texttt{continue}, \texttt{true}, \texttt{false}, \texttt{struct}, \texttt{void}, \texttt{return}, \texttt{switch}, \texttt{case}, \texttt{default}, \texttt{do}. Tienen el mismo uso que en \C.
+    \item \textbf{Identificadores:} Puede componerse de letras, n\'umeros y guiones bajos, pero no pueden empezar con un n\'umero.
+    \item \textbf{Valores constantes:} Pueden ser n\'umeros enteros con o sin signo (expresables en base 8, 10 y 16), n\'umeros de punto flotante, caracteres y strings.
+    \item \textbf{Operadores aritm\'eticos:} \texttt{+} para suma, \texttt{-} para resta, \texttt{*} para multiplicaci\'on \texttt{/} para divisi\'on y \texttt{\%} para el resto de la divisi\'on.
+    \item \textbf{Operadores de comparaci\'on:} \texttt{==}, \texttt{!=}, \texttt{<=}, \texttt{>=}, \texttt{<}, \texttt{>}.
+    \item \textbf{Operadores unarios:} \texttt{++}, \texttt{--}, \texttt{+}, \texttt{-}, \texttt{!}, $\mathtt\sim$.
+    \item \textbf{Operadores de shift:} \texttt{<{}<}, \texttt{>{}>}.
+    \item \textbf{Operadores bitwise:} \texttt{\&}, \texttt{\^}, \texttt{|}.
+    \item \textbf{Operadores l\'ogicos:} \texttt{\&\&}, \texttt{||}.
+    \item \textbf{Operador ternario:} \texttt{ ? : }
+    \item \textbf{Operador coma:} \texttt{exp1,exp2} ejecuta \texttt{exp1}, luego \texttt{exp2} y retorna \texttt{exp2}.
+    \item \textbf{Operadores varios:} \texttt{sizeof} retorna el tama\~no en bytes de una expresi\'on o tipo; llamadas a m\'etodos (\texttt{f(exp1,exp2)}); acceso a miembros (\texttt{estructura.miembro}); y acceso a elementos de un array (\texttt{arr[i]}).
+\end{itemize}
 
 
 \end{document}
