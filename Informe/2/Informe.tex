@@ -21,7 +21,7 @@
 %General help: http://en.wikibooks.org/wiki/LaTeX/Mathematics
 %Or just google stuff
 
-\title{Reporte 2. Analizador semántico para el Lenguaje C+-}
+\title{Reporte 2. Analizador sem\'antico para el Lenguaje C+-}
 \author{Mat\'ias Greco, Javier Reyes}
 \date{9 de Noviembre, 2018}
 \maketitle
@@ -127,35 +127,49 @@ Este programa construye la siguiente tabla de s\'imbolos:
                 └──  {'%loop': 'while'}
 \end{verbatim}
 
+Alg\'unas de los errores sem\'anticos que es capaz de detectar este analizador son los siguientes:
+\begin{itemize}
+    \item Variables no declaradas o no accesibles desde el \'ambito correspondiente.
+    \item Redeclaraci\'on de variables dentro del mismo \'ambito.
+    \item Estructuras no definidas y operaciones con estructuras.
+    \item Retornar valor en funci\'on void y asignaci\'on desde funci\'on void.
+    \item Instrucciones de control de flujo continue o break fuera de ciclos.
+\end{itemize}
 
+Entre otros.
 
-\subsection*{Restricciónes adicionales de la gramática}
+\clearpage
+\subsection*{Restricci\'ones adicionales de la gramática}
 
 Existen dos tipos de instrucciones que fueron restringidos de la gramática admitida por el lenguaje.
 
 \begin{itemize}
     \item \textbf{Switch - case: } Debido a que se complicaba el funcionamiento del analizador semántico.
-    \item \textbf{operadores ++ y --} Dado que al ir acompañado de una variable, era dif\'icil su identificación.
+    \item \textbf{Operadores ++ y --} Dado que al ir acompañado de una variable, era dif\'icil su identificación.
 \end{itemize}
 Ambas restricciones no le quitan capacidades al lenguaje y simplificaron la construcción del analizador semántico.
 
-\clearpage
+
 \section*{Pruebas}
 En el repositorio del proyecto se encuentras nueve c\'odigos de prueba en lenguaje C+-, tres de los cuales construyen la tabla de s\'imbolos sin detectar errores en el código ingresado.
 
 Entre las pruebas con error, se encuentran los siguientes:
+\begin{itemize}
+    
 \item \textbf{Error semántico función: } El código contiene una función de tipo VOID que retorna un valor. Además se le asigna su resultado (de tipo VOID) a una variable, se llama a la función que requiere argumentos y no se le entregan argumentos, y se realizan operaciónes entre dos llamadas a la función.
 
 \item \textbf{Error semántico loop: } Contiene la expresión return sin un valor, dentro de la función main de tipo INT; tambien contiene las instrucciones continue y break fuera de un loop.  
 
 \item \textbf{Error semántico struct: } Genera una instancia de una estructura que no existe; como tambien se realiza una operación con una instancia de una estructura.
-
+\end{itemize}
 
 Entre las pruebas sin error, se encuenta:
+\begin{itemize}
 \item \textbf{Test: } Es un programa que contiene muchas de las funcionalidades del lenguajes, entre las cuales se encuentra la definicion de variables globales, definicion de funciones que retornar un valor y tambien de tipo void, declaración de variables locales dentro de distintos ambitos con sus correspondientes operaciones; tambien contiene ciclos while y for correctamente definidos.
 
 \item \textbf{Test Scopes: } Contiene una prueba de definición de distintas variables dentro de varios scopes. Tambien se aprecia que permite redefinir una variable pero dentro de otro ámbito que la contenga. 
 \end{itemize}
+\clearpage
 Un ejemplo de un extracto de c\'odigo existente entre las pruebas es el siguiente que detalla la construcci\'on de la tabla de s\'imbolos y sus correspondientes \'ambitos es el siguiente:
 \begin{verbatim}
 void main(){
@@ -182,7 +196,7 @@ El c\'odigo presentado, al pasar por el analizador sem\'antico, construye la sig
     └──  {'x': (int)}
         └──  {'a': (int)}
 \end{verbatim}
-En ella se aprecia la definición de la variable a y x en los distintos ámbitos.
+En ella se aprecia la definici\'on de la variable a y x en los distintos ámbitos.
 
 
 \section*{Conclusiones}
