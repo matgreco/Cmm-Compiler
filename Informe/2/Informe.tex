@@ -21,7 +21,7 @@
 %General help: http://en.wikibooks.org/wiki/LaTeX/Mathematics
 %Or just google stuff
 
-\title{Reporte 2. analizador semántico para el Lenguaje C+-}
+\title{Reporte 2. Analizador semántico para el Lenguaje C+-}
 \author{Mat\'ias Greco, Javier Reyes}
 \date{9 de Noviembre, 2018}
 \maketitle
@@ -31,9 +31,9 @@ El presente reporte explica el trabajo realizado para el desarrollo de un anailz
 
 El lenguaje \texttt{C+-} corresponde a un subconjunto del lenguaje \C, con la adici\'on de algunas caracter\'isticas de \Cpp, como la posibilidad de definir una funci\'on con paso por valor o paso por referencia.
 
-El an\'alisis  ' l\'exico y sint\'actico de este lenguaje de programación fue desarrollado previamente, obtenido un arbol sintáctico abstracto (AST) el cual se recorre nodo a nodo. Dicho analizador fue desarrollado en la herramienta ANTLR4 (ANother Tool for Language Recognition) con lenguaje de salida \Cpp. 
+El an\'alisis  ' l\'exico y sint\'actico de este lenguaje de programación fue desarrollado previamente, obtenido un arbol sintáctico abstracto (AST) el cual se recorre nodo a nodo. Dicho analizador fue desarrollado en la herramienta ANTLR4 (ANother Tool for Language Recognition). 
 
-El analizador sem\'antico fue desarrollado en el lenguaje de programación Python y su salida es una tabla de simbolos en la cual se encuentran todos los simbolos necesarios para desarrollar el an\'alisis sem\'antico correspondiente, y donde cada subarbol representa un \'ambito dentro del programa.
+El analizador sem\'antico fue desarrollado en el lenguaje de programación Python y su salida es una tabla de s\'imbolos en la cual se encuentran todos los s\'imbolos necesarios para desarrollar el an\'alisis sem\'antico correspondiente, y donde cada nodo o sub-arbol representa un \'ambito dentro del programa.
 
 El repositorio del proyecto está disponible en github\footnote{https://github.com/matgreco/Cmm-Compiler}.
 
@@ -74,39 +74,39 @@ Algunas caracter\'isticas interesantes incluidas:
 \end{itemize}
 
 
-\subsection*{Representací\'on de la tabla de s\'imbolos}
+\subsection*{Tabla de s\'imbolos}
 En el proceso de compilaci\'on, luego de la generaci\'on del AST, es necesario conocer una serie de nombres y cierta informaci\'on de para realizar el proceso de an\'alisis sem\'antico. Para esto, los compiladores prefieren almacenar y luego recuperar la informaci\'on obtenida en las lineas anteriores del programa en vez de buscarlas o recomputarlas nuevamente. Para esto existe la tabla de simbolos, que en general corresponde a una representaci\'on de un arbol cuyos son \'ambitos que almacenan tablas de hash.
-
-\centerline{\includegraphics[trim={0 9cm 0 0},scale=0.45]{SYmTabex.png}}
+\clearpage
+\centerline{\includegraphics[trim={0 0 0 0},scale=0.35]{SYmTabex.png}}
 \centerline{Figura 1: Representaci\'on de una tabla de simbolos. Fuente: (Cooper, 2012)}
+
 
 Cada tabla de hash representa la informaci\'on contenida dentro de un \'ambito, y dicha informaci\'on solo ser\'a accesible desde los nodos sucesores. La ra\'iz del arbol representa el \'ambito global. 
 
 Para esta implementaci\'on se utiliz\'o la biblioteca de Python AnyTree y la estructura de datos diccionario.
 
 
-\subsection*{Reglas sem\'anticas}
+\subsection*{Representací\'on de la Tabla de Simbolos y Reglas sem\'anticas}
 
-La regla sem\'antica principal es que cada par\'entesis encargado de iniciar un \'ambito, generar\'a un nuevo nodo dentro del \'arbol de la tabla de s\'imbolos y al momento de cerrar el \'ambito volver\'a a su nodo anterior.
+El principal comportamiento del analizador sem\'antico es que cada par\'entesis encargado de iniciar un \'ambito, generar\'a un nuevo nodo dentro del \'arbol de la tabla de s\'imbolos y al momento de cerrar el \'ambito volver\'a a su nodo anterior.
 
 Cada nodo corresponde a un diccionario que en su \'indice contiene el nombre del s\'imbolo y almacena algunos datos propios de la definici\'on encontrada en el form\'ato de una estructura llamad\'a \texttt{simbol}. 
 
 La estructura \texttt{simbol} contiene los siguientes atributos:
 
 \begin{itemize}
-    \item  \textbf{Stype:} Define el tipo de s\'imbolo encontrado. Ejemplo: 'funci\'on', 'struct', 'variable', 'valor'.
-    \item  \textbf{Name:} Define el nombre del simbolo encontrado. Este es coincidente con el \'indice con el cual se agrega a la tabla de s\'imbolos.
-    \item  \textbf{Vtype:} Define el tipo de dato correspondiente. En el caso de una funci\'on contendr\'a el tipo que retorna, en el caso de una definici\'on el tipo del cual es propia la variable. 
+    \item  \textbf{SType:} Define el tipo de s\'imbolo encontrado. Ejemplo: 'funci\'on', 'struct', 'variable', 'valor'.
+    \item  \textbf{Name:} Define el nombre del simbolo encontrado. Este es coincidente con el \'indice con el cual se agrega al diccionario.
+    \item  \textbf{VType:} Define el tipo de dato correspondiente. En el caso de una funci\'on contendr\'a el tipo que retorna, en el caso de una definici\'on el tipo del cual es propia la variable. 
     \item  \textbf{Info:} Contiene antecedentes adicionales del s\'imbolo. Por ejemplo, el n\'umero de argumentos de una funci\'on o el numero de datos miembro una estructura. 
-    \item  \textbf{Line:} Corresponde a la l\'inea en la cual fue encontrado el s\'imbolo. Ser\'a \'util para retornar mensajes de error como: "Redeclaraci\'on de la variable X, ya fue definida en la l\'inea Y". 
-
+    \item  \textbf{Line:} Corresponde a la l\'inea en la cual fue encontrado el s\'imbolo. Ser\'a \'util para retornar mensajes de error como: \"Redeclaraci\'on de la variable X, ya fue definida en la l\'inea Y\". 
+\clearpage
 Una particularidad de nuestro analizador sem\'antico es que a la tabla de s\'imbolos tambien agrega los ciclos y las funciones como un nodo del \'arbol. Esto permite detectar el tipo de dato a retornar por la funci\'on o si el \'ambito corresponde a un ciclo, con la intenci\'on de hacer verificaciones como la instrucci\'on continue o break est\'en dentro de un ciclo, o si una funci\'on de tipo void tiene un valor en su instrucci\'on return.
 
 Ejemplo de una tabla de s\'imbolos con ciclos.
 
 \begin{verbatim}
 int main(){
-
     while(1){
         {
             break;
@@ -115,14 +115,13 @@ int main(){
             }
         }
     }
-
     return 0;
 }
 \end{verbatim}
 
 Este programa construye la siguiente tabla de s\'imbolos:
 \begin{verbatim}
- {'main': (int)}
+{'main': (int)}
 └──  {'%return': 'int'}
     └──  {'%loop': 'while'}
                 └──  {'%loop': 'while'}
@@ -132,19 +131,19 @@ Este programa construye la siguiente tabla de s\'imbolos:
 
 \subsection*{Restricciónes adicionales de la gramática}
 
-Existen dos tipos de instrucciones que fueron eliminados de la gramática admitida por el lenguaje.
+Existen dos tipos de instrucciones que fueron restringidos de la gramática admitida por el lenguaje.
 
 \begin{itemize}
-    \item \textbf{Switch-case: } Debido a que se complicaba el funcionamiento del analizador semántico.
-    \item \textbf{operadores ++ y --} Dado que al ir acompañado de una variable, era dificil su identificación.
-
+    \item \textbf{Switch - case: } Debido a que se complicaba el funcionamiento del analizador semántico.
+    \item \textbf{operadores ++ y --} Dado que al ir acompañado de una variable, era dif\'icil su identificación.
+\end{itemize}
 Ambas restricciones no le quitan capacidades al lenguaje y simplificaron la construcción del analizador semántico.
 
-
+\clearpage
 \section*{Pruebas}
-En el repositorio se encuentras nueve c\'odigos de prueba en lenguaje C+-, tres de los cuales construyen sin detectar errores en el código ingresado.
+En el repositorio del proyecto se encuentras nueve c\'odigos de prueba en lenguaje C+-, tres de los cuales construyen la tabla de s\'imbolos sin detectar errores en el código ingresado.
 
-Entre las pruebas con error, se encuentan los siguientes:
+Entre las pruebas con error, se encuentran los siguientes:
 \item \textbf{Error semántico función: } El código contiene una función de tipo VOID que retorna un valor. Además se le asigna su resultado (de tipo VOID) a una variable, se llama a la función que requiere argumentos y no se le entregan argumentos, y se realizan operaciónes entre dos llamadas a la función.
 
 \item \textbf{Error semántico loop: } Contiene la expresión return sin un valor, dentro de la función main de tipo INT; tambien contiene las instrucciones continue y break fuera de un loop.  
@@ -156,7 +155,8 @@ Entre las pruebas sin error, se encuenta:
 \item \textbf{Test: } Es un programa que contiene muchas de las funcionalidades del lenguajes, entre las cuales se encuentra la definicion de variables globales, definicion de funciones que retornar un valor y tambien de tipo void, declaración de variables locales dentro de distintos ambitos con sus correspondientes operaciones; tambien contiene ciclos while y for correctamente definidos.
 
 \item \textbf{Test Scopes: } Contiene una prueba de definición de distintas variables dentro de varios scopes. Tambien se aprecia que permite redefinir una variable pero dentro de otro ámbito que la contenga. 
-
+\end{itemize}
+Un ejemplo de un extracto de c\'odigo existente entre las pruebas es el siguiente que detalla la construcci\'on de la tabla de s\'imbolos y sus correspondientes \'ambitos es el siguiente:
 \begin{verbatim}
 void main(){
     int a;      // ok
@@ -174,32 +174,24 @@ void main(){
     }
 }
 \end{verbatim}
-Este c\'odigo, al pasar por el analizador semántico construye la siguiente tabla de símbolos.
 
+El c\'odigo presentado, al pasar por el analizador sem\'antico, construye la siguiente tabla de s\'imbolos.
 \begin{verbatim}
  {'main': (void)}
 └──  {'%return': 'void', 'a': (int), 'b': (int), 'x': (int)}
     └──  {'x': (int)}
         └──  {'a': (int)}
 \end{verbatim}
-
 En ella se aprecia la definición de la variable a y x en los distintos ámbitos.
-\clearpage
+
 
 \section*{Conclusiones}
-En este reporte se presentó el analizador semántico construido para el lenguaje llamado C+-. Dicho trabajo se realizó construyendo un arbol donde cada nodo representa un ámbito diferente del programa y permite verificar la visibilidad de las variables a través de los ámbitos antecesores como tambien para evitar la redeclaración de variables.
-En t\'erminos generales, en analizador semántico es robusto y logra detectar una gran cantidad de errores de distinto tipo sin obtener falsos positivos.
+En este reporte se present\'o el analizador sem\'antico construido para el lenguaje llamado C+-. Dicho trabajo se realiz\'o construyendo un \'arbol donde cada nodo representa un \'ambito diferente del programa y permite verificar la visibilidad de las variables a trav\'es de los \'ambitos antecesores como tambi\'en para evitar la redeclaraci\'on de variables.
+En t\'erminos generales, en analizador sem\'antico es robusto y logra detectar una gran cantidad de errores de distinto tipo sin obtener falsos positivos.
 
 
 
-
-
-
-
-
-
-
-**************** APENDICEE
+\clearpage
 \section*{APENDICE}
 
 \subsection*{Definiciones l\'exicas}
