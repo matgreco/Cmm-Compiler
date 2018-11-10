@@ -12,7 +12,7 @@ Ejemplo:
 
 python3 test.py MIPROGRAMA.CMM
 
-##Códigos de ejemplos:
+## Códigos de ejemplos:
 
 Existen los siguientes ejemplos con errores:
 
