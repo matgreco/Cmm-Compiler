@@ -5,7 +5,7 @@ if __name__ is not None and "." in __name__:
 else:
     from Cmm2Parser import Cmm2Parser
 from anytree import Node, RenderTree
-
+from pprint import pprint
 # This class defines a complete generic visitor for a parse tree produced by Cmm2Parser.
 
 
@@ -46,10 +46,15 @@ def mostrarArbol(nodo):
     print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
 
-
-
-
-
+def llc_vtype(type):
+    if type == 'int':
+        return 'i32'
+    if type == 'void' :
+        return 'void'
+    if type == 'float' :
+        return 'float'
+    if type =='char' :
+        return 'i8'
 
 
 def Error(msg, line):
@@ -92,7 +97,7 @@ class symbol:
         #function: [[arg1, opts], [arg2, opts], ...]
         #struct: [[member1, type], [member2, type], ...]
         #variable: []
-        #value: []
+        self.value = ""
         self.line = line
     def __str__(self):
         return str(self.name) + "("+ str(self.stype) + " " + str(self.vtype[0]) + ")"
@@ -107,6 +112,7 @@ class symbol:
 
 
 
+codigo = list()
 
 class Cmm2Visitor(ParseTreeVisitor):
 
@@ -116,10 +122,19 @@ class Cmm2Visitor(ParseTreeVisitor):
         self.tree = Node(dict({}))
         self.where = 'global' #'global', 'function', 'struct'
 
+        #Agrega print
+        self.functions['print']=['int']
+        self.functions['print'].append(['int', 'int'])
+        self.tree.name['print'] = symbol('function', 'print', 'void', list('int'), '0')
+
+        self.n_registro = 0
+
+
+
 
     # Visit a parse tree produced by Cmm2Parser#build.
     def visitBuild(self, ctx:Cmm2Parser.BuildContext):
-        return self.visitChildren(ctx)
+        return self.visitChildren(ctx),codigo
 
 
     # Visit a parse tree produced by Cmm2Parser#declare_statement.
@@ -133,7 +148,6 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by Cmm2Parser#declare_normal.
     def visitDeclare_normal(self, ctx:Cmm2Parser.Declare_normalContext):
-        #print("PPPP_ ",ctx.VAR().getText())
         vtype = self.visit(ctx.type_cmm())
         name = ctx.VAR().getText()
         line = ctx.start.line
@@ -144,8 +158,10 @@ class Cmm2Visitor(ParseTreeVisitor):
             Error(name + " ya est\'a definida en este scope en la linea " + str(self.tree.name[name].line), line)
         else:
             self.tree.name[name] = symbol("variable", name, vtype, [], line)
+            codigo.append("%" + name + " = alloca " + llc_vtype(vtype) + " \n")  
             return self.tree.name[name]
-                
+        
+         
         return None
 
 
@@ -171,6 +187,7 @@ class Cmm2Visitor(ParseTreeVisitor):
     
     # Visit a parse tree produced by Cmm2Parser#declare_assign_expression.
     def visitDeclare_assign_expression(self, ctx:Cmm2Parser.Declare_assign_expressionContext):
+
         vtype = self.visit(ctx.type_cmm())
         name = ctx.VAR().getText()
         line = ctx.start.line
@@ -179,6 +196,11 @@ class Cmm2Visitor(ParseTreeVisitor):
         else:
             self.tree.name[name] = symbol("variable", name, vtype, [], line)
         val = self.visit(ctx.expression())
+
+        valor_asignacion = 2222 #ESTO DEBE SER EL VALOR ASIGNADO - CAMBIAR
+        codigo.append("%" + name + " = " + " alloca " + llc_vtype(vtype) + " \n")
+        codigo.append("%r" + str(self.n_registro) + " = add " + llc_vtype(vtype) + " " + str(valor_asignacion) + ", 0" + " \n")
+        codigo.append("store "+ llc_vtype(vtype) + " " + "%r" + str(self.n_registro) + ", " + llc_vtype(vtype) + "* %" + name + " \n")
         return None
 
 
@@ -338,6 +360,7 @@ class Cmm2Visitor(ParseTreeVisitor):
 
 
 
+
         return symbol("value", "", self.functions[name][0], [])
 
 
@@ -388,13 +411,26 @@ class Cmm2Visitor(ParseTreeVisitor):
         #inicializa el scope y agrega lo de adentro
         self.tree = Initialize_scope(self.tree)
         self.tree.name["%return"] = vtype
+
+        #LLC
+        codigo.append("define " + llc_vtype(vtype) + " @" + name + "(")
+        count_args = 0
         for arg in args:
             self.tree.name[arg[1]] = symbol("variable", arg[1], arg[0], [], line)
+            codigo.append(llc_vtype(arg[0]) + " %" + arg[1]  )
+            count_args+=1
+            if count_args < len(args):
+                codigo.append(" ,")
+
+        codigo.append(") #0 { \n")
+
         i = 0
         while ctx.statement(i) != None:
             statement = self.visit(ctx.statement(i))
             i += 1
         self.tree = Finalize_scope(self.tree)
+
+        codigo.append("}")
         return None
 
 
@@ -503,6 +539,13 @@ class Cmm2Visitor(ParseTreeVisitor):
             pass
         if op == "|=":
             pass
+
+        print("ASIGNANDO ", left.name, right.vtype)
+        #%r2 = add i32 2, 0
+        #store i32 %r2, i32* %x
+        codigo.append("%r"+str(self.n_registro) + " = add " + llc_vtype(left.vtype) + " 99999, 0 \n" )
+        codigo.append("store " + llc_vtype(left.vtype) + " %r" + str(self.n_registro) + ", " + llc_vtype(left.vtype) + "*" + "%" + left.name +" \n" )
+        #n_registro+=1
         return symbol("variable", right.name, right.vtype, [])
 
 

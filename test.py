@@ -13,7 +13,8 @@ parser = Cmm2Parser(stream)
 tree = parser.build()
 
 visitor = Cmm2Visitor()
-result = visitor.visit(tree)
+result,llvm_output = visitor.visit(tree)
 
 mostrarArbol(visitor.tree)
 
+print(''.join(llvm_output))
