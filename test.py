@@ -21,11 +21,10 @@ mostrarArbol(visitor.tree)
 
 print(''.join(llvm_output))
 
+file_s = sys.argv[0].split(".")[0]+".llm"
+file_o = sys.argv[0].split(".")[0]+".om"
 
-file_s = sys.argv[0].split(".")[0]+".ll"
-file_o = sys.argv[0].split(".")[0]+".o"
-
-f = open(file_s, "w+")
+f = open(file_s, "a")
 f.write(''.join(llvm_output))
 #subprocess.call(["ls", "-l"])
 subprocess.call(["llc", file_s, "-filetype=obj"] )

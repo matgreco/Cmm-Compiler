@@ -389,7 +389,8 @@ class Cmm2Visitor(ParseTreeVisitor):
             Error("La funcion deberia retornar valores de tipo" + vtype, exp.line)
             return None
         
-        codigo.append("ret i32 0 \n")
+        codigo.append("ret i32 %.r"+ str(self.n_registro) +" \n")
+        self.n_registro+=1
         return None
 
     # Visit a parse tree produced by Cmm2Parser#block_statement.
@@ -490,7 +491,7 @@ class Cmm2Visitor(ParseTreeVisitor):
 
 
         if(name == 'print'):
-            codigo.append("%.r" + str(self.n_registro+1) + " = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str, i32 0, i32 0), i32 %.r" + str(self.n_registro) + ")"  )
+            codigo.append("%.r" + str(self.n_registro+1) + " = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str, i32 0, i32 0), i32 %.r" + str(self.n_registro) + ") \n"  )
             self.n_registro += 1
 
 
