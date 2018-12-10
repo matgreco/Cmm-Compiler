@@ -7,7 +7,7 @@ La ejecución del analisador semántico requiere lo siguiente:
 - Biblioteca Anytree para Python3 (pip install anytree)
 - LLVM (sudo apt-get install llvm)
 
-## Generar la tabla de símbolos de un programa
+## Generar código LLVM IR de un programa Cmm
 Para la generación de código de un programa hecho en lenguaje C+- debe ejecutar el programa test.py entregando como parámetro el nombre del archivo cmm.
 
 Ejemplo:
