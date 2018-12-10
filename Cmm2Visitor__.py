@@ -786,7 +786,7 @@ class Cmm2Visitor(ParseTreeVisitor):
             newvar = "%.r" + str(self.n_registro + 1)
             self.n_registro += 1
             codigo.append(newvar + " = alloca " + llc_vtype(val[1]) + "\n")
-            codigo.append("store " + llc_vtype + " " + str(val[0]) + " , " + llc_vtype + "* " + newvar + "\n")
+            codigo.append("store " + llc_vtype(val[1]) + " " + str(val[0]) + " , " + llc_vtype(val[1]) + "* " + newvar + "\n")
             return symbol('value', val[0], val[1],[])
         if ctx.STRING_CONSTANT() != None:
             return symbol('value', ctx.STRING_CONSTANT().getText(),"char[]",[])
