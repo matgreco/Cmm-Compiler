@@ -777,9 +777,16 @@ class Cmm2Visitor(ParseTreeVisitor):
                     line = ctx.start.line
                     Error(x.name+ " no es una variable", line)
                     return None
+                self.n_registro += 1
+                newvar = "%.r" + str(self.n_registro)
+                codigo.append("store " + llc_vtype(x.vtype) + "%" + x.name + " , " + llc_vtype(x.vtype) + "* " + newvar + "\n")
                 return x
         if ctx.INT_NUMBER() != None:
             val = stoi(ctx.INT_NUMBER().getText())
+            newvar = "%.r" + str(self.n_registro + 1)
+            self.n_registro += 1
+            codigo.append(newvar " = alloca " + llc_vtype(val[1]) + "\n")
+            codigo.append("store " + llc_vtype + " " + str(val[0]) + " , " + llc_vtype + "* " + newvar + "\n")
             return symbol('value', val[0], val[1],[])
         if ctx.STRING_CONSTANT() != None:
             return symbol('value', ctx.STRING_CONSTANT().getText(),"char[]",[])
