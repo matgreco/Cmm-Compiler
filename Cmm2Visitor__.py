@@ -9,6 +9,8 @@ from pprint import pprint
 # This class defines a complete generic visitor for a parse tree produced by Cmm2Parser.
 
 
+
+
 def Initialize_scope(scope):
     #print("Nuevo scope")
     nuevo_scope = Node(dict({}),scope)
@@ -49,16 +51,24 @@ def mostrarArbol(nodo):
 def llc_vtype(type):
     if type == 'int':
         return 'i32'
-    if type == 'void' :
+    if type[-1] == ']' or type == 'long':
+        return 'i64'
+    if type == 'void':
         return 'void'
-    if type == 'float' :
+    if type == 'float':
         return 'float'
+    if type == 'double':
+        return 'double'
     if type =='char' :
         return 'i8'
+    if type == 'short':
+        return 'i16'
 
 
 def Error(msg, line):
     print("Error en linea "+str(line)+": " + str(msg))
+    global error
+    error = True
 
 
 def stoi(s:str):
@@ -110,7 +120,7 @@ class symbol:
 
 
 
-
+error = False
 
 codigo = list()
 
@@ -128,6 +138,50 @@ class Cmm2Visitor(ParseTreeVisitor):
         self.tree.name['print'] = symbol('function', 'print', 'void', list('int'), '0')
 
         self.n_registro = 0
+
+    #devuelve prioridad entre dos tipos
+    def type_priority(self, type1, type2):
+        d = {"double":0, "float":1, "double[]":2, "float[]":3, "long[]":4, "int[]":5, "short[]":6, "char[]":7, "long":8, "int":9, "short":10, "char":11}
+        invd = ["double", "float", "double[]", "float[]", "long[]", "int[]", "short[]", "char[]", "long", "int", "short", "char"]
+        if type1 in d and type2 in d:
+            return invd[min(d[type1],d[type2])]
+        else:
+            print("Error de casteo")
+
+    #genera el codigo de casteo de type1 a type2
+    def cast(self, type1, varname, type2, line = 0):
+        llc_t1 = llc_vtype(type1)
+        llc_t2 = llc_vtype(type2)
+        if llc_t1 == llc_t2:
+            return varname
+        if llc_t1[0] == 'i' and llc_t2[0] == 'i': #ambos son enteros
+            if int(llc_t1[1:]) < int(llc_t2[1:]):
+                self.n_registro += 1
+                codigo.append("%.r"+str(self.n_registro) + " = sext " + llc_t1 + " " + varname + " to " + llc_t2)
+                return self.n_registro
+            else:
+                self.n_registro += 1
+                codigo.append("%.r" + str(self.n_registro) + " = trunc " + llc_t1 + " " + varname + " to " + llc_t2)
+                return self.n_registro
+        elif llc_t1[0] == "i" and llc_t2 in ["float", "double"]:
+            self.n_registro += 1
+            codigo.append("%.r" + str(self.n_registro) + " = sitofp " + llc_t1 + " " + varname + " to " + llc_t2)
+            return self.n_registro
+        elif llc_t1[0] in ["float", "double"] and llc_t2[0] == "i":
+            self.n_registro += 1
+            codigo.append("%.r" + str(self.n_registro) + " = fptosi " + llc_t1 + " " + varname + " to " + llc_t2)
+            return self.n_registro
+        elif llc_t1 == "float" and llc_t2 == "double":
+            self.n_registro += 1
+            codigo.append("%.r" + str(self.n_registro) + " = fpext float " + varname + " to double")
+            return self.n_registro
+        elif llc_t1 == "double" and llc_t2 == "float":
+            self.n_registro += 1
+            codigo.append("%.r" + str(self.n_registro) + " = fptrunc double " + varname + " to float")
+        else:
+            Error("Error de casteo", line)
+        
+        
 
 
 
@@ -621,7 +675,9 @@ class Cmm2Visitor(ParseTreeVisitor):
         
         #left = self.tree.name[ctx.expression(0).VAR().getText()]
         left = self.visit(ctx.expression(0))
+        var1 = "%.r" + str(self.n_registro)
         right = self.visit(ctx.expression(1))
+        var2 = "%.r" + str(self.n_registro)
 
         if left == None or right == None:
             return None
