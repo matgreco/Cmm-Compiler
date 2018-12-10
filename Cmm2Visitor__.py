@@ -86,7 +86,7 @@ def stoi(s:str):
             base = 16
         elif s[0] == "0":
             base = 8
-        return [(int(s,base) & (2<<64 - 1)), 'long']
+        return [(int(s,base) & ( (2<<64) - 1)), 'long']
     else:
         base = 10
         if s[0:2] in ["0x","0X"]:
@@ -94,7 +94,7 @@ def stoi(s:str):
             base = 16
         elif s[0] == "0":
             base = 8
-        return [(int(s,base) & (2<<32 - 1)), 'int']
+        return [(int(s,base) & ( (2<<32) - 1)), 'int']
 
 
 
@@ -157,27 +157,27 @@ class Cmm2Visitor(ParseTreeVisitor):
         if llc_t1[0] == 'i' and llc_t2[0] == 'i': #ambos son enteros
             if int(llc_t1[1:]) < int(llc_t2[1:]):
                 self.n_registro += 1
-                codigo.append("%.r"+str(self.n_registro) + " = sext " + llc_t1 + " " + varname + " to " + llc_t2)
+                codigo.append("%.r"+str(self.n_registro) + " = sext " + llc_t1 + " " + varname + " to " + llc_t2 + " \n")
                 return self.n_registro
             else:
                 self.n_registro += 1
-                codigo.append("%.r" + str(self.n_registro) + " = trunc " + llc_t1 + " " + varname + " to " + llc_t2)
+                codigo.append("%.r" + str(self.n_registro) + " = trunc " + llc_t1 + " " + varname + " to " + llc_t2 + " \n")
                 return self.n_registro
         elif llc_t1[0] == "i" and llc_t2 in ["float", "double"]:
             self.n_registro += 1
-            codigo.append("%.r" + str(self.n_registro) + " = sitofp " + llc_t1 + " " + varname + " to " + llc_t2)
+            codigo.append("%.r" + str(self.n_registro) + " = sitofp " + llc_t1 + " " + varname + " to " + llc_t2 + " \n")
             return self.n_registro
         elif llc_t1[0] in ["float", "double"] and llc_t2[0] == "i":
             self.n_registro += 1
-            codigo.append("%.r" + str(self.n_registro) + " = fptosi " + llc_t1 + " " + varname + " to " + llc_t2)
+            codigo.append("%.r" + str(self.n_registro) + " = fptosi " + llc_t1 + " " + varname + " to " + llc_t2 + " \n")
             return self.n_registro
         elif llc_t1 == "float" and llc_t2 == "double":
             self.n_registro += 1
-            codigo.append("%.r" + str(self.n_registro) + " = fpext float " + varname + " to double")
+            codigo.append("%.r" + str(self.n_registro) + " = fpext float " + varname + " to double"  + " \n")
             return self.n_registro
         elif llc_t1 == "double" and llc_t2 == "float":
             self.n_registro += 1
-            codigo.append("%.r" + str(self.n_registro) + " = fptrunc double " + varname + " to float")
+            codigo.append("%.r" + str(self.n_registro) + " = fptrunc double " + varname + " to float" + " \n")
             return self.n_registro
         else:
             Error("Error de casteo", line)
@@ -193,14 +193,14 @@ class Cmm2Visitor(ParseTreeVisitor):
             if op in iop:
                 self.n_registro += 1
                 newvar = "%.r" + str(self.n_registro)
-                codigo.append(newvar + " = " + iop[op] + " " + type + " " + var1 + " , " + var2)
+                codigo.append(newvar + " = " + iop[op] + " " + type + " " + var1 + " , " + var2 + " \n")
                 return
             elif op in icmp:
                 temp = "%.r" + str(self.n_registro + 1)
                 newvar = "%.r" + str(self.n_registro + 2)
                 self.n_registro += 2
-                codigo.append(temp + " = " + icmp[op] + " " + type + " " + var1 + " , " + var2)
-                codigo.append(newvar + " = zext i1 " + temp + " to i32")
+                codigo.append(temp + " = " + icmp[op] + " " + type + " " + var1 + " , " + var2 + " \n")
+                codigo.append(newvar + " = zext i1 " + temp + " to i32"  + " \n")
                 return
             elif op in lop:
                 s1 = "{0} = icmp eq {1} {2} , 0"
@@ -222,13 +222,13 @@ class Cmm2Visitor(ParseTreeVisitor):
             if op in fop:
                 self.n_registro += 1
                 newvar = "%.r" + str(self.n_registro)
-                codigo.append(newvar + " = " + fop[op] + " " + type + " " + var1 + " , " + var2)
+                codigo.append(newvar + " = " + fop[op] + " " + type + " " + var1 + " , " + var2  + " \n")
                 return
             elif op in fcmp:
                 temp = "%.r" + str(self.n_registro + 1)
                 newvar = "%.r" + str(self.n_registro + 2)
                 self.n_registro += 2
-                codigo.append(temp + " = " + fcmp[op] + " " + type + " " + var1 + " , " + var2)
+                codigo.append(temp + " = " + fcmp[op] + " " + type + " " + var1 + " , " + var2  + " \n")
                 codigo.append(newvar + " = zext i1 " + temp + " to i32")
                 return
             else:
@@ -650,8 +650,9 @@ class Cmm2Visitor(ParseTreeVisitor):
         print("ASIGNANDO ", left.name, right.vtype)
         #%r2 = add i32 2, 0
         #store i32 %r2, i32* %x
-        codigo.append("%r"+str(self.n_registro) + " = add " + llc_vtype(left.vtype) + " 99999, 0 \n" )
-        codigo.append("store " + llc_vtype(left.vtype) + " %r" + str(self.n_registro) + ", " + llc_vtype(left.vtype) + "*" + "%" + left.name +" \n" )
+        print(vars(right))
+        codigo.append("%.r"+str(self.n_registro) + " = add " + llc_vtype(left.vtype) + " 99999, 0 \n" )
+        codigo.append("store " + llc_vtype(left.vtype) + " %.r" + str(self.n_registro) + ", " + llc_vtype(left.vtype) + "*" + "%" + left.name +" \n" )
         #n_registro+=1
         return symbol("variable", right.name, right.vtype, [])
 
