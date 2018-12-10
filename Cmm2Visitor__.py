@@ -137,7 +137,7 @@ class symbol:
 
 error = False
 
-codigo = list()
+codigo = list('@.str = private unnamed_addr constant [3 x i8] c"%d\00", align 1 \n')
 
 class Cmm2Visitor(ParseTreeVisitor):
 
@@ -388,6 +388,8 @@ class Cmm2Visitor(ParseTreeVisitor):
         elif exp.vtype[0] == "struct":
             Error("La funcion deberia retornar valores de tipo" + vtype, exp.line)
             return None
+        
+        codigo.append("ret i32 0 \n")
         return None
 
     # Visit a parse tree produced by Cmm2Parser#block_statement.
@@ -487,6 +489,9 @@ class Cmm2Visitor(ParseTreeVisitor):
                 return None
 
 
+        if(name == 'print'):
+            codigo.append("%.r" + str(self.n_registro+1) + " = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str, i32 0, i32 0), i32 %.r" + str(self.n_registro) + ")"  )
+            self.n_registro += 1
 
 
         return symbol("value", "", self.functions[name][0], [])
@@ -558,7 +563,7 @@ class Cmm2Visitor(ParseTreeVisitor):
             i += 1
         self.tree = Finalize_scope(self.tree)
 
-        codigo.append("}")
+        codigo.append("} \n")
         return None
 
 
@@ -666,6 +671,7 @@ class Cmm2Visitor(ParseTreeVisitor):
             temp = self.cast(newtype, temp, left.vtype, ctx.start.line)
             codigo.append("store " + llc_type + " " + temp + " , " + llc_type + "* " + avar + "\n")
         else:
+            llc_type = llc_vtype(left.vtype)
             var2 = self.cast(right.vtype, var2, left.vtype, ctx.start.line)
             codigo.append("store "+ llc_type + " " + var2 + " , " + llc_type + "* " + avar + "\n")
 
