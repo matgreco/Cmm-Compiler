@@ -38,6 +38,21 @@ def Consultar(scope, name):
         #print("Simbolo no existe")
         return None
 
+def isGlobal(scope, name):
+    #print("Consultar")
+    test_scope = scope
+    while True :
+        if name in test_scope.name:
+            #print("OK, simbolo encontrado, valor: ", test_scope.name[name])
+            return test_scope.is_root
+        else:
+            if test_scope.is_root == True:
+                break
+            test_scope = test_scope.parent
+
+    if test_scope.is_root == True :
+        #print("Simbolo no existe")
+        return False
 
 def mostrarArbol(nodo):
     print()
@@ -265,7 +280,10 @@ class Cmm2Visitor(ParseTreeVisitor):
             Error(name + " ya est\'a definida en este scope en la linea " + str(self.tree.name[name].line), line)
         else:
             self.tree.name[name] = symbol("variable", name, vtype, [], line)
-            codigo.append("%" + name + " = alloca " + llc_vtype(vtype) + " \n")  
+            if self.tree.is_root:
+                codigo.append("@" + name + " = global " + llc_vtype(vtype) + " \n")
+            else:
+                codigo.append("%" + name + " = alloca " + llc_vtype(vtype) + " \n")
             return self.tree.name[name]
         
          
@@ -303,11 +321,14 @@ class Cmm2Visitor(ParseTreeVisitor):
         else:
             self.tree.name[name] = symbol("variable", name, vtype, [], line)
         val = self.visit(ctx.expression())
+        temp = "%.r" + str(self.n_registro)
 
-        valor_asignacion = 2222 #ESTO DEBE SER EL VALOR ASIGNADO - CAMBIAR
-        codigo.append("%" + name + " = " + " alloca " + llc_vtype(vtype) + " \n")
-        codigo.append("%r" + str(self.n_registro) + " = add " + llc_vtype(vtype) + " " + str(valor_asignacion) + ", 0" + " \n")
-        codigo.append("store "+ llc_vtype(vtype) + " " + "%r" + str(self.n_registro) + ", " + llc_vtype(vtype) + "* %" + name + " \n")
+        #valor_asignacion = 2222 #ESTO DEBE SER EL VALOR ASIGNADO - CAMBIAR
+        codigo.append("%" + name + " = alloca " + llc_vtype(vtype) + " \n")
+        temp = self.cast(val.vtype, temp, vtype, ctx.start.line)
+        codigo.append("store " + llc_vtype(vtype) + " " + temp + " , " + llc_vtype(vtype) + "* %" + name)
+        #codigo.append("%r" + str(self.n_registro) + " = add " + llc_vtype(vtype) + " " + str(valor_asignacion) + ", 0" + " \n")
+        #codigo.append("store "+ llc_vtype(vtype) + " " + "%r" + str(self.n_registro) + ", " + llc_vtype(vtype) + "* %" + name + " \n")
         return None
 
 
@@ -603,6 +624,7 @@ class Cmm2Visitor(ParseTreeVisitor):
     def visitExpAssign(self, ctx:Cmm2Parser.ExpAssignContext):
         left = self.visit(ctx.expression(0))
         right = self.visit(ctx.expression(1))
+        var2 = "%.r" + str(self.n_registro)
         op = ctx.op.text
         if left is None or right is None :
             return None
@@ -624,35 +646,35 @@ class Cmm2Visitor(ParseTreeVisitor):
                 else:
                     #asignar struct a struct
                     return symbol("variable", right.name, right.vtype, [])
-        if op == "=":
-            pass
-        if op == "+=":
-            pass
-        if op == "-=":
-            pass
-        if op == "*=":
-            pass
-        if op == "/=":
-            pass
-        if op == "%=":
-            pass
-        if op == "<<=":
-            pass
-        if op == ">>=":
-            pass
-        if op == "&=":
-            pass
-        if op == "^=":
-            pass
-        if op == "|=":
-            pass
+        if isGlobal(self.tree, left.name):
+            avar = "@" + left.name
+        else:
+            avar = "%" + left.name
 
-        print("ASIGNANDO ", left.name, right.vtype)
+        if op != "=":
+            preop = op[:-1]
+            newtype = self.type_priority(left.vtype, right.vtype)
+            if newtype == left.vtype:
+                var2 = self.cast(right.vtype,var2, newtype, ctx.start.line)
+            else:
+                avar = self.cast(left.vtype,avar, newtype, ctx.start.line)
+
+            llc_type = llc_vtype(newtype)
+
+            self.binop(llc_type, avar, var2, preop, ctx.start.line)
+            temp = "%.r" + str(self.n_registro)
+            temp = self.cast(newtype, temp, left.vtype, ctx.start.line)
+            codigo.append("store " + llc_type + " " + temp + " , " + llc_type + "* " + avar + "\n")
+        else:
+            var2 = self.cast(right.vtype, var2, left.vtype, ctx.start.line)
+            codigo.append("store "+ llc_type + " " + var2 + " , " + llc_type + "* " + avar + "\n")
+
+        #print("ASIGNANDO ", left.name, right.vtype)
         #%r2 = add i32 2, 0
         #store i32 %r2, i32* %x
-        print(vars(right))
-        codigo.append("%.r"+str(self.n_registro) + " = add " + llc_vtype(left.vtype) + " 99999, 0 \n" )
-        codigo.append("store " + llc_vtype(left.vtype) + " %.r" + str(self.n_registro) + ", " + llc_vtype(left.vtype) + "*" + "%" + left.name +" \n" )
+        #print(vars(right))
+        #codigo.append("%.r"+str(self.n_registro) + " = add " + llc_vtype(left.vtype) + " 99999, 0 \n" )
+        #codigo.append("store " + llc_vtype(left.vtype) + " %.r" + str(self.n_registro) + ", " + llc_vtype(left.vtype) + "*" + "%" + left.name +" \n" )
         #n_registro+=1
         return symbol("variable", right.name, right.vtype, [])
 
@@ -780,7 +802,11 @@ class Cmm2Visitor(ParseTreeVisitor):
                     return None
                 self.n_registro += 1
                 newvar = "%.r" + str(self.n_registro)
-                codigo.append("store " + llc_vtype(x.vtype) + "%" + x.name + " , " + llc_vtype(x.vtype) + "* " + newvar + "\n")
+                if isGlobal(self.tree, x.name):
+                    vname = "@" + x.name
+                else:
+                    vname = "%" + x.name
+                codigo.append(newvar + " = load " + llc_vtype(x.vtype) + " , " + llc_vtype(x.vtype) + "* " + vname + "\n")
                 return x
         if ctx.INT_NUMBER() != None:
             val = stoi(ctx.INT_NUMBER().getText())
