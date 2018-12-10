@@ -744,11 +744,11 @@ class Cmm2Visitor(ParseTreeVisitor):
             Error("No se puede realizar la operacion, dado que la expresion no retorna ningun valor", ctx.start.line)
             return None
         
-        newtype = self.type_priority(left.vtype[0], right.vtype[0])
-        if newtype == left.vtype[0]:
-            var2 = self.cast(right.vtype[0],var2, newtype, ctx.start.line)
+        newtype = self.type_priority(left.vtype, right.vtype)
+        if newtype == left.vtype:
+            var2 = self.cast(right.vtype,var2, newtype, ctx.start.line)
         else:
-            var1 = self.cast(left.vtype[0],var1, newtype, ctx.start.line)
+            var1 = self.cast(left.vtype,var1, newtype, ctx.start.line)
 
         llc_type = llc_vtype(newtype)
 
@@ -785,7 +785,7 @@ class Cmm2Visitor(ParseTreeVisitor):
             val = stoi(ctx.INT_NUMBER().getText())
             newvar = "%.r" + str(self.n_registro + 1)
             self.n_registro += 1
-            codigo.append(newvar " = alloca " + llc_vtype(val[1]) + "\n")
+            codigo.append(newvar + " = alloca " + llc_vtype(val[1]) + "\n")
             codigo.append("store " + llc_vtype + " " + str(val[0]) + " , " + llc_vtype + "* " + newvar + "\n")
             return symbol('value', val[0], val[1],[])
         if ctx.STRING_CONSTANT() != None:
