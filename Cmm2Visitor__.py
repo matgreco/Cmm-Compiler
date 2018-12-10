@@ -178,6 +178,7 @@ class Cmm2Visitor(ParseTreeVisitor):
         elif llc_t1 == "double" and llc_t2 == "float":
             self.n_registro += 1
             codigo.append("%.r" + str(self.n_registro) + " = fptrunc double " + varname + " to float")
+            return self.n_registro
         else:
             Error("Error de casteo", line)
         
