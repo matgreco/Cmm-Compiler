@@ -3,29 +3,32 @@
 ## Requisitos:
 La ejecución del analisador semántico requiere lo siguiente:
 - Python 3 (sudo apt-get install python3)
+- Antlr4 Runtime (pip install antlr4-python3-runtime)
 - Biblioteca Anytree para Python3 (pip install anytree)
+- LLVM (sudo apt-get install llvm)
 
 ## Generar la tabla de símbolos de un programa
-Para la generación de la tabla de simbolos de un programa hecho en lenguaje C+- debe ejecutar el programa test.py entregando como parámetro el nombre del archivo cmm.
+Para la generación de código de un programa hecho en lenguaje C+- debe ejecutar el programa test.py entregando como parámetro el nombre del archivo cmm.
 
 Ejemplo:
 
 python3 test.py MIPROGRAMA.CMM
 
+Los archivos correspondientes deben estar en la misma ruta que el programa test.py.
+El programa generará:
+ - Un archivo .ll con el codigo LLVM IR.
+ - Un archivo .s con el prorgrama objeto.
+ - Un archivo de nombre out.out con el programa ejecutable.
+
 ## Códigos de ejemplos:
 
-Existen los siguientes ejemplos con errores:
+Existen los siguientes ejemplos. Debe primero generar el codigo y luego ejecutar el archivo .out.
 
-- python3 test.py test_sem/error_semantico_funcion.cmm
-- python3 test.py test_sem/error_semantico_loop.cmm
-- python3 test.py test_sem/error_semantico_struct.cmm
-- python3 test.py test_sem/error_sem_redeclaracion.cmm
-- python3 test.py test_sem/error_semantico_loop.cmm
-- python3 test.py test_sem/error_sem_struct.cmm
+- python3 test.py test3.cmm
+- ./test3.out
 
-Y los siguientes ejemplos sin errores: 
+- python3 test.py test4.cmm
+- ./test4.out
 
-- python3 test.py test_sem/test.cmm
-- python3 test.py test_sem/test_semantico_funcion.cmm
 
  

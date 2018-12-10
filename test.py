@@ -19,14 +19,22 @@ llvm_output.append("declare i32 @printf(i8*, ...) #1")
 
 mostrarArbol(visitor.tree)
 
-print(''.join(llvm_output))
+txt_code = ''.join(llvm_output)
+print("------------  - - - - CODIGO GENERADO - - - - -----------------")
+print(txt_code)
+print("---------------------------------------------------------------")
+file_s = sys.argv[1].split(".")[0]+".ll"
+file_o = sys.argv[1].split(".")[0]+".o"
+file_out = sys.argv[1].split(".")[0]+".out"
 
-file_s = sys.argv[0].split(".")[0]+".llm"
-file_o = sys.argv[0].split(".")[0]+".om"
+f = open(file_s, "w")
+f.write( txt_code )
+f.close()
 
-f = open(file_s, "a")
-f.write(''.join(llvm_output))
-#subprocess.call(["ls", "-l"])
+#print(file_s + "  _____ " + file_o)
+#print("1 *****************************************")
 subprocess.call(["llc", file_s, "-filetype=obj"] )
-#subprocess.call(["gcc", file_o ,"-o out.out -no-pie"])
-#subprocess.run(["./out.out"])
+#print("2 *****************************************")
+subprocess.call(["gcc", file_o ,"-o"+ file_out , "-no-pie"])
+#print("3 *****************************************")
+#subprocess.call(["./out.out"])

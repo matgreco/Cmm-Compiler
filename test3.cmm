@@ -1,0 +1,20 @@
+//#include <stdio.h>
+int main()
+{
+    int a;
+    float b;
+    b = 15;
+    b /= 2;
+    a = 10+20;
+    b *= 2;
+    a = b;
+
+    print(a);
+
+    int c = 15;
+    c /= 2;
+    c *= 2;
+    print(c);
+
+    return 23;
+}

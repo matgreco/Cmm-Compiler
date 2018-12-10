@@ -137,7 +137,7 @@ class symbol:
 
 error = False
 
-codigo = list('@.str = private unnamed_addr constant [3 x i8] c"%d\00", align 1 \n')
+codigo = list(' @.str = private unnamed_addr constant [4 x i8] c"%d\\0a\\00", align 1 \n')
 
 class Cmm2Visitor(ParseTreeVisitor):
 
@@ -173,27 +173,27 @@ class Cmm2Visitor(ParseTreeVisitor):
             if int(llc_t1[1:]) < int(llc_t2[1:]):
                 self.n_registro += 1
                 codigo.append("%.r"+str(self.n_registro) + " = sext " + llc_t1 + " " + varname + " to " + llc_t2 + " \n")
-                return self.n_registro
+                return "%.r" + str(self.n_registro)
             else:
                 self.n_registro += 1
                 codigo.append("%.r" + str(self.n_registro) + " = trunc " + llc_t1 + " " + varname + " to " + llc_t2 + " \n")
-                return self.n_registro
+                return "%.r" + str(self.n_registro)
         elif llc_t1[0] == "i" and llc_t2 in ["float", "double"]:
             self.n_registro += 1
             codigo.append("%.r" + str(self.n_registro) + " = sitofp " + llc_t1 + " " + varname + " to " + llc_t2 + " \n")
-            return self.n_registro
-        elif llc_t1[0] in ["float", "double"] and llc_t2[0] == "i":
+            return "%.r" + str(self.n_registro)
+        elif llc_t1 in ["float", "double"] and llc_t2[0] == "i":
             self.n_registro += 1
             codigo.append("%.r" + str(self.n_registro) + " = fptosi " + llc_t1 + " " + varname + " to " + llc_t2 + " \n")
-            return self.n_registro
+            return "%.r" + str(self.n_registro)
         elif llc_t1 == "float" and llc_t2 == "double":
             self.n_registro += 1
             codigo.append("%.r" + str(self.n_registro) + " = fpext float " + varname + " to double"  + " \n")
-            return self.n_registro
+            return "%.r" + str(self.n_registro)
         elif llc_t1 == "double" and llc_t2 == "float":
             self.n_registro += 1
             codigo.append("%.r" + str(self.n_registro) + " = fptrunc double " + varname + " to float" + " \n")
-            return self.n_registro
+            return "%.r" + str(self.n_registro)
         else:
             Error("Error de casteo", line)
         
@@ -491,7 +491,7 @@ class Cmm2Visitor(ParseTreeVisitor):
 
 
         if(name == 'print'):
-            codigo.append("%.r" + str(self.n_registro+1) + " = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str, i32 0, i32 0), i32 %.r" + str(self.n_registro) + ") \n"  )
+            codigo.append("%.r" + str(self.n_registro+1) + " = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %.r" + str(self.n_registro) + ") \n"  )
             self.n_registro += 1
 
 
@@ -666,15 +666,20 @@ class Cmm2Visitor(ParseTreeVisitor):
                 avar = self.cast(left.vtype,avar, newtype, ctx.start.line)
 
             llc_type = llc_vtype(newtype)
-
-            self.binop(llc_type, avar, var2, preop, ctx.start.line)
+            tempavar = "%.r" + str(self.n_registro +1)
+            self.n_registro += 1
+            codigo.append(tempavar + " = load " + llc_type + " , " + llc_type + "* " + avar + "\n")
+            self.binop(llc_type, tempavar, var2, preop, ctx.start.line)
             temp = "%.r" + str(self.n_registro)
             temp = self.cast(newtype, temp, left.vtype, ctx.start.line)
             codigo.append("store " + llc_type + " " + temp + " , " + llc_type + "* " + avar + "\n")
         else:
             llc_type = llc_vtype(left.vtype)
+            #print(llc_vtype(left.vtype), llc_vtype(right.vtype))
             var2 = self.cast(right.vtype, var2, left.vtype, ctx.start.line)
+            #print("?????????????????????????",llc_type, var2, avar)
             codigo.append("store "+ llc_type + " " + var2 + " , " + llc_type + "* " + avar + "\n")
+
 
         #print("ASIGNANDO ", left.name, right.vtype)
         #%r2 = add i32 2, 0
@@ -819,8 +824,8 @@ class Cmm2Visitor(ParseTreeVisitor):
             val = stoi(ctx.INT_NUMBER().getText())
             newvar = "%.r" + str(self.n_registro + 1)
             self.n_registro += 1
-            codigo.append(newvar + " = alloca " + llc_vtype(val[1]) + "\n")
-            codigo.append("store " + llc_vtype(val[1]) + " " + str(val[0]) + " , " + llc_vtype(val[1]) + "* " + newvar + "\n")
+            codigo.append(newvar + " = add " + llc_vtype(val[1]) + " " + str(val[0]) + " , 0\n")
+            #codigo.append("store " + llc_vtype(val[1]) + " " + str(val[0]) + " , " + llc_vtype(val[1]) + "* " + newvar + "\n")
             return symbol('value', val[0], val[1],[])
         if ctx.STRING_CONSTANT() != None:
             return symbol('value', ctx.STRING_CONSTANT().getText(),"char[]",[])
