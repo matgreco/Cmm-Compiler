@@ -141,8 +141,8 @@ class Cmm2Visitor(ParseTreeVisitor):
 
     #devuelve prioridad entre dos tipos
     def type_priority(self, type1, type2):
-        d = {"double":0, "float":1, "double[]":2, "float[]":3, "long[]":4, "int[]":5, "short[]":6, "char[]":7, "long":8, "int":9, "short":10, "char":11}
-        invd = ["double", "float", "double[]", "float[]", "long[]", "int[]", "short[]", "char[]", "long", "int", "short", "char"]
+        d = {"double":0, "float":1, "double[]":2, "float[]":3, "long[]":4, "int[]":5, "short[]":6, "char[]":7, "struct[]":8, "long":9, "int":10, "short":11, "char":12}
+        invd = ["double", "float", "double[]", "float[]", "long[]", "int[]", "short[]", "char[]", "struct[]", "long", "int", "short", "char"]
         if type1 in d and type2 in d:
             return invd[min(d[type1],d[type2])]
         else:
@@ -183,6 +183,58 @@ class Cmm2Visitor(ParseTreeVisitor):
             Error("Error de casteo", line)
         
         
+    def binop(self, type, var1, var2, op, line):
+        iop = {"+":"add", "-":"sub", "*":"mul", "/":"sdiv", "%":"srem", "<<":"shl", ">>": "ashr", "&": "and", "|": "or", "^": "xor"}
+        fop = {"+":"fadd", "-":"fsub", "*":"fmul", "/":"fdiv", "%":"frem"}
+        icmp = {"==":"icmp eq", "!=":"icmp ne", "<":"icmp slt", "<=":"icmp sle", ">": "icmp sgt", ">=": "icmp sge"}
+        fcmp = {"==":"fcmp eq", "!=":"fcmp ne", "<":"fcmp slt", "<=":"fcmp sle", ">": "fcmp sgt", ">=": "fcmp sge"}
+        lop = {"&&": "and", "||": "or"}
+        if type in ["i8", "i16", "i32", "i64"]:
+            if op in iop:
+                self.n_registro += 1
+                newvar = "%.r" + str(self.n_registro)
+                codigo.append(newvar + " = " + iop[op] + " " + type + " " + var1 + " , " + var2)
+                return
+            elif op in icmp:
+                temp = "%.r" + str(self.n_registro + 1)
+                newvar = "%.r" + str(self.n_registro + 2)
+                self.n_registro += 2
+                codigo.append(temp + " = " + icmp[op] + " " + type + " " + var1 + " , " + var2)
+                codigo.append(newvar + " = zext i1 " + temp + " to i32")
+                return
+            elif op in lop:
+                s1 = "{0} = icmp eq {1} {2} , 0"
+                s2 = "{0} = {1} i1 {2} , {3}"
+                s3 = "{0} = zext i1 {1} to i32"
+                temp1 = "%.r" + str(self.n_registro + 1)
+                temp2 = "%.r" + str(self.n_registro + 2)
+                temp3 = "%.r" + str(self.n_registro + 3)
+                newvar = "%.r" + str(self.n_registro + 4)
+                self.n_registro += 4
+                codigo.append(s1.format(temp1,type,var1))
+                codigo.append(s1.format(temp2,type,var2))
+                codigo.append(s2.format(temp3,lop[op],temp1,temp2))
+                codigo.append(s3.format(newvar,temp3))
+                return
+            else:
+                Error("Error de operacion",line)
+        elif type in ["float", "double"]:
+            if op in fop:
+                self.n_registro += 1
+                newvar = "%.r" + str(self.n_registro)
+                codigo.append(newvar + " = " + fop[op] + " " + type + " " + var1 + " , " + var2)
+                return
+            elif op in fcmp:
+                temp = "%.r" + str(self.n_registro + 1)
+                newvar = "%.r" + str(self.n_registro + 2)
+                self.n_registro += 2
+                codigo.append(temp + " = " + fcmp[op] + " " + type + " " + var1 + " , " + var2)
+                codigo.append(newvar + " = zext i1 " + temp + " to i32")
+                return
+            else:
+                Error("No se puede realizar la operacion "+ op + " con numeros no enteros", line)
+        else:
+            Error("No se puede realizar la operacion " + op +" con valores no enteros",line)
 
 
 
@@ -692,48 +744,23 @@ class Cmm2Visitor(ParseTreeVisitor):
             Error("No se puede realizar la operacion, dado que la expresion no retorna ningun valor", ctx.start.line)
             return None
         
+        newtype = self.type_priority(left.vtype[0], right.vtype[0])
+        if newtype == left.vtype[0]:
+            var2 = self.cast(right.vtype[0],var2, newtype, ctx.start.line)
+        else:
+            var1 = self.cast(left.vtype[0],var1, newtype, ctx.start.line)
 
-        if op == '+':
-            #print("SUMAA entre ",left,right)
-            pass
-        elif op == '-':
-            pass
-        elif op == '*':
-            pass
-        elif op == '/':
-            pass
-        elif op == '%':
-            pass
-        elif op == '<<':
-            pass
-        elif op == '>>':
-            pass
-        elif op == '<':
-            pass
-        elif op == '<=':
-            pass
-        elif op == '>':
-            pass
-        elif op == '>=':
-            pass
-        elif op == '==':
-            pass
-        elif op == '!=':
-            pass
-        elif op == '&':
-            pass
-        elif op == '^':
-            pass
-        elif op == '|':
-            pass
-        elif op == '&&':
-            pass
-        elif op == '||':
-            pass
+        llc_type = llc_vtype(newtype)
 
-        type1 = left.stype
-        type2 = right.stype
-        return symbol(left.stype,"", left.vtype,list(left.stype))
+        self.binop(llc_type, var1, var2, op, ctx.start.line)
+        if op in ["==", "!=", "<", "<=", ">", ">=", "||", "&&"]:
+            return symbol("value","", "int", [])
+        else:
+            return symbol("value","", newtype, [])
+
+        #type1 = left.stype
+        #type2 = right.stype
+        #return symbol(left.stype,"", left.vtype,list(left.stype))
 
 
     # Visit a parse tree produced by Cmm2Parser#expAtom.
